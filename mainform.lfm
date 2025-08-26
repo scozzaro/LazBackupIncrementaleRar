@@ -1,0 +1,236 @@
+object FrmMain: TFrmMain
+  Left = 702
+  Height = 827
+  Top = 152
+  Width = 697
+  Caption = 'Laz Backup Incrementale '
+  ClientHeight = 827
+  ClientWidth = 697
+  Menu = MainMenu1
+  LCLVersion = '4.2.0.0'
+  OnCreate = FormCreate
+  object Panel1: TPanel
+    Left = 0
+    Height = 827
+    Top = 0
+    Width = 697
+    Align = alClient
+    ClientHeight = 827
+    ClientWidth = 697
+    TabOrder = 0
+    object RARPathLabel: TLabel
+      Left = 10
+      Height = 16
+      Top = 35
+      Width = 86
+      Caption = 'RARPathLabel'
+    end
+    object BackupNameLabel: TLabel
+      Left = 10
+      Height = 16
+      Top = 10
+      Width = 113
+      Caption = 'BackupNameLabel'
+    end
+    object RARPathEdit: TEdit
+      Left = 10
+      Height = 22
+      Top = 50
+      Width = 526
+      TabOrder = 0
+      Text = '/usr/local/bin/rar'
+    end
+    object BrowseRARButton: TButton
+      Left = 544
+      Height = 25
+      Top = 48
+      Width = 124
+      Caption = 'Trova Programma'
+      TabOrder = 1
+      OnClick = BrowseRARButtonClick
+    end
+    object DestinationLabel: TLabel
+      Left = 10
+      Height = 16
+      Top = 85
+      Width = 102
+      Caption = 'DestinationLabel'
+    end
+    object DestinationEdit: TEdit
+      Left = 10
+      Height = 22
+      Top = 100
+      Width = 526
+      TabOrder = 2
+      Text = '/Users/scozzaro/Documents'
+    end
+    object DestButton: TButton
+      Left = 544
+      Height = 25
+      Top = 96
+      Width = 123
+      Caption = 'Trova Percorso'
+      TabOrder = 3
+      OnClick = DestButtonClick
+    end
+    object ArchiveNameLabel: TLabel
+      Left = 10
+      Height = 16
+      Top = 135
+      Width = 113
+      Caption = 'ArchiveNameLabel'
+      WordWrap = True
+    end
+    object ArchiveNameEdit: TEdit
+      Left = 10
+      Height = 22
+      Top = 150
+      Width = 658
+      TabOrder = 4
+      Text = 'test.rar'
+    end
+    object FoldersLabel: TLabel
+      Left = 10
+      Height = 16
+      Top = 185
+      Width = 112
+      Caption = 'Cartelle da salvare'
+      WordWrap = True
+    end
+    object FoldersListbox: TListBox
+      Left = 10
+      Height = 80
+      Top = 200
+      Width = 620
+      ItemHeight = 0
+      TabOrder = 5
+    end
+    object AddButton: TButton
+      Left = 640
+      Height = 25
+      Top = 200
+      Width = 30
+      Caption = '+'
+      TabOrder = 6
+      OnClick = AddButtonClick
+    end
+    object RemoveButton: TButton
+      Left = 640
+      Height = 25
+      Top = 235
+      Width = 30
+      Caption = '-'
+      TabOrder = 7
+      OnClick = RemoveButtonClick
+    end
+    object ExcludeLabel: TLabel
+      Left = 10
+      Height = 16
+      Top = 295
+      Width = 305
+      Caption = 'Escludi file/cartelle (pattern *.tmp, *.zip, C:\temp\*)'
+      WordWrap = True
+    end
+    object ExcludeListbox: TListBox
+      Left = 10
+      Height = 80
+      Top = 310
+      Width = 620
+      ItemHeight = 0
+      TabOrder = 8
+    end
+    object AddExcludeButton: TButton
+      Left = 640
+      Height = 25
+      Top = 310
+      Width = 30
+      Caption = '+'
+      TabOrder = 9
+      OnClick = AddExcludeButtonClick
+    end
+    object RemoveExcludeButton: TButton
+      Left = 640
+      Height = 25
+      Top = 345
+      Width = 30
+      Caption = '-'
+      TabOrder = 10
+      OnClick = RemoveExcludeButtonClick
+    end
+    object ProgressLabel: TLabel
+      Left = 16
+      Height = 16
+      Top = 408
+      Width = 652
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Avanzamento: 0%'
+      WordWrap = True
+    end
+    object StatusLabel: TLabel
+      Left = 10
+      Height = 16
+      Top = 450
+      Width = 44
+      Caption = 'Pronto.'
+      WordWrap = True
+    end
+    object RunBackupButton: TButton
+      Left = 285
+      Height = 30
+      Top = 470
+      Width = 115
+      Caption = 'Esegui Backup'
+      TabOrder = 11
+      OnClick = RunBackupButtonClick
+    end
+    object ScrolledOutput: TMemo
+      Left = 8
+      Height = 260
+      Top = 520
+      Width = 660
+      ReadOnly = True
+      ScrollBars = ssVertical
+      TabOrder = 12
+    end
+  end
+  object MainMenu1: TMainMenu
+    Left = 624
+    Top = 8
+    object FileMenu: TMenuItem
+      Caption = '&File'
+      object SaveConfigMenuItem: TMenuItem
+        Caption = 'Salva Configurazione'
+        OnClick = SaveConfigMenuItemClick
+      end
+      object LoadConfigMenuItem: TMenuItem
+        Caption = 'Carica Configurazione'
+        OnClick = LoadConfigMenuItemClick
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object QuitMenuItem: TMenuItem
+        Caption = 'Esci'
+      end
+    end
+    object InfoMenu: TMenuItem
+      Caption = '&Info'
+      object LicenseMenuItem: TMenuItem
+        Caption = 'Licenza'
+      end
+      object AboutMenuItem: TMenuItem
+        Caption = 'About'
+        OnClick = AboutMenuItemClick
+      end
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 410
+    Top = 472
+  end
+  object SaveDialog1: TSaveDialog
+    Left = 472
+    Top = 463
+  end
+end
