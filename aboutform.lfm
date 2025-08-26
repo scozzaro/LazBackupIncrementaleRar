@@ -1,12 +1,12 @@
 object frmAbout: TfrmAbout
   Left = 903
-  Height = 517
+  Height = 787
   Top = 170
-  Width = 332
+  Width = 472
   Caption = 'About'
-  ClientHeight = 517
-  ClientWidth = 332
-  LCLVersion = '4.2.0.0'
+  ClientHeight = 787
+  ClientWidth = 472
+  LCLVersion = '4.99.0.0'
   object ImgLogo: TImage
     Left = 10
     Height = 64
@@ -24660,9 +24660,9 @@ object frmAbout: TfrmAbout
   end
   object LblAppName: TLabel
     Left = 90
-    Height = 18
+    Height = 21
     Top = 20
-    Width = 187
+    Width = 182
     Caption = 'LazbackupIncrementale'
     Font.Height = -16
     Font.Style = [fsBold]
@@ -24670,39 +24670,43 @@ object frmAbout: TfrmAbout
   end
   object LblVersion: TLabel
     Left = 90
-    Height = 16
+    Height = 15
     Top = 50
-    Width = 84
+    Width = 71
     Caption = 'Versione 1.0.0'
   end
   object LblCopyright: TLabel
     Left = 90
-    Height = 16
+    Height = 15
     Top = 75
-    Width = 229
+    Width = 194
     Caption = 'Copyright © 2025 Vincenzo Scozzaro'
   end
   object LblAuthor: TLabel
     Left = 90
-    Height = 16
+    Height = 15
     Top = 100
-    Width = 163
+    Width = 139
     Caption = 'Autore: Vincenzo Scozzaro'
   end
   object LblLicenza: TLabel
     Left = 10
-    Height = 56
+    Height = 24
     Top = 128
     Width = 309
     AutoSize = False
     Caption = 'Licenza: Mozilla, gratuito anche per scopi commerciali'
+    Font.Color = clHighlight
+    Font.Style = [fsUnderline]
+    ParentFont = False
     WordWrap = True
+    OnClick = LblLicenzaClick
   end
   object MemoTestoLicenza: TMemo
     Left = 10
-    Height = 179
+    Height = 104
     Top = 192
-    Width = 310
+    Width = 447
     Lines.Strings = (
       'Questa applicazione è distribuita sotto licenza Mozilla Public License.'
       'È gratuita e può essere utilizzata anche per scopi commerciali.'
@@ -24714,9 +24718,9 @@ object frmAbout: TfrmAbout
     TabOrder = 1
   end
   object LblWinRARWarning: TLabel
-    Left = 10
+    Left = 72
     Height = 88
-    Top = 384
+    Top = 624
     Width = 309
     AutoSize = False
     Caption = 'Avvertenza: Questo programma richiede l''installazione di RAR o WinRAR. Questi strumenti non sono forniti e devono essere scaricati e installati separatamente dall''utente.'
@@ -24726,14 +24730,27 @@ object frmAbout: TfrmAbout
     Font.Name = '.SF NS'
     ParentFont = False
     WordWrap = True
+    OnClick = LblWinRARWarningClick
   end
   object BtnClose1: TButton
-    Left = 120
+    Left = 174
     Height = 30
-    Top = 480
+    Top = 720
     Width = 100
     Caption = 'Chiudi'
     TabOrder = 0
     OnClick = BtnClose1Click
+  end
+  object RichMemo1: TRichMemo
+    Left = 10
+    Height = 310
+    Top = 304
+    Width = 444
+    HideSelection = False
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 2
+    WantTabs = True
+    ZoomFactor = 1
   end
 end
