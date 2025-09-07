@@ -6,9 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  FileUtil, Process, LazFileUtils, FileCtrl, StrUtils, ComCtrls, Menus,
-  AboutForm,
-  fpjson, jsonparser, jsonconf;
+  FileUtil, Process, LazFileUtils, DateTimePicker, FileCtrl, StrUtils, ComCtrls,
+  Menus, EditBtn, Buttons, AboutForm, fpjson, jsonparser, jsonconf;
 
 type
 
@@ -22,6 +21,13 @@ type
     ArchiveNameLabel: TLabel;
     BackupNameLabel: TLabel;
     BrowseRARButton: TButton;
+    Button1: TButton;
+    chkSpegni: TCheckBox;
+    chkStartTime: TCheckBox;
+    Label1: TLabel;
+    Visualizza: TMenuItem;
+    PopupMenuTray: TPopupMenu;
+    StartTime: TDateTimePicker;
     DestButton: TButton;
     DestinationEdit: TEdit;
     DestinationLabel: TLabel;
@@ -49,10 +55,14 @@ type
     SaveDialog1: TSaveDialog;
     ScrolledOutput: TMemo;
     StatusLabel: TLabel;
+    TimerStartTime: TTimer;
+    TrayIcon1: TTrayIcon;
     procedure AboutMenuItemClick(Sender: TObject);
     procedure AddButtonClick(Sender: TObject);
     procedure AddExcludeButtonClick(Sender: TObject);
     procedure BrowseRARButtonClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure chkStartTimeChange(Sender: TObject);
     procedure DestButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure LoadConfigMenuItemClick(Sender: TObject);
@@ -60,6 +70,9 @@ type
     procedure RemoveExcludeButtonClick(Sender: TObject);
     procedure RunBackupButtonClick(Sender: TObject);
     procedure SaveConfigMenuItemClick(Sender: TObject);
+    procedure TimerStartTimeTimer(Sender: TObject);
+    procedure TrayIcon1Click(Sender: TObject);
+    procedure VisualizzaClick(Sender: TObject);
   private
     FProcess: TProcess;
     FTotalFiles: integer;
@@ -157,6 +170,24 @@ procedure TFrmMain.BrowseRARButtonClick(Sender: TObject);
 begin
   if OpenDialog1.Execute then
     RARPathEdit.Text := OpenDialog1.FileName;
+end;
+
+procedure TFrmMain.Button1Click(Sender: TObject);
+begin
+    // Nasconde la finestra principale
+  Application.Minimize;
+  Self.Hide;
+
+  // Mostra icona nella barra di stato (tray)
+  TrayIcon1.Visible := True;
+  TrayIcon1.Hint := 'Backup App - in esecuzione';
+  TrayIcon1.PopupMenu := PopupMenuTray; // collega il menu
+end;
+
+procedure TFrmMain.chkStartTimeChange(Sender: TObject);
+begin
+   // abilita/disabilita il timer a seconda dello stato della checkbox
+  TimerStartTime.Enabled := chkStartTime.Checked;
 end;
 
 procedure TFrmMain.PreCalculateFiles(const SourceDir: string);
@@ -265,8 +296,39 @@ begin
       ScrolledOutput.Lines.Text := ScrolledOutput.Lines.Text + Line;
     end;
   end;
+
     ProgressLabel.Caption := Format('Avanzamento: %d%% (%d di %d file)',
-      [Round(100), FTotalFiles, FTotalFiles]);
+    [Round(100), FTotalFiles, FTotalFiles]);
+
+  // 🔹 Spegnimento del computer se chkSpegni è attivo
+  // 🔹 Spegnimento del computer se chkSpegni è attivo
+   if chkSpegni.Checked then
+   begin
+     FProcess.CloseInput; // chiude eventuali pipe precedenti
+     FProcess.Parameters.Clear;
+
+     {$IFDEF WINDOWS}
+     FProcess.Executable := 'shutdown';
+     FProcess.Parameters.Add('-s');
+     FProcess.Parameters.Add('-t');
+     FProcess.Parameters.Add('0');
+     {$ENDIF}
+
+     {$IFDEF LINUX}
+     FProcess.Executable := '/sbin/shutdown';
+     FProcess.Parameters.Add('-h');
+     FProcess.Parameters.Add('now');
+     {$ENDIF}
+
+   {$IFDEF DARWIN} // macOS
+FProcess.Executable := '/usr/bin/osascript';
+FProcess.Parameters.Add('-e');
+FProcess.Parameters.Add('tell application "System Events" to shut down');
+{$ENDIF}
+
+     FProcess.Options := [];
+     FProcess.Execute;
+   end;
 
 end;
 
@@ -295,6 +357,14 @@ begin
     DestinationEdit.Text := JSONObj.Get('destination_folder', '');
     ArchiveNameEdit.Text := JSONObj.Get('archive_name', '');
     RARPathEdit.Text := JSONObj.Get('rar_path', '');
+
+          // Caricamento stato della checkbox chkSpegni
+      chkSpegni.Checked := JSONObj.Get('chkSpegni', False);
+
+      chkStartTime.Checked := JSONObj.Get('chkStartTime', False);
+      StartTime.Time := StrToTimeDef(JSONObj.Get('start_time', ''), Now);
+        TimerStartTime.Enabled := chkStartTime.Checked;
+
   finally
     JSONObj.Free;
   end;
@@ -338,6 +408,14 @@ begin
       J.Add('archive_name', ArchiveNameEdit.Text);
       J.Add('rar_path', RARPathEdit.Text);
 
+      // Salva stato della checkbox chkSpegni
+      J.Add('chkSpegni', chkSpegni.Checked);
+
+        J.Add('chkStartTime', chkStartTime.Checked);
+
+        // Salva anche il valore di StartTime (solo ora, non data)
+J.Add('start_time', TimeToStr(StartTime.Time));
+
       // Converti in UTF-8
       JSONText := UTF8Encode(J.AsJSON);
 
@@ -355,6 +433,55 @@ begin
   finally
     SaveDlg.Free;
   end;
+end;
+
+procedure TFrmMain.TimerStartTimeTimer(Sender: TObject);
+var
+  CurrentTime, TargetTime: TTime;
+begin
+  if not chkStartTime.Checked then
+  begin
+    TimerStartTime.Enabled := False;
+    Exit;
+  end;
+
+  CurrentTime := Time;
+  TargetTime := StartTime.Time;
+
+  // Mostra l'orario attuale per debug
+  Label1.Caption := 'Ora attuale: ' + FormatDateTime('hh:nn:ss', CurrentTime) +
+                    ' - Target: ' + FormatDateTime('hh:nn:ss', TargetTime);
+
+
+  // Confronto con tolleranza di 1 minuto
+  if Abs(Frac(CurrentTime) - Frac(TargetTime)) < (1 / (24 * 60)) then
+  begin
+    TimerStartTime.Enabled := False; // evita che riparta più volte
+    //EseguiBackup; // chiama la tua procedura
+  end;
+
+end;
+
+procedure TFrmMain.TrayIcon1Click(Sender: TObject);
+begin
+   // Ripristina la finestra
+  Self.Show;
+  Application.Restore;
+  Application.BringToFront;
+
+  // Nasconde l’icona dal tray
+  TrayIcon1.Visible := False;
+end;
+
+procedure TFrmMain.VisualizzaClick(Sender: TObject);
+begin
+  // Ripristina la finestra
+   Self.Show;
+   Application.Restore;
+   Application.BringToFront;
+
+   // Nasconde l’icona dal tray
+   TrayIcon1.Visible := False;
 end;
 
 
@@ -389,6 +516,15 @@ begin
       DestinationEdit.Text := JSONObj.Get('destination_folder', '');
       ArchiveNameEdit.Text := JSONObj.Get('archive_name', '');
       RARPathEdit.Text := JSONObj.Get('rar_path', '');
+
+      // Caricamento stato della checkbox chkSpegni
+      chkSpegni.Checked := JSONObj.Get('chkSpegni', False);
+
+            chkStartTime.Checked := JSONObj.Get('chkStartTime', False);
+
+             StartTime.Time := StrToTimeDef(JSONObj.Get('start_time', ''), Now);
+
+             TimerStartTime.Enabled := chkStartTime.Checked;
     finally
       JSONObj.Free;
     end;
