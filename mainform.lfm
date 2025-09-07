@@ -1,7 +1,7 @@
 object FrmMain: TFrmMain
-  Left = 702
+  Left = 659
   Height = 827
-  Top = 152
+  Top = 23
   Width = 697
   Caption = 'Laz Backup Incrementale '
   ClientHeight = 827
@@ -20,21 +20,21 @@ object FrmMain: TFrmMain
     TabOrder = 0
     object RARPathLabel: TLabel
       Left = 10
-      Height = 16
+      Height = 15
       Top = 35
-      Width = 86
+      Width = 74
       Caption = 'RARPathLabel'
     end
     object BackupNameLabel: TLabel
       Left = 10
-      Height = 16
+      Height = 15
       Top = 10
-      Width = 113
+      Width = 99
       Caption = 'BackupNameLabel'
     end
     object RARPathEdit: TEdit
       Left = 10
-      Height = 22
+      Height = 23
       Top = 50
       Width = 526
       TabOrder = 0
@@ -51,14 +51,14 @@ object FrmMain: TFrmMain
     end
     object DestinationLabel: TLabel
       Left = 10
-      Height = 16
+      Height = 15
       Top = 85
-      Width = 102
+      Width = 88
       Caption = 'DestinationLabel'
     end
     object DestinationEdit: TEdit
       Left = 10
-      Height = 22
+      Height = 23
       Top = 100
       Width = 526
       TabOrder = 2
@@ -75,15 +75,15 @@ object FrmMain: TFrmMain
     end
     object ArchiveNameLabel: TLabel
       Left = 10
-      Height = 16
+      Height = 15
       Top = 135
-      Width = 113
+      Width = 100
       Caption = 'ArchiveNameLabel'
       WordWrap = True
     end
     object ArchiveNameEdit: TEdit
       Left = 10
-      Height = 22
+      Height = 23
       Top = 150
       Width = 658
       TabOrder = 4
@@ -91,9 +91,9 @@ object FrmMain: TFrmMain
     end
     object FoldersLabel: TLabel
       Left = 10
-      Height = 16
+      Height = 15
       Top = 185
-      Width = 112
+      Width = 95
       Caption = 'Cartelle da salvare'
       WordWrap = True
     end
@@ -125,9 +125,9 @@ object FrmMain: TFrmMain
     end
     object ExcludeLabel: TLabel
       Left = 10
-      Height = 16
+      Height = 15
       Top = 295
-      Width = 305
+      Width = 270
       Caption = 'Escludi file/cartelle (pattern *.tmp, *.zip, C:\temp\*)'
       WordWrap = True
     end
@@ -169,9 +169,9 @@ object FrmMain: TFrmMain
     end
     object StatusLabel: TLabel
       Left = 10
-      Height = 16
+      Height = 15
       Top = 456
-      Width = 44
+      Width = 39
       Caption = 'Pronto.'
       WordWrap = True
     end
@@ -195,26 +195,26 @@ object FrmMain: TFrmMain
     end
     object chkSpegni: TCheckBox
       Left = 10
-      Height = 18
+      Height = 19
       Top = 400
-      Width = 183
+      Width = 165
       Caption = 'Spegni computer al termine'
       TabOrder = 13
     end
     object chkStartTime: TCheckBox
       Left = 208
-      Height = 18
+      Height = 19
       Top = 400
-      Width = 84
+      Width = 71
       Caption = 'Auto Start'
       TabOrder = 14
       OnChange = chkStartTimeChange
     end
     object StartTime: TDateTimePicker
       Left = 320
-      Height = 21
+      Height = 23
       Top = 397
-      Width = 77
+      Width = 65
       CenturyFrom = 1941
       MaxDate = 2958465
       MinDate = -53780
@@ -234,9 +234,9 @@ object FrmMain: TFrmMain
     end
     object Label1: TLabel
       Left = 408
-      Height = 16
+      Height = 15
       Top = 399
-      Width = 39
+      Width = 34
       Caption = 'Label1'
     end
     object Button1: TButton
@@ -27935,6 +27935,7 @@ object FrmMain: TFrmMain
       3E41E441207EE905450000000049454E44AE426082
     }
     OnClick = TrayIcon1Click
+    OnDblClick = TrayIcon1DblClick
     Left = 520
     Top = 776
   end

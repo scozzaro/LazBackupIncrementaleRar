@@ -72,6 +72,7 @@ type
     procedure SaveConfigMenuItemClick(Sender: TObject);
     procedure TimerStartTimeTimer(Sender: TObject);
     procedure TrayIcon1Click(Sender: TObject);
+    procedure TrayIcon1DblClick(Sender: TObject);
     procedure VisualizzaClick(Sender: TObject);
   private
     FProcess: TProcess;
@@ -452,12 +453,11 @@ begin
   Label1.Caption := 'Ora attuale: ' + FormatDateTime('hh:nn:ss', CurrentTime) +
                     ' - Target: ' + FormatDateTime('hh:nn:ss', TargetTime);
 
-
-  // Confronto con tolleranza di 1 minuto
-  if Abs(Frac(CurrentTime) - Frac(TargetTime)) < (1 / (24 * 60)) then
+  // Confronto con tolleranza di 1 secondo
+  if Abs(Frac(CurrentTime) - Frac(TargetTime)) < (1 / (24 * 60 * 60)) then
   begin
     TimerStartTime.Enabled := False; // evita che riparta più volte
-    //EseguiBackup; // chiama la tua procedura
+    RunBackupButtonClick(Sender);    // chiama la tua procedura di backup
   end;
 
 end;
@@ -471,6 +471,11 @@ begin
 
   // Nasconde l’icona dal tray
   TrayIcon1.Visible := False;
+end;
+
+procedure TFrmMain.TrayIcon1DblClick(Sender: TObject);
+begin
+
 end;
 
 procedure TFrmMain.VisualizzaClick(Sender: TObject);
