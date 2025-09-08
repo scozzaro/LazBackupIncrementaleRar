@@ -19,12 +19,15 @@ type
     AddExcludeButton: TButton;
     ArchiveNameEdit: TEdit;
     ArchiveNameLabel: TLabel;
-    BackupNameLabel: TLabel;
     BrowseRARButton: TButton;
-    Button1: TButton;
+    btnTrayBar: TButton;
+    chkDayBak: TCheckBox;
+    chkMinTrayBar: TCheckBox;
     chkSpegni: TCheckBox;
+    chkChiudiApp: TCheckBox;
     chkStartTime: TCheckBox;
     Label1: TLabel;
+    StatusLabel1: TLabel;
     Visualizza: TMenuItem;
     PopupMenuTray: TPopupMenu;
     StartTime: TDateTimePicker;
@@ -48,7 +51,7 @@ type
     RARPathLabel: TLabel;
     RemoveButton: TButton;
     RemoveExcludeButton: TButton;
-    RunBackupButton: TButton;
+    btnRunBackup: TButton;
     ProgressBar: TProgressBar;
     ProgressLabel: TLabel;
     SaveConfigMenuItem: TMenuItem;
@@ -61,14 +64,15 @@ type
     procedure AddButtonClick(Sender: TObject);
     procedure AddExcludeButtonClick(Sender: TObject);
     procedure BrowseRARButtonClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure btnTrayBarClick(Sender: TObject);
     procedure chkStartTimeChange(Sender: TObject);
     procedure DestButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure LicenseMenuItemClick(Sender: TObject);
     procedure LoadConfigMenuItemClick(Sender: TObject);
     procedure RemoveButtonClick(Sender: TObject);
     procedure RemoveExcludeButtonClick(Sender: TObject);
-    procedure RunBackupButtonClick(Sender: TObject);
+    procedure btnRunBackupClick(Sender: TObject);
     procedure SaveConfigMenuItemClick(Sender: TObject);
     procedure TimerStartTimeTimer(Sender: TObject);
     procedure TrayIcon1Click(Sender: TObject);
@@ -109,6 +113,11 @@ begin
     LoadConfigFromFile(ConfigPath);
 end;
 
+procedure TFrmMain.LicenseMenuItemClick(Sender: TObject);
+begin
+
+end;
+
 procedure TFrmMain.AddButtonClick(Sender: TObject);
 var
   Folder: string;
@@ -125,9 +134,7 @@ end;
 procedure TFrmMain.AboutMenuItemClick(Sender: TObject);
 begin
 
-
-    FrmAbout.ShowModal;
-
+  FrmAbout.ShowModal;
 
 end;
 
@@ -173,21 +180,21 @@ begin
     RARPathEdit.Text := OpenDialog1.FileName;
 end;
 
-procedure TFrmMain.Button1Click(Sender: TObject);
+procedure TFrmMain.btnTrayBarClick(Sender: TObject);
 begin
-    // Nasconde la finestra principale
+  // Nasconde la finestra principale
   Application.Minimize;
   Self.Hide;
 
   // Mostra icona nella barra di stato (tray)
   TrayIcon1.Visible := True;
   TrayIcon1.Hint := 'Backup App - in esecuzione';
-  TrayIcon1.PopupMenu := PopupMenuTray; // collega il menu
+  // TrayIcon1.PopupMenu := PopupMenuTray; // collega il menu
 end;
 
 procedure TFrmMain.chkStartTimeChange(Sender: TObject);
 begin
-   // abilita/disabilita il timer a seconda dello stato della checkbox
+  // abilita/disabilita il timer a seconda dello stato della checkbox
   TimerStartTime.Enabled := chkStartTime.Checked;
 end;
 
@@ -224,24 +231,31 @@ begin
   end;
 end;
 
-procedure TFrmMain.RunBackupButtonClick(Sender: TObject);
-function GetHomeDir: string;
-begin
-  {$IFDEF UNIX}
+procedure TFrmMain.btnRunBackupClick(Sender: TObject);
+
+  function GetHomeDir: string;
+  begin
+    {$IFDEF UNIX}
   Result := GetEnvironmentVariable('HOME');  // su Linux/macOS
   if Result = '' then
     Result := '/tmp'; // fallback se HOME non è impostata
-  {$ELSE}
-  Result := GetEnvironmentVariable('USERPROFILE'); // su Windows
-  if Result = '' then
-    Result := 'C:\'; // fallback se USERPROFILE non è impostata
-  {$ENDIF}
-end;
+    {$ELSE}
+    Result := GetEnvironmentVariable('USERPROFILE'); // su Windows
+    if Result = '' then
+      Result := 'C:\'; // fallback se USERPROFILE non è impostata
+    {$ENDIF}
+  end;
+
+const
+  Giorni: array[0..6] of string = (
+    'Lunedi', 'Martedi', 'Mercoledi', 'Giovedi', 'Venerdi', 'Sabato', 'Domenica'
+    );
 var
   Buffer: array[0..1023] of byte;
-  BytesRead: LongInt;
+  BytesRead: longint;
   Line: string;
-  i: Integer;
+  i, idx: integer;
+  ArchiveName: string;
 begin
   ScrolledOutput.Lines.Clear;
   FProcessedFiles := 0;
@@ -251,14 +265,35 @@ begin
   for i := 0 to FoldersListbox.Items.Count - 1 do
     PreCalculateFiles(FoldersListbox.Items[i]);
 
+  // Nome archivio
+  ArchiveName := ArchiveNameEdit.Text;
+
+  // Se non termina con .rar -> aggiungilo
+  if LowerCase(ExtractFileExt(ArchiveName)) <> '.rar' then
+  begin
+    ArchiveName := ArchiveName + '.rar';
+    ArchiveNameEdit.Text := ArchiveName;
+  end;
+
+  if chkDayBak.Checked then
+  begin
+    // DayOfWeek(Now): 1 = Domenica ... 7 = Sabato
+    // Noi lo mappiamo a 0 = Lunedi ... 6 = Domenica
+    idx := DayOfWeek(Now) - 2;
+    if idx < 0 then
+      idx := 6;
+
+    ArchiveName := ChangeFileExt(ArchiveName, '') + '_' + IntToStr(idx) +
+      '_' + Giorni[idx] + '.rar';
+  end;
+
   // Configurazione del processo RAR
   FProcess.Executable := RARPathEdit.Text;
   FProcess.Parameters.Clear;
-  FProcess.Parameters.Add('a');                 // aggiungi file all'archivio
-  FProcess.Parameters.Add('-u');                // aggiorna solo file modificati o nuovi
-  FProcess.Parameters.Add('-r');                // include sottocartelle
-  //FProcess.Parameters.Add('-o');                // include sottocartelle
-  FProcess.Parameters.Add(DestinationEdit.Text + PathDelim + ArchiveNameEdit.Text);
+  FProcess.Parameters.Add('a');   // aggiungi file all'archivio
+  FProcess.Parameters.Add('-u');  // aggiorna solo file modificati o nuovi
+  FProcess.Parameters.Add('-r');  // include sottocartelle
+  FProcess.Parameters.Add(DestinationEdit.Text + PathDelim + ArchiveName);
   FProcess.Parameters.AddStrings(FoldersListbox.Items);
 
   FProcess.Options := [poUsePipes, poStderrToOutput, poNoConsole];
@@ -276,7 +311,7 @@ begin
       BytesRead := FProcess.Output.Read(Buffer, SizeOf(Buffer));
       if BytesRead > 0 then
       begin
-        SetString(Line, PAnsiChar(@Buffer[0]), BytesRead);
+        SetString(Line, pansichar(@Buffer[0]), BytesRead);
         // Aggiunge l'output riga per riga
         ScrolledOutput.Lines.Text := ScrolledOutput.Lines.Text + Line;
         ScrolledOutput.SelStart := Length(ScrolledOutput.Text);
@@ -293,43 +328,57 @@ begin
     BytesRead := FProcess.Output.Read(Buffer, SizeOf(Buffer));
     if BytesRead > 0 then
     begin
-      SetString(Line, PAnsiChar(@Buffer[0]), BytesRead);
+      SetString(Line, pansichar(@Buffer[0]), BytesRead);
       ScrolledOutput.Lines.Text := ScrolledOutput.Lines.Text + Line;
     end;
   end;
 
-    ProgressLabel.Caption := Format('Avanzamento: %d%% (%d di %d file)',
+  ProgressLabel.Caption := Format('Avanzamento: %d%% (%d di %d file)',
     [Round(100), FTotalFiles, FTotalFiles]);
 
   // 🔹 Spegnimento del computer se chkSpegni è attivo
   // 🔹 Spegnimento del computer se chkSpegni è attivo
-   if chkSpegni.Checked then
-   begin
-     FProcess.CloseInput; // chiude eventuali pipe precedenti
-     FProcess.Parameters.Clear;
+  if chkSpegni.Checked then
+  begin
+    FProcess.CloseInput; // chiude eventuali pipe precedenti
+    FProcess.Parameters.Clear;
 
-     {$IFDEF WINDOWS}
+    {$IFDEF WINDOWS}
      FProcess.Executable := 'shutdown';
      FProcess.Parameters.Add('-s');
      FProcess.Parameters.Add('-t');
      FProcess.Parameters.Add('0');
-     {$ENDIF}
+    {$ENDIF}
 
-     {$IFDEF LINUX}
+    {$IFDEF LINUX}
      FProcess.Executable := '/sbin/shutdown';
      FProcess.Parameters.Add('-h');
      FProcess.Parameters.Add('now');
-     {$ENDIF}
+    {$ENDIF}
 
-   {$IFDEF DARWIN} // macOS
-FProcess.Executable := '/usr/bin/osascript';
-FProcess.Parameters.Add('-e');
-FProcess.Parameters.Add('tell application "System Events" to shut down');
-{$ENDIF}
+    // macOS
+    {$IFDEF DARWIN}
+      FProcess.Executable := '/usr/bin/osascript';
+      FProcess.Parameters.Add('-e');
+      FProcess.Parameters.Add('tell application "System Events" to shut down');
+    {$ENDIF}
 
-     FProcess.Options := [];
-     FProcess.Execute;
-   end;
+
+
+    FProcess.Options := [];
+    FProcess.Execute;
+  end;
+
+
+  if chkMinTrayBar.Checked then
+  begin
+    btnTrayBarClick(Sender);
+  end;
+
+  if chkChiudiApp.Checked then
+  begin
+    halt(0);
+  end;
 
 end;
 
@@ -359,12 +408,20 @@ begin
     ArchiveNameEdit.Text := JSONObj.Get('archive_name', '');
     RARPathEdit.Text := JSONObj.Get('rar_path', '');
 
-          // Caricamento stato della checkbox chkSpegni
-      chkSpegni.Checked := JSONObj.Get('chkSpegni', False);
+    // Caricamento stato della checkbox chkSpegni
+    chkSpegni.Checked := JSONObj.Get('chkSpegni', False);
 
-      chkStartTime.Checked := JSONObj.Get('chkStartTime', False);
-      StartTime.Time := StrToTimeDef(JSONObj.Get('start_time', ''), Now);
-        TimerStartTime.Enabled := chkStartTime.Checked;
+    chkStartTime.Checked := JSONObj.Get('chkStartTime', False);
+    StartTime.Time := StrToTimeDef(JSONObj.Get('start_time', ''), Now);
+    TimerStartTime.Enabled := chkStartTime.Checked;
+
+
+    chkDayBak.Checked := JSONObj.Get('chkDayBak', False);
+
+    chkChiudiApp.Checked := JSONObj.Get('chkChiudiApp', False);
+
+    chkMinTrayBar.Checked := JSONObj.Get('chkMinTrayBar', False);
+
 
   finally
     JSONObj.Free;
@@ -412,10 +469,18 @@ begin
       // Salva stato della checkbox chkSpegni
       J.Add('chkSpegni', chkSpegni.Checked);
 
-        J.Add('chkStartTime', chkStartTime.Checked);
+      J.Add('chkStartTime', chkStartTime.Checked);
 
-        // Salva anche il valore di StartTime (solo ora, non data)
-J.Add('start_time', TimeToStr(StartTime.Time));
+      // Salva anche il valore di StartTime (solo ora, non data)
+      J.Add('start_time', TimeToStr(StartTime.Time));
+
+
+      J.Add('chkDayBak', chkDayBak.Checked);
+
+      J.Add('chkChiudiApp', chkChiudiApp.Checked);
+      J.Add('chkMinTrayBar', chkMinTrayBar.Checked);
+
+
 
       // Converti in UTF-8
       JSONText := UTF8Encode(J.AsJSON);
@@ -438,7 +503,9 @@ end;
 
 procedure TFrmMain.TimerStartTimeTimer(Sender: TObject);
 var
-  CurrentTime, TargetTime: TTime;
+  CurrentDateTime, TargetDateTime: TDateTime;
+  SecondsLeft: int64;
+  Hours, Minutes, Seconds: word;
 begin
   if not chkStartTime.Checked then
   begin
@@ -446,25 +513,45 @@ begin
     Exit;
   end;
 
-  CurrentTime := Time;
-  TargetTime := StartTime.Time;
+  CurrentDateTime := Now;
+  TargetDateTime := Int(Now) + Frac(StartTime.Time); // oggi all'ora scelta
 
-  // Mostra l'orario attuale per debug
-  Label1.Caption := 'Ora attuale: ' + FormatDateTime('hh:nn:ss', CurrentTime) +
-                    ' - Target: ' + FormatDateTime('hh:nn:ss', TargetTime);
+  // Se l’orario target è già passato, sposta a domani
+  if TargetDateTime <= CurrentDateTime then
+    TargetDateTime := TargetDateTime + 1; // aggiungi 1 giorno
+
+  // Calcolo del tempo rimanente in secondi
+  SecondsLeft := Round((TargetDateTime - CurrentDateTime) * 24 * 60 * 60);
+
+  if SecondsLeft < 0 then
+    SecondsLeft := 0;
+
+  // Converti in h:m:s
+  Hours := SecondsLeft div 3600;
+  Minutes := (SecondsLeft mod 3600) div 60;
+  Seconds := SecondsLeft mod 60;
+
+  // Mostra orario e countdown
+  Label1.Caption :=
+    'Ora attuale: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', CurrentDateTime) +
+    ' - Target: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', TargetDateTime) +
+    ' - Mancano: ' + Format('%.2d:%.2d:%.2d', [Hours, Minutes, Seconds]);
 
   // Confronto con tolleranza di 1 secondo
-  if Abs(Frac(CurrentTime) - Frac(TargetTime)) < (1 / (24 * 60 * 60)) then
+  if Abs(CurrentDateTime - TargetDateTime) < (1 / (24 * 60 * 60)) then
   begin
-    TimerStartTime.Enabled := False; // evita che riparta più volte
-    RunBackupButtonClick(Sender);    // chiama la tua procedura di backup
+    TimerStartTime.Enabled := False;
+    btnRunBackupClick(Sender);    // chiama la tua procedura
+    Sleep(110); // Ritardo di 1,1 sec per attivare il timer per il prossimo backup
+    TimerStartTime.Enabled := True;  // riabilita per il giorno dopo
   end;
-
 end;
+
+
 
 procedure TFrmMain.TrayIcon1Click(Sender: TObject);
 begin
-   // Ripristina la finestra
+  // Ripristina la finestra
   Self.Show;
   Application.Restore;
   Application.BringToFront;
@@ -481,12 +568,12 @@ end;
 procedure TFrmMain.VisualizzaClick(Sender: TObject);
 begin
   // Ripristina la finestra
-   Self.Show;
-   Application.Restore;
-   Application.BringToFront;
+  Self.Show;
+  Application.Restore;
+  Application.BringToFront;
 
-   // Nasconde l’icona dal tray
-   TrayIcon1.Visible := False;
+  // Nasconde l’icona dal tray
+  TrayIcon1.Visible := False;
 end;
 
 
@@ -525,11 +612,18 @@ begin
       // Caricamento stato della checkbox chkSpegni
       chkSpegni.Checked := JSONObj.Get('chkSpegni', False);
 
-            chkStartTime.Checked := JSONObj.Get('chkStartTime', False);
+      chkStartTime.Checked := JSONObj.Get('chkStartTime', False);
 
-             StartTime.Time := StrToTimeDef(JSONObj.Get('start_time', ''), Now);
+      StartTime.Time := StrToTimeDef(JSONObj.Get('start_time', ''), Now);
 
-             TimerStartTime.Enabled := chkStartTime.Checked;
+      chkDayBak.Checked := JSONObj.Get('chkDayBak', False);
+
+      chkChiudiApp.Checked := JSONObj.Get('chkChiudiApp', False);
+
+      chkMinTrayBar.Checked := JSONObj.Get('chkMinTrayBar', False);
+
+
+      TimerStartTime.Enabled := chkStartTime.Checked;
     finally
       JSONObj.Free;
     end;
