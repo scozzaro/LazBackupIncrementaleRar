@@ -26,19 +26,25 @@ type
     btnTrayBar: TButton; // Bottone per minimizzare nella barra delle applicazioni
     chkEncrypt: TCheckBox;
     chkDayBak: TCheckBox; // Casella di spunta per il backup giornaliero
-    chkMinTrayBar: TCheckBox; // Casella di spunta per minimizzare nella barra delle applicazioni dopo l'avvio
+    chkMinTrayBar: TCheckBox;
+    // Casella di spunta per minimizzare nella barra delle applicazioni dopo l'avvio
     chkSpegni: TCheckBox; // Casella di spunta per spegnere il PC dopo il backup
     chkChiudiApp: TCheckBox; // Casella di spunta per chiudere l'app dopo il backup
-    chkStartTime: TCheckBox; // Casella di spunta per avviare il backup a un'ora specifica
+    chkStartTime: TCheckBox;
+    // Casella di spunta per avviare il backup a un'ora specifica
     cmbCompressionLevel: TComboBox;
     cmbFrequency: TComboBox;
     cmbDayOfWeek: TComboBox;
     edtPassword: TEdit;
     Label1: TLabel; // Etichetta per visualizzare il conto alla rovescia del timer
     Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Panel2: TPanel;
     StatusLabel1: TLabel; // Etichetta per lo stato
     Visualizza: TMenuItem; // Voce di menu per visualizzare la finestra
-    PopupMenuTray: TPopupMenu; // Menu a comparsa per l'icona nella barra delle applicazioni
+    PopupMenuTray: TPopupMenu;
+    // Menu a comparsa per l'icona nella barra delle applicazioni
     StartTime: TDateTimePicker; // Componente per selezionare l'ora di avvio
     DestButton: TButton; // Bottone per selezionare la cartella di destinazione
     DestinationEdit: TEdit; // Campo di testo per la cartella di destinazione
@@ -80,7 +86,9 @@ type
     procedure chkStartTimeChange(Sender: TObject);
     procedure cmbFrequencyChange(Sender: TObject);
     procedure DestButtonClick(Sender: TObject);
+    procedure ExcludeLabelClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure LicenseMenuItemClick(Sender: TObject);
     procedure LoadConfigMenuItemClick(Sender: TObject);
     procedure RemoveButtonClick(Sender: TObject);
@@ -97,10 +105,14 @@ type
     FTotalFiles: integer; // Numero totale di file da processare
     FProcessedFiles: integer; // Numero di file processati
 
+    TrayMode: boolean;
+
     // Procedure interne per la gestione dei dati
     procedure OnProcessOutput(const ALine: string); // Gestisce l'output del processo
-    procedure PreCalculateFiles(const SourceDir: string); // Precalcola il numero totale di file
-    procedure LoadConfigFromFile(const AFileName: string); // Carica la configurazione da un file
+    procedure PreCalculateFiles(const SourceDir: string);
+    // Precalcola il numero totale di file
+    procedure LoadConfigFromFile(const AFileName: string);
+    // Carica la configurazione da un file
   public
   end;
 
@@ -114,20 +126,116 @@ implementation
 { TFrmMain }
 
 procedure TFrmMain.FormCreate(Sender: TObject);
+
+  procedure SetDefault;
+  begin
+    {$IFDEF WINDOWS}
+    RARPathEdit.Text := 'C:\Program Files\WinRAR\Rar.exe';
+    DestinationEdit.Text:= 'D:\';
+    ArchiveNameEdit.text:='RarBackup.rar';
+
+    ExcludeListbox.Clear;
+
+
+
+        ExcludeLabelClick(Sender);
+
+    {$ENDIF}
+
+    {$IFDEF LINUX}
+      FProcess.Executable := '/sbin/shutdown';
+      FProcess.Parameters.Add('-h'); // Opzione per l'halt (spegnimento)
+      FProcess.Parameters.Add('now'); // Spegni immediatamente
+    {$ENDIF}
+
+    {$IFDEF DARWIN}
+ // Per macOS
+      FProcess.Executable := '/usr/bin/osascript';
+      FProcess.Parameters.Add('-e');
+      FProcess.Parameters.Add('tell application "System Events" to shut down');
+    {$ENDIF}
+  end;
+
 var
   ConfigPath: string;
+  I: integer;
+  Param: string;
+  LoadFile: string;
 begin
-  // Viene eseguita all'avvio dell'applicazione
+  LoadFile := '';
+  TrayMode := False;
+
+  // Analizza i parametri passati all'applicazione
+  I := 1;
+  while I <= ParamCount do
+  begin
+    Param := UpperCASE(ParamStr(I));
+    if AnsiStartsText('/TRAY', Param) then
+    begin
+      TrayMode := True;
+      Inc(I); // Passa al prossimo parametro
+    end
+    else if AnsiStartsText('/LOAD', Param) then
+    begin
+      Inc(I); // Passa al prossimo parametro, che dovrebbe essere il nome del file
+      if I <= ParamCount then
+      begin
+        LoadFile := ParamStr(I);
+        // Rimuovi eventuali doppi apici se il percorso era tra virgolette
+        LoadFile := StringReplace(LoadFile, '"', '', [rfReplaceAll]);
+      end;
+      Inc(I); // Passa al parametro successivo dopo il nome del file
+    end
+    else
+    begin
+      // Se il parametro non è riconosciuto, passa al successivo
+      Inc(I);
+    end;
+  end;
+
+  // Crea l'oggetto per l'esecuzione del processo RAR
   FProcess := TProcess.Create(Self);
-  // Configura il processo per leggere l'output standard e gli errori
   FProcess.Options := [poUsePipes, poStderrToOutput];
 
-  // Definisce il percorso predefinito per il file di configurazione
-  ConfigPath := GetUserDir + 'Documents' + PathDelim + 'backup_configLaz.rbak';
+  // Carica il file di configurazione specificato, se presente
+  if LoadFile <> '' then
+  begin
+    if FileExists(LoadFile) then
+    begin
+      LoadConfigFromFile(LoadFile);
+    end
+    else
+    begin
+      SetDefault;
+    end;
 
-  // Se il file di configurazione esiste, lo carica automaticamente
-  if FileExists(ConfigPath) then
-    LoadConfigFromFile(ConfigPath);
+  end
+  else
+  begin
+    // Se non è stato specificato un file, cerca quello predefinito
+    ConfigPath := GetUserDir + 'Documents' + PathDelim + 'backup_configLaz.rbak';
+    if FileExists(ConfigPath) then
+    begin
+      LoadConfigFromFile(ConfigPath);
+    end
+    else
+    begin
+      SetDefault;
+    end;
+  end;
+
+end;
+
+procedure TFrmMain.FormShow(Sender: TObject);
+begin
+  // Se è stato passato il parametro /tray, minimizza l'applicazione nel tray
+  if TrayMode then
+  begin
+    // Nasconde la finestra principale
+    btnTrayBarClick(Sender);
+    TrayMode := False;
+  end;
+
 end;
 
 procedure TFrmMain.LicenseMenuItemClick(Sender: TObject);
@@ -197,18 +305,51 @@ begin
     DestinationEdit.Text := DestFolder; // Imposta il percorso nella casella di testo
 end;
 
+procedure TFrmMain.ExcludeLabelClick(Sender: TObject);
+begin
+    ExcludeListbox.Items.Add('desktop.ini');
+
+      // Fili infetti da ransomeware
+    ExcludeListbox.Items.Add('*.locked');
+    ExcludeListbox.Items.Add('*.encrypted');
+    ExcludeListbox.Items.Add('*.wannacry');
+    ExcludeListbox.Items.Add('*.phobos');
+    ExcludeListbox.Items.Add('*.locked');
+    ExcludeListbox.Items.Add('ryuk');
+
+             // File temporanei generici
+  ExcludeListbox.Items.Add('*.tmp');
+  ExcludeListbox.Items.Add('*.~*');
+  ExcludeListbox.Items.Add('*.bak');
+  ExcludeListbox.Items.Add('*.log');
+  ExcludeListbox.Items.Add('*.temp');
+
+  // File di Microsoft Office e di sistema
+  ExcludeListbox.Items.Add('*.xlsx~');
+  ExcludeListbox.Items.Add('*.docx~');
+  ExcludeListbox.Items.Add('*.pptx~');
+  ExcludeListbox.Items.Add('Thumbs.db');
+end;
+
 procedure TFrmMain.BrowseRARButtonClick(Sender: TObject);
 begin
   // Apre un dialogo per cercare il file eseguibile di RAR (rar.exe)
   if OpenDialog1.Execute then
-    RARPathEdit.Text := OpenDialog1.FileName; // Imposta il percorso nella casella di testo
+    RARPathEdit.Text := OpenDialog1.FileName;
+  // Imposta il percorso nella casella di testo
 end;
 
 procedure TFrmMain.btnTrayBarClick(Sender: TObject);
 begin
+
   // Nasconde la finestra principale
-  Application.Minimize;
-  Self.Hide;
+  Self.ShowInTaskBar := stNever;
+
+
+  // Nasconde la finestra principale
+  //  Application.Minimize;
+  //Self.Hide;
+  frmMain.Hide;
 
   // Mostra l'icona nella barra delle applicazioni (tray)
   TrayIcon1.Visible := True;
@@ -218,7 +359,7 @@ end;
 
 procedure TFrmMain.chkEncryptChange(Sender: TObject);
 begin
-   edtPassword.Enabled := chkEncrypt.Checked;
+  edtPassword.Enabled := chkEncrypt.Checked;
 end;
 
 procedure TFrmMain.chkStartTimeChange(Sender: TObject);
@@ -229,7 +370,7 @@ end;
 
 procedure TFrmMain.cmbFrequencyChange(Sender: TObject);
 begin
-    // Nasconde tutti i controlli aggiuntivi
+  // Nasconde tutti i controlli aggiuntivi
   cmbDayOfWeek.Visible := False;
 
 
@@ -278,17 +419,18 @@ begin
 end;
 
 procedure TFrmMain.btnRunBackupClick(Sender: TObject);
-  // Funzione locale per ottenere il percorso della home directory in base al sistema operativo
+// Funzione locale per ottenere il percorso della home directory in base al sistema operativo
   function GetHomeDir: string;
   begin
-    {$IFDEF UNIX} // Se il sistema operativo è Unix (Linux/macOS)
+    {$IFDEF UNIX}
+ // Se il sistema operativo è Unix (Linux/macOS)
       Result := GetEnvironmentVariable('HOME');
       if Result = '' then
         Result := '/tmp'; // Fallback
-    {$ELSE} // Altrimenti (Windows)
-      Result := GetEnvironmentVariable('USERPROFILE');
-      if Result = '' then
-        Result := 'C:\'; // Fallback
+    {$ELSE}// Altrimenti (Windows)
+    Result := GetEnvironmentVariable('USERPROFILE');
+    if Result = '' then
+      Result := 'C:\'; // Fallback
     {$ENDIF}
   end;
 
@@ -304,7 +446,7 @@ var
   Line: string;
   i, idx: integer;
   ArchiveName: string;
-    CompressionParam: string;
+  CompressionParam: string;
 begin
   // Prepara l'interfaccia per il nuovo backup
   ScrolledOutput.Lines.Clear;
@@ -326,22 +468,23 @@ begin
   // Se la checkbox 'Backup giornaliero' è selezionata, aggiunge il giorno al nome dell'archivio
   if chkDayBak.Checked then
   begin
-    idx := DayOfWeek(Now) - 2; // Mappa il giorno della settimana (1=Domenica) a un indice 0-6
+    idx := DayOfWeek(Now) - 2;
+    // Mappa il giorno della settimana (1=Domenica) a un indice 0-6
     if idx < 0 then
       idx := 6;
     ArchiveName := ChangeFileExt(ArchiveName, '') + '_' + IntToStr(idx) +
       '_' + Giorni[idx] + '.rar';
   end;
 
-    // Aggiungi questo blocco per gestire la compressione
+  // Aggiungi questo blocco per gestire la compressione
   case cmbCompressionLevel.ItemIndex of
     0: CompressionParam := '-m0'; // Sola archiviazione
     1: CompressionParam := '-m1'; // Veloce
     2: CompressionParam := '-m3'; // Normale (default)
     3: CompressionParam := '-m4'; // Buona
     4: CompressionParam := '-m5'; // Massima
-  else
-    CompressionParam := ''; // Nessun parametro se l'opzione non è selezionata
+    else
+      CompressionParam := ''; // Nessun parametro se l'opzione non è selezionata
   end;
 
 
@@ -349,10 +492,11 @@ begin
   FProcess.Executable := RARPathEdit.Text;
   FProcess.Parameters.Clear;
   FProcess.Parameters.Add('a');       // Aggiungi file all'archivio (opzione 'a')
-  FProcess.Parameters.Add('-u');       // Aggiorna solo file modificati o nuovi (opzione '-u')
+  FProcess.Parameters.Add('-u');
+  // Aggiorna solo file modificati o nuovi (opzione '-u')
   FProcess.Parameters.Add('-r');       // Include sottocartelle (opzione '-r')
 
-   // Aggiungi il parametro di compressione se selezionato
+  // Aggiungi il parametro di compressione se selezionato
   if CompressionParam <> '' then
     FProcess.Parameters.Add(CompressionParam);
 
@@ -363,8 +507,10 @@ begin
   end;
 
 
-  FProcess.Parameters.Add(DestinationEdit.Text + PathDelim + ArchiveName); // Percorso di destinazione
-  FProcess.Parameters.AddStrings(FoldersListbox.Items); // Aggiunge le cartelle da includere
+  FProcess.Parameters.Add(DestinationEdit.Text + PathDelim + ArchiveName);
+  // Percorso di destinazione
+  FProcess.Parameters.AddStrings(FoldersListbox.Items);
+  // Aggiunge le cartelle da includere
 
   FProcess.Options := [poUsePipes, poStderrToOutput, poNoConsole];
   FProcess.CurrentDirectory := GetHomeDir;
@@ -384,7 +530,8 @@ begin
         ScrolledOutput.SelStart := Length(ScrolledOutput.Text);
       end;
     end;
-    Application.ProcessMessages; // Permette all'interfaccia utente di rimanere responsiva
+    Application.ProcessMessages;
+    // Permette all'interfaccia utente di rimanere responsiva
     Sleep(50); // Mette in pausa l'esecuzione per evitare di sovraccaricare la CPU
   end;
 
@@ -423,7 +570,8 @@ begin
       FProcess.Parameters.Add('now'); // Spegni immediatamente
     {$ENDIF}
 
-    {$IFDEF DARWIN} // Per macOS
+    {$IFDEF DARWIN}
+ // Per macOS
       FProcess.Executable := '/usr/bin/osascript';
       FProcess.Parameters.Add('-e');
       FProcess.Parameters.Add('tell application "System Events" to shut down');
@@ -547,16 +695,17 @@ begin
     SaveDlg.Free;
   end;
 end;
-    procedure TFrmMain.TimerStartTimeTimer(Sender: TObject);
+
+procedure TFrmMain.TimerStartTimeTimer(Sender: TObject);
 var
   CurrentDateTime: TDateTime;
-  CurrentDayOfWeek: Integer;
-  CurrentDayOfMonth: Integer;
+  CurrentDayOfWeek: integer;
+  CurrentDayOfMonth: integer;
   TargetDateTime: TDateTime;
-  TargetDayOfWeek: Integer;
-  TargetDayOfMonth: Integer;
-  SecondsLeft: Int64;
-  Hours, Minutes, Seconds: Word;
+  TargetDayOfWeek: integer;
+  TargetDayOfMonth: integer;
+  SecondsLeft: int64;
+  Hours, Minutes, Seconds: word;
 begin
   if not chkStartTime.Checked then
   begin
@@ -618,6 +767,10 @@ end;
 
 procedure TFrmMain.TrayIcon1Click(Sender: TObject);
 begin
+  // Ripristina la finestra
+  Self.ShowInTaskBar := stAlways;
+  // Aggiungi questa linea per mostrare l'icona nella taskbar
+
   // Ripristina la finestra dalla barra delle applicazioni
   Self.Show;
   Application.Restore;

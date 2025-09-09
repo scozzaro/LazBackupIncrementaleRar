@@ -6,7 +6,8 @@ object frmAbout: TfrmAbout
   Caption = 'About'
   ClientHeight = 517
   ClientWidth = 332
-  LCLVersion = '4.2.0.0'
+  LCLVersion = '4.99.0.0'
+  OnCreate = FormCreate
   object ImgLogo: TImage
     Left = 10
     Height = 64
@@ -24660,9 +24661,9 @@ object frmAbout: TfrmAbout
   end
   object LblAppName: TLabel
     Left = 90
-    Height = 18
+    Height = 21
     Top = 20
-    Width = 187
+    Width = 182
     Caption = 'LazbackupIncrementale'
     Font.Height = -16
     Font.Style = [fsBold]
@@ -24670,28 +24671,38 @@ object frmAbout: TfrmAbout
   end
   object LblVersion: TLabel
     Left = 90
-    Height = 16
+    Height = 15
     Top = 50
-    Width = 84
+    Width = 71
     Caption = 'Versione 1.0.0'
   end
   object LblCopyright: TLabel
     Left = 90
-    Height = 16
+    Height = 15
     Top = 75
-    Width = 229
+    Width = 205
     Caption = 'Copyright © 2025 Vincenzo Scozzaro'
+    Font.CharSet = ANSI_CHARSET
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
   end
   object LblAuthor: TLabel
     Left = 90
-    Height = 16
+    Height = 15
     Top = 100
-    Width = 163
+    Width = 149
     Caption = 'Autore: Vincenzo Scozzaro'
+    Font.CharSet = ANSI_CHARSET
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
   end
   object LblLicenza: TLabel
     Left = 10
-    Height = 56
+    Height = 32
     Top = 128
     Width = 309
     AutoSize = False
@@ -24700,7 +24711,7 @@ object frmAbout: TfrmAbout
   end
   object MemoTestoLicenza: TMemo
     Left = 10
-    Height = 179
+    Height = 144
     Top = 192
     Width = 310
     Lines.Strings = (
@@ -24714,9 +24725,9 @@ object frmAbout: TfrmAbout
     TabOrder = 1
   end
   object LblWinRARWarning: TLabel
-    Left = 10
+    Left = 12
     Height = 88
-    Top = 384
+    Top = 348
     Width = 309
     AutoSize = False
     Caption = 'Avvertenza: Questo programma richiede l''installazione di RAR o WinRAR. Questi strumenti non sono forniti e devono essere scaricati e installati separatamente dall''utente.'
@@ -24724,6 +24735,7 @@ object frmAbout: TfrmAbout
     Font.Color = 16750080
     Font.Height = -13
     Font.Name = '.SF NS'
+    Font.Style = [fsBold]
     ParentFont = False
     WordWrap = True
   end
@@ -24735,5 +24747,21 @@ object frmAbout: TfrmAbout
     Caption = 'Chiudi'
     TabOrder = 0
     OnClick = BtnClose1Click
+  end
+  object LangRun: TLabel
+    Left = 12
+    Height = 15
+    Top = 171
+    Width = 50
+    Caption = 'Lang Run'
+  end
+  object Label1: TLabel
+    Left = 12
+    Height = 15
+    Top = 444
+    Width = 132
+    Caption = 'https://www.rarlab.com/'
+    Font.Style = [fsUnderline]
+    ParentFont = False
   end
 end

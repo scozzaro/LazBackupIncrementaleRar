@@ -1,14 +1,16 @@
 object FrmMain: TFrmMain
-  Left = 608
+  Left = 44
   Height = 827
-  Top = 128
+  Top = 149
   Width = 686
   Caption = 'Laz Backup Incrementale '
   ClientHeight = 827
   ClientWidth = 686
   Menu = MainMenu1
+  Position = poDesktopCenter
   LCLVersion = '4.99.0.0'
   OnCreate = FormCreate
+  OnShow = FormShow
   object Panel1: TPanel
     Left = 0
     Height = 827
@@ -31,7 +33,6 @@ object FrmMain: TFrmMain
       Top = 19
       Width = 526
       TabOrder = 0
-      Text = '/usr/local/bin/rar'
     end
     object BrowseRARButton: TButton
       Left = 544
@@ -55,7 +56,6 @@ object FrmMain: TFrmMain
       Top = 64
       Width = 526
       TabOrder = 2
-      Text = '/Users/scozzaro/Documents'
     end
     object DestButton: TButton
       Left = 544
@@ -80,7 +80,6 @@ object FrmMain: TFrmMain
       Top = 107
       Width = 658
       TabOrder = 4
-      Text = 'test.rar'
     end
     object FoldersLabel: TLabel
       Left = 10
@@ -123,6 +122,7 @@ object FrmMain: TFrmMain
       Width = 270
       Caption = 'Escludi file/cartelle (pattern *.tmp, *.zip, C:\temp\*)'
       WordWrap = True
+      OnClick = ExcludeLabelClick
     end
     object ExcludeListbox: TListBox
       Left = 10
@@ -144,7 +144,7 @@ object FrmMain: TFrmMain
     object RemoveExcludeButton: TButton
       Left = 640
       Height = 26
-      Top = 298
+      Top = 296
       Width = 30
       Caption = '-'
       TabOrder = 10
@@ -179,7 +179,7 @@ object FrmMain: TFrmMain
     end
     object ScrolledOutput: TMemo
       Left = 10
-      Height = 247
+      Height = 199
       Top = 462
       Width = 660
       ReadOnly = True
@@ -189,7 +189,7 @@ object FrmMain: TFrmMain
     object chkSpegni: TCheckBox
       Left = 10
       Height = 19
-      Top = 734
+      Top = 689
       Width = 165
       Caption = 'Spegni computer al termine'
       TabOrder = 13
@@ -242,17 +242,17 @@ object FrmMain: TFrmMain
       OnClick = btnTrayBarClick
     end
     object chkDayBak: TCheckBox
-      Left = 549
+      Left = 452
       Height = 19
       Top = 88
-      Width = 118
-      Caption = 'Backup Giornaliero'
+      Width = 215
+      Caption = 'Esegui backup giornaliero rotazionale'
       TabOrder = 17
     end
     object chkMinTrayBar: TCheckBox
       Left = 200
       Height = 19
-      Top = 734
+      Top = 689
       Width = 130
       Caption = 'Minimizza in Tray Bar'
       TabOrder = 18
@@ -260,7 +260,7 @@ object FrmMain: TFrmMain
     object chkChiudiApp: TCheckBox
       Left = 344
       Height = 19
-      Top = 734
+      Top = 689
       Width = 124
       Caption = 'Chiudi Applicazione'
       TabOrder = 19
@@ -268,7 +268,7 @@ object FrmMain: TFrmMain
     object StatusLabel1: TLabel
       Left = 10
       Height = 15
-      Top = 717
+      Top = 672
       Width = 219
       Caption = 'Dopo aver complemato il backup esegui: '
       WordWrap = True
@@ -317,10 +317,10 @@ object FrmMain: TFrmMain
       Caption = 'Compressione '
     end
     object cmbFrequency: TComboBox
-      Left = 12
+      Left = 52
       Height = 23
-      Top = 400
-      Width = 126
+      Top = 404
+      Width = 142
       ItemHeight = 15
       ItemIndex = 0
       Items.Strings = (
@@ -332,9 +332,9 @@ object FrmMain: TFrmMain
       OnChange = cmbFrequencyChange
     end
     object cmbDayOfWeek: TComboBox
-      Left = 147
+      Left = 204
       Height = 23
-      Top = 400
+      Top = 404
       Width = 117
       ItemHeight = 15
       ItemIndex = 0
@@ -350,6 +350,40 @@ object FrmMain: TFrmMain
       TabOrder = 24
       Text = 'Lunedì'
       Visible = False
+    end
+    object Panel2: TPanel
+      Left = 12
+      Height = 60
+      Top = 712
+      Width = 657
+      BevelOuter = bvLowered
+      BorderWidth = 2
+      ClientHeight = 60
+      ClientWidth = 657
+      Color = clInfoBk
+      ParentBackground = False
+      ParentColor = False
+      TabOrder = 25
+      object Label3: TLabel
+        Left = 3
+        Height = 54
+        Top = 3
+        Width = 651
+        Align = alClient
+        Caption = 'Esempio: '#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak"'#13#10'I parametri non sono obligatori servono ad ottimizzare ed automatizzare la procedura'
+        Font.CharSet = ANSI_CHARSET
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+    end
+    object Label4: TLabel
+      Left = 12
+      Height = 15
+      Top = 408
+      Width = 23
+      Caption = 'Tipo'
     end
   end
   object MainMenu1: TMainMenu
@@ -28039,7 +28073,6 @@ object FrmMain: TFrmMain
       3E41E441207EE905450000000049454E44AE426082
     }
     OnClick = TrayIcon1Click
-    OnDblClick = TrayIcon1DblClick
     Left = 576
     Top = 776
   end
