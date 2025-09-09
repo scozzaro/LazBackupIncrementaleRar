@@ -1,14 +1,14 @@
 object FrmMain: TFrmMain
-  Left = 44
+  Left = 476
   Height = 827
-  Top = 149
+  Top = 112
   Width = 686
   Caption = 'Laz Backup Incrementale '
   ClientHeight = 827
   ClientWidth = 686
   Menu = MainMenu1
   Position = poDesktopCenter
-  LCLVersion = '4.99.0.0'
+  LCLVersion = '4.0.0.4'
   OnCreate = FormCreate
   OnShow = FormShow
   object Panel1: TPanel
@@ -151,25 +151,25 @@ object FrmMain: TFrmMain
       OnClick = RemoveExcludeButtonClick
     end
     object ProgressLabel: TLabel
-      Left = 10
+      Left = 12
       Height = 16
-      Top = 440
-      Width = 260
+      Top = 432
+      Width = 240
       Alignment = taCenter
       AutoSize = False
       Caption = 'Avanzamento: 0%'
       WordWrap = True
     end
     object StatusLabel: TLabel
-      Left = 429
+      Left = 352
       Height = 15
-      Top = 440
+      Top = 408
       Width = 39
       Caption = 'Pronto.'
       WordWrap = True
     end
     object btnRunBackup: TButton
-      Left = 290
+      Left = 540
       Height = 31
       Top = 424
       Width = 115
@@ -352,7 +352,7 @@ object FrmMain: TFrmMain
       Visible = False
     end
     object Panel2: TPanel
-      Left = 12
+      Left = 10
       Height = 60
       Top = 712
       Width = 657
@@ -385,19 +385,26 @@ object FrmMain: TFrmMain
       Width = 23
       Caption = 'Tipo'
     end
+    object ProgressBar1: TProgressBar
+      Left = 268
+      Height = 17
+      Top = 432
+      Width = 258
+      TabOrder = 26
+    end
   end
   object MainMenu1: TMainMenu
     Left = 616
     Top = 776
     object FileMenu: TMenuItem
       Caption = '&File'
-      object SaveConfigMenuItem: TMenuItem
-        Caption = 'Salva Configurazione'
-        OnClick = SaveConfigMenuItemClick
-      end
       object LoadConfigMenuItem: TMenuItem
         Caption = 'Carica Configurazione'
         OnClick = LoadConfigMenuItemClick
+      end
+      object SaveConfigMenuItem: TMenuItem
+        Caption = 'Salva Configurazione'
+        OnClick = SaveConfigMenuItemClick
       end
       object N1: TMenuItem
         Caption = '-'

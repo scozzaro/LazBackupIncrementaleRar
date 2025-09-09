@@ -41,6 +41,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Panel2: TPanel;
+    ProgressBar1: TProgressBar;
     StatusLabel1: TLabel; // Etichetta per lo stato
     Visualizza: TMenuItem; // Voce di menu per visualizzare la finestra
     PopupMenuTray: TPopupMenu;
@@ -82,6 +83,7 @@ type
     procedure AddExcludeButtonClick(Sender: TObject);
     procedure BrowseRARButtonClick(Sender: TObject);
     procedure btnTrayBarClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure chkEncryptChange(Sender: TObject);
     procedure chkStartTimeChange(Sender: TObject);
     procedure cmbFrequencyChange(Sender: TObject);
@@ -106,6 +108,8 @@ type
     FProcessedFiles: integer; // Numero di file processati
 
     TrayMode: boolean;
+
+    NomeFileConfigBakup: string;
 
     // Procedure interne per la gestione dei dati
     procedure OnProcessOutput(const ALine: string); // Gestisce l'output del processo
@@ -183,6 +187,7 @@ begin
         LoadFile := ParamStr(I);
         // Rimuovi eventuali doppi apici se il percorso era tra virgolette
         LoadFile := StringReplace(LoadFile, '"', '', [rfReplaceAll]);
+
       end;
       Inc(I); // Passa al parametro successivo dopo il nome del file
     end
@@ -202,6 +207,7 @@ begin
   begin
     if FileExists(LoadFile) then
     begin
+      NomeFileConfigBakup := LoadFile;
       LoadConfigFromFile(LoadFile);
     end
     else
@@ -214,6 +220,7 @@ begin
   begin
     // Se non è stato specificato un file, cerca quello predefinito
     ConfigPath := GetUserDir + 'Documents' + PathDelim + 'backup_configLaz.rbak';
+    NomeFileConfigBakup := 'backup_configLaz.rbak';
     if FileExists(ConfigPath) then
     begin
       LoadConfigFromFile(ConfigPath);
@@ -307,17 +314,17 @@ end;
 
 procedure TFrmMain.ExcludeLabelClick(Sender: TObject);
 begin
-    ExcludeListbox.Items.Add('desktop.ini');
+  ExcludeListbox.Items.Add('desktop.ini');
 
-      // Fili infetti da ransomeware
-    ExcludeListbox.Items.Add('*.locked');
-    ExcludeListbox.Items.Add('*.encrypted');
-    ExcludeListbox.Items.Add('*.wannacry');
-    ExcludeListbox.Items.Add('*.phobos');
-    ExcludeListbox.Items.Add('*.locked');
-    ExcludeListbox.Items.Add('ryuk');
+  // Fili infetti da ransomeware
+  ExcludeListbox.Items.Add('*.locked');
+  ExcludeListbox.Items.Add('*.encrypted');
+  ExcludeListbox.Items.Add('*.wannacry');
+  ExcludeListbox.Items.Add('*.phobos');
+  ExcludeListbox.Items.Add('*.locked');
+  ExcludeListbox.Items.Add('ryuk');
 
-             // File temporanei generici
+  // File temporanei generici
   ExcludeListbox.Items.Add('*.tmp');
   ExcludeListbox.Items.Add('*.~*');
   ExcludeListbox.Items.Add('*.bak');
@@ -355,6 +362,11 @@ begin
   TrayIcon1.Visible := True;
   TrayIcon1.Hint := 'Backup App - in esecuzione'; // Suggerimento al passaggio del mouse
   // TrayIcon1.PopupMenu := PopupMenuTray; // collega il menu
+end;
+
+procedure TFrmMain.Button1Click(Sender: TObject);
+begin
+
 end;
 
 procedure TFrmMain.chkEncryptChange(Sender: TObject);
@@ -451,11 +463,18 @@ begin
   // Prepara l'interfaccia per il nuovo backup
   ScrolledOutput.Lines.Clear;
   FProcessedFiles := 0;
+
   FTotalFiles := 0;
 
   // Calcola il numero totale di file da processare per aggiornare l'avanzamento
   for i := 0 to FoldersListbox.Items.Count - 1 do
     PreCalculateFiles(FoldersListbox.Items[i]);
+
+  // Imposta il valore massimo della progress bar sul numero totale di file
+  ProgressBar1.Min := 0;
+  ProgressBar1.Max := FTotalFiles;
+  ProgressBar1.Position := 0;
+
 
   // Gestione del nome dell'archivio
   ArchiveName := ArchiveNameEdit.Text;
@@ -518,6 +537,10 @@ begin
   FProcess.Execute; // Avvia il processo RAR
 
   // Ciclo per leggere l'output del processo RAR in tempo reale
+
+
+
+
   while FProcess.Running or (FProcess.Output.NumBytesAvailable > 0) do
   begin
     if FProcess.Output.NumBytesAvailable > 0 then
@@ -528,6 +551,15 @@ begin
         SetString(Line, pansichar(@Buffer[0]), BytesRead);
         ScrolledOutput.Lines.Text := ScrolledOutput.Lines.Text + Line;
         ScrolledOutput.SelStart := Length(ScrolledOutput.Text);
+
+        // La logica per aggiornare la progress bar in base all'output di RAR
+        Inc(FProcessedFiles);
+        ProgressBar1.Position := FProcessedFiles;
+
+        ProgressLabel.Caption :=
+          Format('Avanzamento: %d%% (%d di %d file)', [Round(
+          (FProcessedFiles / FTotalFiles) * 100), FProcessedFiles, FTotalFiles]);
+
       end;
     end;
     Application.ProcessMessages;
@@ -547,8 +579,10 @@ begin
   end;
 
   // Aggiorna la barra di avanzamento e lo stato al 100% al termine del backup
-  ProgressLabel.Caption := Format('Avanzamento: %d%% (%d di %d file)',
-    [Round(100), FTotalFiles, FTotalFiles]);
+  // Imposta la barra di avanzamento e l'etichetta al 100% al termine del backup
+  ProgressBar1.Position := FTotalFiles;
+  ProgressLabel.Caption := Format('Avanzamento: 100%% (%d di %d file)',
+    [FTotalFiles, FTotalFiles]);
 
   // 🔹 Se la checkbox per lo spegnimento è attiva, esegue il comando di spegnimento
   if chkSpegni.Checked then
@@ -651,7 +685,7 @@ begin
   SaveDlg := TSaveDialog.Create(Self);
   try
     SaveDlg.Filter := 'Backup Config (*.rbak)|*.rbak';
-    SaveDlg.FileName := 'backup_configLaz.rbak';
+    SaveDlg.FileName := NomeFileConfigBakup;
     if not SaveDlg.Execute then Exit; // Esce se l'utente annulla
 
     J := TJSONObject.Create;
@@ -804,7 +838,8 @@ begin
   // Apre una finestra di dialogo per selezionare un file di configurazione e lo carica
   if OpenDialog1.Execute then
   begin
-    JSONObj := TJSONObject(GetJSON(ReadFileToString(OpenDialog1.FileName)));
+    NomeFileConfigBakup :=  OpenDialog1.FileName;
+    JSONObj := TJSONObject(GetJSON(ReadFileToString(NomeFileConfigBakup)));
     try
       FoldersListbox.Items.Clear;
       ExcludeListbox.Items.Clear;
