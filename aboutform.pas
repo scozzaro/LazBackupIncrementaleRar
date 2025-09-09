@@ -7,11 +7,12 @@ interface
 uses
     {$IFDEF WINDOWS}
   Windows,
+        ShellApi,
   {$ENDIF}
   {$IFDEF LINUX}
   BaseUnix,
   {$ENDIF}
-
+    Process,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls;
 
 type
@@ -32,6 +33,7 @@ type
     MemoTestoLicenza: TMemo;
     procedure BtnClose1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Label1Click(Sender: TObject);
   private
 
   public
@@ -78,6 +80,35 @@ end;
 procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
   Langrun.Caption:= GetSystemLanguageCode;
+end;
+
+procedure TfrmAbout.Label1Click(Sender: TObject);
+var
+  BrowserProcess: TProcess;
+begin
+  BrowserProcess := TProcess.Create(nil);
+  try
+    {$IFDEF MSWINDOWS}
+    BrowserProcess.Executable := 'cmd';
+    BrowserProcess.Parameters.Add('/c');
+    BrowserProcess.Parameters.Add('start');
+    BrowserProcess.Parameters.Add('https://www.rarlab.com/');
+    {$ENDIF}
+
+    {$IFDEF LINUX}
+    BrowserProcess.Executable := 'xdg-open';
+    BrowserProcess.Parameters.Add('https://www.rarlab.com/');
+    {$ENDIF}
+
+    {$IFDEF DARWIN} // DARWIN è la direttiva per macOS e iOS
+    BrowserProcess.Executable := 'open';
+    BrowserProcess.Parameters.Add('https://www.rarlab.com/');
+    {$ENDIF}
+
+    BrowserProcess.Execute;
+  finally
+    BrowserProcess.Free;
+  end;
 end;
 
 end.

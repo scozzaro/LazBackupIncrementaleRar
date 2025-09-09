@@ -7,9 +7,8 @@
       <Unit>
         <Filename Value="LazBackupIncrementaleRar.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="21"/>
-        <CursorPos Y="53"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="12" Y="16"/>
         <UsageCount Value="60"/>
         <Loaded Value="True"/>
       </Unit>
@@ -20,8 +19,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="296"/>
-        <CursorPos X="5" Y="311"/>
+        <TopLine Value="206"/>
+        <CursorPos Y="231"/>
         <UsageCount Value="60"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -34,8 +33,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="AboutForm"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="45"/>
-        <CursorPos X="25" Y="59"/>
+        <TopLine Value="67"/>
+        <CursorPos X="3" Y="89"/>
         <UsageCount Value="60"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -48,11 +47,10 @@
       </Unit>
       <Unit>
         <Filename Value="../../lazarus/lcl/include/progressbar.inc"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="148"/>
         <CursorPos Y="172"/>
         <UsageCount Value="29"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="aboutform.lfm"/>
@@ -64,59 +62,27 @@
       <Unit>
         <Filename Value="../../fpcsrc/packages/winunits-base/src/shellapi.pp"/>
         <UnitName Value="ShellApi"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="1066"/>
         <CursorPos X="10" Y="1083"/>
         <UsageCount Value="21"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../lazarus/lcl/forms.pp"/>
         <UnitName Value="Forms"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="477"/>
         <CursorPos X="5" Y="493"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../fpcupdeluxe/lazarus/fpc/3.2.2/sources/rtl/objpas/sysutils/osutilsh.inc"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="11" Y="31"/>
+        <UsageCount Value="10"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="156" Column="50" TopLine="124"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="155" Column="50" TopLine="123"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="156" Column="50" TopLine="124"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="137" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="LazBackupIncrementaleRar.lpr"/>
-        <Caret Line="18" Column="51"/>
-      </Position>
-      <Position>
-        <Filename Value="LazBackupIncrementaleRar.lpr"/>
-        <Caret Line="45" Column="5" TopLine="13"/>
-      </Position>
-      <Position>
-        <Filename Value="LazBackupIncrementaleRar.lpr"/>
-        <Caret Line="40" Column="34" TopLine="13"/>
-      </Position>
-      <Position>
-        <Filename Value="LazBackupIncrementaleRar.lpr"/>
-        <Caret Line="38" Column="19" TopLine="13"/>
-      </Position>
-      <Position>
-        <Filename Value="LazBackupIncrementaleRar.lpr"/>
-        <Caret Line="45" Column="3" TopLine="18"/>
-      </Position>
       <Position>
         <Filename Value="LazBackupIncrementaleRar.lpr"/>
         <Caret Line="46" Column="43" TopLine="17"/>
@@ -201,6 +167,42 @@
         <Filename Value="mainform.pas"/>
         <Caret Line="141" Column="26" TopLine="114"/>
       </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="311" Column="5" TopLine="296"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="303" Column="32" TopLine="296"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="561" Column="17" TopLine="531"/>
+      </Position>
+      <Position>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="16" Column="12"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="224" TopLine="203"/>
+      </Position>
+      <Position>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="46" Column="25" TopLine="46"/>
+      </Position>
+      <Position>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="66" Column="18" TopLine="61"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="232" TopLine="207"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="231" TopLine="206"/>
+      </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
@@ -226,22 +228,4 @@
       </List>
     </HistoryLists>
   </ProjectSession>
-  <Debugging>
-    <BreakPoints>
-      <Item>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="mainform.pas"/>
-        <Line Value="224"/>
-      </Item>
-      <Item>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="mainform.pas"/>
-        <Line Value="232"/>
-      </Item>
-    </BreakPoints>
-  </Debugging>
 </CONFIG>

@@ -56,7 +56,6 @@ type
     FoldersLabel: TLabel; // Etichetta per le cartelle da includere
     FoldersListbox: TListBox; // Lista delle cartelle da includere
     InfoMenu: TMenuItem; // Menu "Info"
-    LicenseMenuItem: TMenuItem; // Voce di menu "Licenza"
     LoadConfigMenuItem: TMenuItem; // Voce di menu per caricare la configurazione
     MainMenu1: TMainMenu; // Menu principale
     N1: TMenuItem; // Separatore di menu

@@ -6,6 +6,7 @@ object frmAbout: TfrmAbout
   Caption = 'About'
   ClientHeight = 517
   ClientWidth = 332
+  Position = poDesktopCenter
   LCLVersion = '4.99.0.0'
   OnCreate = FormCreate
   object ImgLogo: TImage
@@ -24661,9 +24662,9 @@ object frmAbout: TfrmAbout
   end
   object LblAppName: TLabel
     Left = 90
-    Height = 21
+    Height = 23
     Top = 20
-    Width = 182
+    Width = 194
     Caption = 'LazbackupIncrementale'
     Font.Height = -16
     Font.Style = [fsBold]
@@ -24671,16 +24672,16 @@ object frmAbout: TfrmAbout
   end
   object LblVersion: TLabel
     Left = 90
-    Height = 15
+    Height = 17
     Top = 50
-    Width = 71
+    Width = 79
     Caption = 'Versione 1.0.0'
   end
   object LblCopyright: TLabel
     Left = 90
-    Height = 15
+    Height = 17
     Top = 75
-    Width = 205
+    Width = 214
     Caption = 'Copyright © 2025 Vincenzo Scozzaro'
     Font.CharSet = ANSI_CHARSET
     Font.Pitch = fpVariable
@@ -24690,9 +24691,9 @@ object frmAbout: TfrmAbout
   end
   object LblAuthor: TLabel
     Left = 90
-    Height = 15
+    Height = 17
     Top = 100
-    Width = 149
+    Width = 154
     Caption = 'Autore: Vincenzo Scozzaro'
     Font.CharSet = ANSI_CHARSET
     Font.Pitch = fpVariable
@@ -24750,18 +24751,19 @@ object frmAbout: TfrmAbout
   end
   object LangRun: TLabel
     Left = 12
-    Height = 15
+    Height = 17
     Top = 171
-    Width = 50
+    Width = 51
     Caption = 'Lang Run'
   end
   object Label1: TLabel
     Left = 12
-    Height = 15
+    Height = 17
     Top = 444
-    Width = 132
+    Width = 134
     Caption = 'https://www.rarlab.com/'
     Font.Style = [fsUnderline]
     ParentFont = False
+    OnClick = Label1Click
   end
 end
