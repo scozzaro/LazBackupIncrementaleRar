@@ -171,8 +171,8 @@ object FrmMain: TFrmMain
     end
     object ScrolledOutput: TMemo
       Left = 10
-      Height = 199
-      Top = 462
+      Height = 198
+      Top = 470
       Width = 660
       ReadOnly = True
       ScrollBars = ssVertical
@@ -411,6 +411,13 @@ object FrmMain: TFrmMain
       Caption = 'C'
       TabOrder = 13
       OnClick = RemoveEscludiAllFilesClick
+    end
+    object Label1: TLabel
+      Left = 12
+      Height = 15
+      Top = 451
+      Width = 20
+      Caption = 'Log'
     end
   end
   object MainMenu1: TMainMenu

@@ -5,6 +5,10 @@ unit mainform;
 interface
 
 uses
+    {$IFDEF WINDOWS}
+  Windows,
+        ShellApi,
+  {$ENDIF}
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   dateutils,
   FileUtil, Process, LazFileUtils, DateTimePicker, FileCtrl, StrUtils, ComCtrls,
@@ -36,6 +40,7 @@ type
     cmbFrequency: TComboBox;
     cmbDayOfWeek: TComboBox;
     edtPassword: TEdit;
+    Label1: TLabel;
     lblTimeLeft: TLabel; // Etichetta per visualizzare il conto alla rovescia del timer
     Label2: TLabel;
     Label3: TLabel;
@@ -131,7 +136,35 @@ implementation
 
 { TFrmMain }
 
+
+{$IFDEF MSWINDOWS}
+function GetLocaleInformation(Flag: integer): string;
+var
+ pcLCA: array[0..20] of char;
+begin
+ if (GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, Flag, pcLCA, 19) <= 0) then
+ begin
+   pcLCA[0] := #0;
+ end;
+ Result := pcLCA;
+end;
+
+{$ENDIF}
+
+function GetSystemLanguageCode: string;
+begin
+  {$IFDEF MSWINDOWS}
+   Result := GetLocaleInformation(LOCALE_SENGLANGUAGE);
+  {$ELSE}
+   Result := SysUtils.GetEnvironmentVariable('LANG');
+  {$ENDIF}
+end;
+
+
+
 procedure TFrmMain.FormCreate(Sender: TObject);
+
+
 
   procedure SetDefault;
   begin
@@ -232,6 +265,136 @@ begin
       SetDefault;
     end;
   end;
+
+
+
+    if GetSystemLanguageCode = 'Italian' then
+  begin
+    // Imposta le etichette e le caption in italiano
+    // Form principale
+    Self.Caption := 'Laz Backup Incrementale';
+
+    // Pannello 1
+    RARPathLabel.Caption := 'Percorso del programma RAR';
+    BrowseRARButton.Caption := 'Trova Programma';
+    DestinationLabel.Caption := 'Percorso di destinazione di salvataggio dell''archivio';
+    DestButton.Caption := 'Trova Percorso';
+    ArchiveNameLabel.Caption := 'Nome del file di backup';
+    FoldersLabel.Caption := 'Cartelle da salvare';
+    ExcludeLabel.Caption := 'Escludi file/cartelle (pattern *.tmp, *.zip, C:\temp\*)';
+    ProgressLabel.Caption := 'Avanzamento: 0%';
+    btnRunBackup.Caption := 'Esegui Backup';
+    chkSpegni.Caption := 'Spegni computer al termine';
+    chkStartTime.Caption := 'Auto Start';
+    lblTimeLeft.Caption := 'Tempo rimanente';
+    btnTrayBar.Caption := 'Minimizza nella tray bar';
+    chkDayBak.Caption := 'Esegui backup giornaliero rotazionale';
+    chkDayBak.Hint := 'Aggiunge al nome del file il giorno della settimana.'#13#10'Il backup aggiornerà, se esiste, il file della settimana precedente '#13#10'in modo da avere 7 backup incrementali.';
+    chkMinTrayBar.Caption := 'Minimizza in Tray Bar';
+    chkChiudiApp.Caption := 'Chiudi Applicazione';
+    StatusLabel1.Caption := 'Dopo aver completato il backup esegui:';
+    chkEncrypt.Caption := 'Proteggi con password';
+    Label2.Caption := 'Compressione';
+    Label4.Caption := 'Tipo';
+
+    // ComboBox
+    cmbCompressionLevel.Items.Clear;
+    cmbCompressionLevel.Items.Add('Sola archiviazione');
+    cmbCompressionLevel.Items.Add('Veloce');
+    cmbCompressionLevel.Items.Add('Normale');
+    cmbCompressionLevel.Items.Add('Buona');
+    cmbCompressionLevel.Items.Add('Massima');
+
+    cmbFrequency.Items.Clear;
+    cmbFrequency.Items.Add('Giornaliero');
+    cmbFrequency.Items.Add('Settimanale');
+
+    cmbDayOfWeek.Items.Clear;
+    cmbDayOfWeek.Items.Add('Lunedì');
+    cmbDayOfWeek.Items.Add('Martedì');
+    cmbDayOfWeek.Items.Add('Mercoledì');
+    cmbDayOfWeek.Items.Add('Giovedì');
+    cmbDayOfWeek.Items.Add('Venerdì');
+    cmbDayOfWeek.Items.Add('Sabato');
+    cmbDayOfWeek.Items.Add('Domenica');
+
+    // Menu
+    FileMenu.Caption := '&File';
+    LoadConfigMenuItem.Caption := 'Carica Configurazione';
+    SaveConfigMenuItem.Caption := 'Salva Configurazione';
+    QuitMenuItem.Caption := 'Esci';
+    InfoMenu.Caption := '&Info';
+    AboutMenuItem.Caption := 'About';
+
+    // Popup Menu Tray
+    Visualizza.Caption := 'Visualizza';
+
+    Label3.caption :='Esempio:'#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak" '#13#10'I parametri non sono obligatori servono ad automatizzare la procedura';
+  end else begin
+     // Imposta le etichette e le caption in inglese
+    // Main Form
+    Self.Caption := 'Laz Incremental Backup';
+
+    // Panel 1
+    RARPathLabel.Caption := 'RAR Program Path';
+    BrowseRARButton.Caption := 'Browse Program';
+    DestinationLabel.Caption := 'Archive destination path';
+    DestButton.Caption := 'Browse Path';
+    ArchiveNameLabel.Caption := 'Backup file name';
+    FoldersLabel.Caption := 'Folders to save';
+    ExcludeLabel.Caption := 'Exclude files/folders (pattern *.tmp, *.zip, C:\temp\*)';
+    ProgressLabel.Caption := 'Progress: 0%';
+    btnRunBackup.Caption := 'Run Backup';
+    chkSpegni.Caption := 'Shutdown computer on finish';
+    chkStartTime.Caption := 'Auto Start';
+    lblTimeLeft.Caption := 'Time left to start';
+    btnTrayBar.Caption := 'Minimize to tray bar';
+    chkDayBak.Caption := 'Perform rotational daily backup';
+    chkDayBak.Hint := 'Adds the day of the week to the file name.'#13#10'The backup will update the previous week''s file if it exists,'#13#10'allowing for 7 incremental backups.';
+
+    chkMinTrayBar.Caption := 'Minimize to Tray Bar';
+    chkChiudiApp.Caption := 'Close Application';
+    StatusLabel1.Caption := 'After completing the backup, execute:';
+    chkEncrypt.Caption := 'Protect with password';
+    Label2.Caption := 'Compression';
+    Label4.Caption := 'Type';
+
+    // ComboBox
+    cmbCompressionLevel.Items.Clear;
+    cmbCompressionLevel.Items.Add('Store only');
+    cmbCompressionLevel.Items.Add('Fastest');
+    cmbCompressionLevel.Items.Add('Normal');
+    cmbCompressionLevel.Items.Add('Good');
+    cmbCompressionLevel.Items.Add('Best');
+
+    cmbFrequency.Items.Clear;
+    cmbFrequency.Items.Add('Daily');
+    cmbFrequency.Items.Add('Weekly');
+
+    cmbDayOfWeek.Items.Clear;
+    cmbDayOfWeek.Items.Add('Monday');
+    cmbDayOfWeek.Items.Add('Tuesday');
+    cmbDayOfWeek.Items.Add('Wednesday');
+    cmbDayOfWeek.Items.Add('Thursday');
+    cmbDayOfWeek.Items.Add('Friday');
+    cmbDayOfWeek.Items.Add('Saturday');
+    cmbDayOfWeek.Items.Add('Sunday');
+
+    // Menu
+    FileMenu.Caption := '&File';
+    LoadConfigMenuItem.Caption := 'Load Configuration';
+    SaveConfigMenuItem.Caption := 'Save Configuration';
+    QuitMenuItem.Caption := 'Quit';
+    InfoMenu.Caption := '&Info';
+    AboutMenuItem.Caption := 'About';
+
+    // Popup Menu Tray
+    Visualizza.Caption := 'View';
+
+    Label3.caption :='Example:'#13#10'LazBackup.exe /tray /load "C:\Configurations\home_backup.rbak"'#13#10'The parameters are not mandatory; they serve to automate the process.';
+
+  end;
+
 
 end;
 

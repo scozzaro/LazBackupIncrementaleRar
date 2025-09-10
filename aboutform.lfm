@@ -24662,9 +24662,9 @@ object frmAbout: TfrmAbout
   end
   object LblAppName: TLabel
     Left = 90
-    Height = 23
+    Height = 21
     Top = 20
-    Width = 194
+    Width = 182
     Caption = 'LazbackupIncrementale'
     Font.Height = -16
     Font.Style = [fsBold]
@@ -24672,16 +24672,16 @@ object frmAbout: TfrmAbout
   end
   object LblVersion: TLabel
     Left = 90
-    Height = 17
+    Height = 15
     Top = 50
-    Width = 79
+    Width = 71
     Caption = 'Versione 1.0.0'
   end
   object LblCopyright: TLabel
     Left = 90
-    Height = 17
+    Height = 15
     Top = 75
-    Width = 214
+    Width = 205
     Caption = 'Copyright © 2025 Vincenzo Scozzaro'
     Font.CharSet = ANSI_CHARSET
     Font.Pitch = fpVariable
@@ -24691,9 +24691,9 @@ object frmAbout: TfrmAbout
   end
   object LblAuthor: TLabel
     Left = 90
-    Height = 17
+    Height = 15
     Top = 100
-    Width = 154
+    Width = 149
     Caption = 'Autore: Vincenzo Scozzaro'
     Font.CharSet = ANSI_CHARSET
     Font.Pitch = fpVariable
@@ -24751,16 +24751,16 @@ object frmAbout: TfrmAbout
   end
   object LangRun: TLabel
     Left = 12
-    Height = 17
+    Height = 15
     Top = 171
-    Width = 51
+    Width = 50
     Caption = 'Lang Run'
   end
   object Label1: TLabel
     Left = 12
-    Height = 17
+    Height = 15
     Top = 444
-    Width = 134
+    Width = 132
     Caption = 'https://www.rarlab.com/'
     Font.Style = [fsUnderline]
     ParentFont = False
