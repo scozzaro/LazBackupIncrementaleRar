@@ -27,3 +27,4 @@ Siamo aperti a contributi di ogni tipo: segnalazioni di bug, richieste di funzio
 
 ![Screenshot della finestra principale](images/screen_main.jpg)
 
+![Screenshot della finestra principale](images/screen_about.jpg)
