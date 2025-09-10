@@ -36,12 +36,14 @@ type
     cmbFrequency: TComboBox;
     cmbDayOfWeek: TComboBox;
     edtPassword: TEdit;
-    Label1: TLabel; // Etichetta per visualizzare il conto alla rovescia del timer
+    lblTimeLeft: TLabel; // Etichetta per visualizzare il conto alla rovescia del timer
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Panel2: TPanel;
     ProgressBar1: TProgressBar;
+    RemoveAllFolder: TButton;
+    RemoveEscludiAllFiles: TButton;
     StatusLabel1: TLabel; // Etichetta per lo stato
     Visualizza: TMenuItem; // Voce di menu per visualizzare la finestra
     PopupMenuTray: TPopupMenu;
@@ -72,7 +74,6 @@ type
     SaveConfigMenuItem: TMenuItem; // Voce di menu per salvare la configurazione
     SaveDialog1: TSaveDialog; // Dialogo per il salvataggio dei file
     ScrolledOutput: TMemo; // Memo per visualizzare l'output del processo RAR
-    StatusLabel: TLabel; // Etichetta di stato
     TimerStartTime: TTimer; // Timer per l'avvio del backup a un'ora specifica
     TrayIcon1: TTrayIcon; // Icona nella barra delle applicazioni
 
@@ -92,7 +93,9 @@ type
     procedure FormShow(Sender: TObject);
     procedure LicenseMenuItemClick(Sender: TObject);
     procedure LoadConfigMenuItemClick(Sender: TObject);
+    procedure RemoveAllFolderClick(Sender: TObject);
     procedure RemoveButtonClick(Sender: TObject);
+    procedure RemoveEscludiAllFilesClick(Sender: TObject);
     procedure RemoveExcludeButtonClick(Sender: TObject);
     procedure btnRunBackupClick(Sender: TObject);
     procedure SaveConfigMenuItemClick(Sender: TObject);
@@ -280,6 +283,11 @@ begin
     FoldersListbox.Items.Delete(Index);
 end;
 
+procedure TFrmMain.RemoveEscludiAllFilesClick(Sender: TObject);
+begin
+   ExcludeListbox.Clear;
+end;
+
 procedure TFrmMain.AddExcludeButtonClick(Sender: TObject);
 var
   Pattern: string;
@@ -321,7 +329,7 @@ begin
   ExcludeListbox.Items.Add('*.wannacry');
   ExcludeListbox.Items.Add('*.phobos');
   ExcludeListbox.Items.Add('*.locked');
-  ExcludeListbox.Items.Add('ryuk');
+  ExcludeListbox.Items.Add('*.ryuk');
 
   // File temporanei generici
   ExcludeListbox.Items.Add('*.tmp');
@@ -377,6 +385,7 @@ procedure TFrmMain.chkStartTimeChange(Sender: TObject);
 begin
   // Abilita/disabilita il timer in base allo stato della checkbox
   TimerStartTime.Enabled := chkStartTime.Checked;
+  lblTimeLeft.Visible:=chkStartTime.Checked;
 end;
 
 procedure TFrmMain.cmbFrequencyChange(Sender: TObject);
@@ -639,7 +648,7 @@ begin
   JSONObj := TJSONObject(GetJSON(ReadFileToString(AFileName)));
   try
     FoldersListbox.Items.Clear;
-    ExcludeListbox.Items.Clear;
+
 
     // Carica le cartelle da includere
     FoldersArray := JSONObj.Arrays['folders'];
@@ -782,7 +791,7 @@ begin
   Minutes := (SecondsLeft mod 3600) div 60;
   Seconds := SecondsLeft mod 60;
 
-  Label1.Caption :=
+  lblTimeLeft.Caption :=
     'Ora attuale: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', CurrentDateTime) +
     ' - Target: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', TargetDateTime) +
     ' - Mancano: ' + Format('%.2d:%.2d:%.2d', [Hours, Minutes, Seconds]);
@@ -868,6 +877,11 @@ begin
       JSONObj.Free;
     end;
   end;
+end;
+
+procedure TFrmMain.RemoveAllFolderClick(Sender: TObject);
+begin
+   FoldersListbox.Items.Clear;
 end;
 
 end.
