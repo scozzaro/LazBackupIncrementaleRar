@@ -24,3 +24,6 @@ Questo software è distribuito sotto la Licenza Pubblica Mozilla 2.0 (MPL-2.0). 
 
 Come Contribuire
 Siamo aperti a contributi di ogni tipo: segnalazioni di bug, richieste di funzionalità e miglioramenti al codice. Per maggiori informazioni, consulta la nostra guida per i contributori.
+
+![Screenshot della finestra principale](images/screen_main.jpg)
+
