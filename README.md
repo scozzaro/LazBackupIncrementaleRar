@@ -1,29 +1,30 @@
 LazBackupIncrementale
-Un programma multipiattaforma (Windows, macOS, Linux) per la creazione di backup incrementali e completi, utilizzando il software di compressione esterno RAR/WinRAR.
+I'm very pleased to share this backup software with the Lazarus community—a project I hope many of you will find useful.
 
-Caratteristiche Principali
-Backup Flessibile: Seleziona facilmente le cartelle che desideri includere nel tuo backup.
+Overview
+This backup program, developed with Lazarus, is a robust and versatile solution designed to meet backup needs on Windows, macOS, and Linux platforms.
 
-Esclusioni Personalizzabili: Escludi specifici tipi di file dal backup per ridurre la dimensione dell'archivio, ad esempio file temporanei, log o file di sistema.
+The program is built around the reliable RAR compression tool, offering an intuitive graphical interface that makes the process of incremental backup both simple and fast. Its cross-platform nature ensures that users can protect their data regardless of the operating system they use. To function, the program requires that RAR or WinRAR be installed separately on the system.
 
-Supporto Multipiattaforma: Funziona su sistemi operativi Windows, macOS e Linux, offrendo un'unica soluzione per diverse piattaforme.
+Key Features
+Incremental Backup: Thanks to RAR's -u option, the program performs incremental backups. This means that only new or modified files are added to the archive, saving time and disk space with each execution.
 
-Gestione della Configurazione: Salva le tue impostazioni di backup in un file di configurazione per un uso rapido e ripetibile. All'avvio, il programma carica automaticamente l'ultima configurazione salvata.
+Advanced File Management: You can exclude specific file types from the backup (such as temporary files or those infected by ransomware), ensuring the archive contains only useful and secure data. Users can also include an unlimited number of folders in the backup process.
 
-Log Dettagliato: Genera un file di log completo che registra tutte le operazioni e gli eventi durante il processo di backup, utile per il debug e il monitoraggio.
+Automation and Scheduling: The program offers scheduling options for backups at a pre-set time, with the ability to choose a daily, weekly, or monthly frequency.
 
-Integrazione con RAR/WinRAR: Sfrutta il motore di compressione potente di RAR per creare archivi efficienti e protetti. Nota: è necessario che RAR/WinRAR sia già installato sul sistema.
+Flexible Execution Modes:
 
-Requisiti di Sistema
-Sistema operativo: Windows, macOS o Linux.
+Tray Mode: The application can be launched directly into the system tray (/tray), running in the background without cluttering the desktop.
 
-Programma di compressione RAR/WinRAR (deve essere già installato e accessibile dal PATH di sistema).
+Automatic Configuration Loading: If a configuration file (.rbak) is saved, the program loads it automatically on the next launch, or it can be loaded manually using the /load parameter.
 
-Licenza
-Questo software è distribuito sotto la Licenza Pubblica Mozilla 2.0 (MPL-2.0). È un software libero e gratuito, utilizzabile anche per scopi commerciali. Per i dettagli completi, consulta il file LICENSE.
+Security and Control: Users can set a password to encrypt the archive, making sensitive data more secure. Additionally, you can choose from various compression levels to balance speed with storage efficiency.
 
-Come Contribuire
-Siamo aperti a contributi di ogni tipo: segnalazioni di bug, richieste di funzionalità e miglioramenti al codice. Per maggiori informazioni, consulta la nostra guida per i contributori.
+Improved User Experience: At startup, a splash screen provides a welcome interface, while a progress bar and a real-time log inform the user about the status of the backup process.
+
+License
+This software is distributed under the Mozilla Public License (MPL), which allows you to use, modify, and redistribute the source code in compliance with the terms of the license.
 
 ![Screenshot della finestra principale](images/screen_main.jpg)
 
