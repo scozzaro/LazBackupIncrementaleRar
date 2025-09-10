@@ -201,6 +201,152 @@ var
   Param: string;
   LoadFile: string;
 begin
+
+
+
+    if GetSystemLanguageCode = 'Italian' then
+  begin
+    // Imposta le etichette e le caption in italiano
+    // Form principale
+    Self.Caption := 'Laz Backup Incrementale';
+
+    // Pannello 1
+    RARPathLabel.Caption := 'Percorso del programma RAR';
+    BrowseRARButton.Caption := 'Trova Programma';
+    DestinationLabel.Caption := 'Percorso di destinazione di salvataggio dell''archivio';
+    DestButton.Caption := 'Trova Percorso';
+    ArchiveNameLabel.Caption := 'Nome del file di backup';
+    FoldersLabel.Caption := 'Cartelle da salvare';
+    ExcludeLabel.Caption := 'Escludi file/cartelle (pattern *.tmp, *.zip, C:\temp\*)';
+    ProgressLabel.Caption := 'Avanzamento: 0%';
+    btnRunBackup.Caption := 'Esegui Backup';
+    chkSpegni.Caption := 'Spegni computer al termine';
+    chkStartTime.Caption := 'Auto Start';
+    lblTimeLeft.Caption := 'Tempo rimanente';
+    btnTrayBar.Caption := 'Minimizza nella tray bar';
+    chkDayBak.Caption := 'Esegui backup giornaliero rotazionale';
+    chkDayBak.Hint := 'Aggiunge al nome del file il giorno della settimana.'#13#10'Il backup aggiornerà, se esiste, il file della settimana precedente '#13#10'in modo da avere 7 backup incrementali.';
+    chkMinTrayBar.Caption := 'Minimizza in Tray Bar';
+    chkChiudiApp.Caption := 'Chiudi Applicazione';
+    StatusLabel1.Caption := 'Dopo aver completato il backup esegui:';
+    chkEncrypt.Caption := 'Proteggi con password';
+    Label2.Caption := 'Compressione';
+    Label4.Caption := 'Tipo';
+
+    // ComboBox
+    cmbCompressionLevel.Items.Clear;
+    cmbCompressionLevel.Items.Add('Sola archiviazione');
+    cmbCompressionLevel.Items.Add('Veloce');
+    cmbCompressionLevel.Items.Add('Normale');
+    cmbCompressionLevel.Items.Add('Buona');
+    cmbCompressionLevel.Items.Add('Massima');
+
+    cmbCompressionLevel.Caption:= 'Normale';
+
+    cmbFrequency.Items.Clear;
+    cmbFrequency.Items.Add('Giornaliero');
+    cmbFrequency.Items.Add('Settimanale');
+
+    cmbFrequency.Caption := 'Giornaliero';
+
+
+    cmbDayOfWeek.Items.Clear;
+    cmbDayOfWeek.Items.Add('Lunedì');
+    cmbDayOfWeek.Items.Add('Martedì');
+    cmbDayOfWeek.Items.Add('Mercoledì');
+    cmbDayOfWeek.Items.Add('Giovedì');
+    cmbDayOfWeek.Items.Add('Venerdì');
+    cmbDayOfWeek.Items.Add('Sabato');
+    cmbDayOfWeek.Items.Add('Domenica');
+
+    cmbDayOfWeek.Caption := 'Lunedì';
+
+    // Menu
+    FileMenu.Caption := '&File';
+    LoadConfigMenuItem.Caption := 'Carica Configurazione';
+    SaveConfigMenuItem.Caption := 'Salva Configurazione';
+    QuitMenuItem.Caption := 'Esci';
+    InfoMenu.Caption := '&Info';
+    AboutMenuItem.Caption := 'About';
+
+    // Popup Menu Tray
+    Visualizza.Caption := 'Visualizza';
+
+    Label3.caption :='Esempio:'#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak" '#13#10'I parametri non sono obligatori servono ad automatizzare la procedura';
+  end else begin
+     // Imposta le etichette e le caption in inglese
+    // Main Form
+    Self.Caption := 'Laz Incremental Backup';
+
+    // Panel 1
+    RARPathLabel.Caption := 'RAR Program Path';
+    BrowseRARButton.Caption := 'Browse Program';
+    DestinationLabel.Caption := 'Archive destination path';
+    DestButton.Caption := 'Browse Path';
+    ArchiveNameLabel.Caption := 'Backup file name';
+    FoldersLabel.Caption := 'Folders to save';
+    ExcludeLabel.Caption := 'Exclude files/folders (pattern *.tmp, *.zip, C:\temp\*)';
+    ProgressLabel.Caption := 'Progress: 0%';
+    btnRunBackup.Caption := 'Run Backup';
+    chkSpegni.Caption := 'Shutdown computer on finish';
+    chkStartTime.Caption := 'Auto Start';
+    lblTimeLeft.Caption := 'Time left to start';
+    btnTrayBar.Caption := 'Minimize to tray bar';
+    chkDayBak.Caption := 'Perform rotational daily backup';
+    chkDayBak.Hint := 'Adds the day of the week to the file name.'#13#10'The backup will update the previous week''s file if it exists,'#13#10'allowing for 7 incremental backups.';
+
+    chkMinTrayBar.Caption := 'Minimize to Tray Bar';
+    chkChiudiApp.Caption := 'Close Application';
+    StatusLabel1.Caption := 'After completing the backup, execute:';
+    chkEncrypt.Caption := 'Protect with password';
+    Label2.Caption := 'Compression';
+    Label4.Caption := 'Type';
+
+    // ComboBox
+    cmbCompressionLevel.Items.Clear;
+    cmbCompressionLevel.Items.Add('Store only');
+    cmbCompressionLevel.Items.Add('Fastest');
+    cmbCompressionLevel.Items.Add('Normal');
+    cmbCompressionLevel.Items.Add('Good');
+    cmbCompressionLevel.Items.Add('Best');
+
+    cmbCompressionLevel.Caption:='Normal';
+
+    cmbFrequency.Items.Clear;
+    cmbFrequency.Items.Add('Daily');
+    cmbFrequency.Items.Add('Weekly');
+
+    cmbFrequency.Caption:='Daily';
+
+
+    cmbDayOfWeek.Items.Clear;
+    cmbDayOfWeek.Items.Add('Monday');
+    cmbDayOfWeek.Items.Add('Tuesday');
+    cmbDayOfWeek.Items.Add('Wednesday');
+    cmbDayOfWeek.Items.Add('Thursday');
+    cmbDayOfWeek.Items.Add('Friday');
+    cmbDayOfWeek.Items.Add('Saturday');
+    cmbDayOfWeek.Items.Add('Sunday');
+
+    cmbDayOfWeek.Caption:= 'Monday';
+
+    // Menu
+    FileMenu.Caption := '&File';
+    LoadConfigMenuItem.Caption := 'Load Configuration';
+    SaveConfigMenuItem.Caption := 'Save Configuration';
+    QuitMenuItem.Caption := 'Quit';
+    InfoMenu.Caption := '&Info';
+    AboutMenuItem.Caption := 'About';
+
+    // Popup Menu Tray
+    Visualizza.Caption := 'View';
+
+    Label3.caption :='Example:'#13#10'LazBackup.exe /tray /load "C:\Configurations\home_backup.rbak"'#13#10'The parameters are not mandatory; they serve to automate the process.';
+
+  end;
+
+
+
   LoadFile := '';
   TrayMode := False;
 
@@ -266,134 +412,6 @@ begin
     end;
   end;
 
-
-
-    if GetSystemLanguageCode = 'Italian' then
-  begin
-    // Imposta le etichette e le caption in italiano
-    // Form principale
-    Self.Caption := 'Laz Backup Incrementale';
-
-    // Pannello 1
-    RARPathLabel.Caption := 'Percorso del programma RAR';
-    BrowseRARButton.Caption := 'Trova Programma';
-    DestinationLabel.Caption := 'Percorso di destinazione di salvataggio dell''archivio';
-    DestButton.Caption := 'Trova Percorso';
-    ArchiveNameLabel.Caption := 'Nome del file di backup';
-    FoldersLabel.Caption := 'Cartelle da salvare';
-    ExcludeLabel.Caption := 'Escludi file/cartelle (pattern *.tmp, *.zip, C:\temp\*)';
-    ProgressLabel.Caption := 'Avanzamento: 0%';
-    btnRunBackup.Caption := 'Esegui Backup';
-    chkSpegni.Caption := 'Spegni computer al termine';
-    chkStartTime.Caption := 'Auto Start';
-    lblTimeLeft.Caption := 'Tempo rimanente';
-    btnTrayBar.Caption := 'Minimizza nella tray bar';
-    chkDayBak.Caption := 'Esegui backup giornaliero rotazionale';
-    chkDayBak.Hint := 'Aggiunge al nome del file il giorno della settimana.'#13#10'Il backup aggiornerà, se esiste, il file della settimana precedente '#13#10'in modo da avere 7 backup incrementali.';
-    chkMinTrayBar.Caption := 'Minimizza in Tray Bar';
-    chkChiudiApp.Caption := 'Chiudi Applicazione';
-    StatusLabel1.Caption := 'Dopo aver completato il backup esegui:';
-    chkEncrypt.Caption := 'Proteggi con password';
-    Label2.Caption := 'Compressione';
-    Label4.Caption := 'Tipo';
-
-    // ComboBox
-    cmbCompressionLevel.Items.Clear;
-    cmbCompressionLevel.Items.Add('Sola archiviazione');
-    cmbCompressionLevel.Items.Add('Veloce');
-    cmbCompressionLevel.Items.Add('Normale');
-    cmbCompressionLevel.Items.Add('Buona');
-    cmbCompressionLevel.Items.Add('Massima');
-
-    cmbFrequency.Items.Clear;
-    cmbFrequency.Items.Add('Giornaliero');
-    cmbFrequency.Items.Add('Settimanale');
-
-    cmbDayOfWeek.Items.Clear;
-    cmbDayOfWeek.Items.Add('Lunedì');
-    cmbDayOfWeek.Items.Add('Martedì');
-    cmbDayOfWeek.Items.Add('Mercoledì');
-    cmbDayOfWeek.Items.Add('Giovedì');
-    cmbDayOfWeek.Items.Add('Venerdì');
-    cmbDayOfWeek.Items.Add('Sabato');
-    cmbDayOfWeek.Items.Add('Domenica');
-
-    // Menu
-    FileMenu.Caption := '&File';
-    LoadConfigMenuItem.Caption := 'Carica Configurazione';
-    SaveConfigMenuItem.Caption := 'Salva Configurazione';
-    QuitMenuItem.Caption := 'Esci';
-    InfoMenu.Caption := '&Info';
-    AboutMenuItem.Caption := 'About';
-
-    // Popup Menu Tray
-    Visualizza.Caption := 'Visualizza';
-
-    Label3.caption :='Esempio:'#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak" '#13#10'I parametri non sono obligatori servono ad automatizzare la procedura';
-  end else begin
-     // Imposta le etichette e le caption in inglese
-    // Main Form
-    Self.Caption := 'Laz Incremental Backup';
-
-    // Panel 1
-    RARPathLabel.Caption := 'RAR Program Path';
-    BrowseRARButton.Caption := 'Browse Program';
-    DestinationLabel.Caption := 'Archive destination path';
-    DestButton.Caption := 'Browse Path';
-    ArchiveNameLabel.Caption := 'Backup file name';
-    FoldersLabel.Caption := 'Folders to save';
-    ExcludeLabel.Caption := 'Exclude files/folders (pattern *.tmp, *.zip, C:\temp\*)';
-    ProgressLabel.Caption := 'Progress: 0%';
-    btnRunBackup.Caption := 'Run Backup';
-    chkSpegni.Caption := 'Shutdown computer on finish';
-    chkStartTime.Caption := 'Auto Start';
-    lblTimeLeft.Caption := 'Time left to start';
-    btnTrayBar.Caption := 'Minimize to tray bar';
-    chkDayBak.Caption := 'Perform rotational daily backup';
-    chkDayBak.Hint := 'Adds the day of the week to the file name.'#13#10'The backup will update the previous week''s file if it exists,'#13#10'allowing for 7 incremental backups.';
-
-    chkMinTrayBar.Caption := 'Minimize to Tray Bar';
-    chkChiudiApp.Caption := 'Close Application';
-    StatusLabel1.Caption := 'After completing the backup, execute:';
-    chkEncrypt.Caption := 'Protect with password';
-    Label2.Caption := 'Compression';
-    Label4.Caption := 'Type';
-
-    // ComboBox
-    cmbCompressionLevel.Items.Clear;
-    cmbCompressionLevel.Items.Add('Store only');
-    cmbCompressionLevel.Items.Add('Fastest');
-    cmbCompressionLevel.Items.Add('Normal');
-    cmbCompressionLevel.Items.Add('Good');
-    cmbCompressionLevel.Items.Add('Best');
-
-    cmbFrequency.Items.Clear;
-    cmbFrequency.Items.Add('Daily');
-    cmbFrequency.Items.Add('Weekly');
-
-    cmbDayOfWeek.Items.Clear;
-    cmbDayOfWeek.Items.Add('Monday');
-    cmbDayOfWeek.Items.Add('Tuesday');
-    cmbDayOfWeek.Items.Add('Wednesday');
-    cmbDayOfWeek.Items.Add('Thursday');
-    cmbDayOfWeek.Items.Add('Friday');
-    cmbDayOfWeek.Items.Add('Saturday');
-    cmbDayOfWeek.Items.Add('Sunday');
-
-    // Menu
-    FileMenu.Caption := '&File';
-    LoadConfigMenuItem.Caption := 'Load Configuration';
-    SaveConfigMenuItem.Caption := 'Save Configuration';
-    QuitMenuItem.Caption := 'Quit';
-    InfoMenu.Caption := '&Info';
-    AboutMenuItem.Caption := 'About';
-
-    // Popup Menu Tray
-    Visualizza.Caption := 'View';
-
-    Label3.caption :='Example:'#13#10'LazBackup.exe /tray /load "C:\Configurations\home_backup.rbak"'#13#10'The parameters are not mandatory; they serve to automate the process.';
-
-  end;
 
 
 end;
@@ -837,6 +855,26 @@ begin
     chkChiudiApp.Checked := JSONObj.Get('chkChiudiApp', False);
     chkMinTrayBar.Checked := JSONObj.Get('chkMinTrayBar', False);
 
+    cmbCompressionLevel.Caption:= JSONObj.Get('cmbCompressionLevel', '');
+    cmbFrequency.Caption := JSONObj.Get('cmbFrequency', '');
+    cmbDayOfWeek.Caption := JSONObj.Get('cmbDayOfWeek', '');
+
+      // Mostra i controlli appropriati in base alla selezione
+  case cmbFrequency.ItemIndex of
+    0: // Giornaliero: nessun controllo aggiuntivo necessario
+      ;
+    1: // Settimanale
+      cmbDayOfWeek.Visible := True;
+
+  end;
+
+
+    chkEncrypt.Checked := JSONObj.Get('chkEncrypt', False);
+
+    edtPassword.Text:=JSONObj.Get('edtPassword', '');
+
+
+
   finally
     JSONObj.Free; // Libera la memoria
   end;
@@ -884,6 +922,16 @@ begin
       J.Add('chkDayBak', chkDayBak.Checked);
       J.Add('chkChiudiApp', chkChiudiApp.Checked);
       J.Add('chkMinTrayBar', chkMinTrayBar.Checked);
+
+
+      J.Add('cmbCompressionLevel', cmbCompressionLevel.Caption);
+      J.Add('cmbFrequency', cmbFrequency.Caption);
+      J.Add('cmbDayOfWeek', cmbDayOfWeek.Caption);
+
+      // Salvo lo stato della password e password
+      J.Add('chkEncrypt', chkEncrypt.Checked);
+      J.Add('edtPassword', edtPassword.Text);
+
 
       // Scrive il JSON su file
       JSONText := UTF8Encode(J.AsJSON);
@@ -1001,44 +1049,13 @@ end;
 
 
 procedure TFrmMain.LoadConfigMenuItemClick(Sender: TObject);
-var
-  JSONObj: TJSONObject;
-  FoldersArray, ExcludesArray: TJSONArray;
-  i: integer;
 begin
   // Apre una finestra di dialogo per selezionare un file di configurazione e lo carica
   if OpenDialog1.Execute then
   begin
     NomeFileConfigBakup :=  OpenDialog1.FileName;
-    JSONObj := TJSONObject(GetJSON(ReadFileToString(NomeFileConfigBakup)));
-    try
-      FoldersListbox.Items.Clear;
-      ExcludeListbox.Items.Clear;
+    LoadConfigFromFile(NomeFileConfigBakup);
 
-      FoldersArray := JSONObj.Arrays['folders'];
-      if Assigned(FoldersArray) then
-        for i := 0 to FoldersArray.Count - 1 do
-          FoldersListbox.Items.Add(FoldersArray.Items[i].AsString);
-
-      ExcludesArray := JSONObj.Arrays['excludes'];
-      if Assigned(ExcludesArray) then
-        for i := 0 to ExcludesArray.Count - 1 do
-          ExcludeListbox.Items.Add(ExcludesArray.Items[i].AsString);
-
-      DestinationEdit.Text := JSONObj.Get('destination_folder', '');
-      ArchiveNameEdit.Text := JSONObj.Get('archive_name', '');
-      RARPathEdit.Text := JSONObj.Get('rar_path', '');
-      chkSpegni.Checked := JSONObj.Get('chkSpegni', False);
-      chkStartTime.Checked := JSONObj.Get('chkStartTime', False);
-      StartTime.Time := StrToTimeDef(JSONObj.Get('start_time', ''), Now);
-      chkDayBak.Checked := JSONObj.Get('chkDayBak', False);
-      chkChiudiApp.Checked := JSONObj.Get('chkChiudiApp', False);
-      chkMinTrayBar.Checked := JSONObj.Get('chkMinTrayBar', False);
-
-      TimerStartTime.Enabled := chkStartTime.Checked;
-    finally
-      JSONObj.Free;
-    end;
   end;
 end;
 

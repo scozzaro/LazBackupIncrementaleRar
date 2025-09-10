@@ -10,7 +10,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="21"/>
         <CursorPos Y="53"/>
-        <UsageCount Value="67"/>
+        <UsageCount Value="72"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -20,10 +20,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="320"/>
-        <CursorPos X="65" Y="332"/>
-        <UsageCount Value="67"/>
+        <TopLine Value="1035"/>
+        <CursorPos Y="1052"/>
+        <UsageCount Value="72"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="aboutform.pas"/>
@@ -35,7 +36,7 @@
         <EditorIndex Value="2"/>
         <TopLine Value="79"/>
         <CursorPos Y="99"/>
-        <UsageCount Value="67"/>
+        <UsageCount Value="72"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -49,7 +50,7 @@
         <EditorIndex Value="6"/>
         <TopLine Value="148"/>
         <CursorPos Y="172"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="35"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -57,7 +58,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="24626"/>
         <CursorPos X="11" Y="24658"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../fpcsrc/packages/winunits-base/src/shellapi.pp"/>
@@ -65,7 +66,7 @@
         <EditorIndex Value="4"/>
         <TopLine Value="1066"/>
         <CursorPos X="10" Y="1083"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="27"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -74,7 +75,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="477"/>
         <CursorPos X="14" Y="492"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="19"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -88,130 +89,130 @@
         <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
         <EditorIndex Value="3"/>
         <CursorPos X="22" Y="16"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="72" Column="34" TopLine="46"/>
-      </Position>
-      <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="137" Column="16" TopLine="110"/>
-      </Position>
-      <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="143" Column="16" TopLine="116"/>
-      </Position>
-      <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="149" Column="16" TopLine="122"/>
-      </Position>
-      <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="153" Column="41" TopLine="126"/>
-      </Position>
-      <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="163" Column="12" TopLine="136"/>
-      </Position>
-      <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="166" Column="32" TopLine="139"/>
-      </Position>
-      <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="176" Column="7" TopLine="149"/>
-      </Position>
-      <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="195" Column="32" TopLine="168"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="90" Column="4" TopLine="79"/>
-      </Position>
-      <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="77" Column="31" TopLine="71"/>
-      </Position>
-      <Position>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <Caret Line="577" Column="34" TopLine="569"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="15" Column="13"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="98" Column="3" TopLine="79"/>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="846" TopLine="833"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="265" Column="47" TopLine="255"/>
+        <Caret Line="847" TopLine="833"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="331" TopLine="306"/>
+        <Caret Line="848" TopLine="833"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="332" Column="99" TopLine="306"/>
+        <Caret Line="849" TopLine="833"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="394" Column="99" TopLine="368"/>
+        <Caret Line="850" TopLine="833"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="436" Column="26" TopLine="408"/>
+        <Caret Line="851" TopLine="833"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="782" Column="64" TopLine="756"/>
+        <Caret Line="852" TopLine="833"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="376" Column="61" TopLine="363"/>
+        <Caret Line="854" Column="29" TopLine="845"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="385" Column="40" TopLine="363"/>
+        <Caret Line="856" TopLine="845"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="394" Column="64" TopLine="368"/>
+        <Caret Line="858" TopLine="845"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="804" Column="24" TopLine="777"/>
+        <Caret Line="860" TopLine="845"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="1003" Column="24" TopLine="976"/>
+        <Caret Line="826" TopLine="809"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="66" Column="9" TopLine="51"/>
+        <Caret Line="865" TopLine="850"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="101" Column="19" TopLine="74"/>
+        <Caret Line="866" TopLine="850"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="126" Column="19" TopLine="99"/>
+        <Caret Line="823" TopLine="806"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="202" Column="7" TopLine="176"/>
+        <Caret Line="867" TopLine="852"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="204" Column="7" TopLine="178"/>
+        <Caret Line="271" TopLine="255"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="349" Column="3" TopLine="318"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="863" TopLine="844"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="831" TopLine="814"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="863" TopLine="848"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="867" TopLine="848"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="862" TopLine="848"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="822" Column="38" TopLine="811"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="818" Column="33" TopLine="812"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="822" Column="38" TopLine="811"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="125" Column="33" TopLine="110"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="392" Column="25" TopLine="366"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="407" Column="25" TopLine="381"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="822" Column="38" TopLine="795"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -238,4 +239,22 @@
       </List>
     </HistoryLists>
   </ProjectSession>
+  <Debugging>
+    <BreakPoints>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="mainform.pas"/>
+        <Line Value="831"/>
+      </Item>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="mainform.pas"/>
+        <Line Value="863"/>
+      </Item>
+    </BreakPoints>
+  </Debugging>
 </CONFIG>

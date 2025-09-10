@@ -1,7 +1,7 @@
 object FrmMain: TFrmMain
-  Left = 482
+  Left = 1029
   Height = 827
-  Top = 25
+  Top = 190
   Width = 686
   Caption = 'Laz Backup Incrementale '
   ClientHeight = 827
