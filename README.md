@@ -30,4 +30,6 @@ This software is distributed under the Mozilla Public License (MPL), which allow
 
 ![Screenshot della finestra principale](images/screen_main_ubuntu.png)
 
+![Screenshot della finestra principale](images/screen_main_macos.png)
+
 ![Screenshot della finestra principale](images/screen_about.jpg)
