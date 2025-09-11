@@ -1,7 +1,7 @@
 object FrmMain: TFrmMain
-  Left = 1029
+  Left = 982
   Height = 827
-  Top = 190
+  Top = 181
   Width = 686
   Caption = 'Laz Backup Incrementale '
   ClientHeight = 827
@@ -456,9 +456,9 @@ object FrmMain: TFrmMain
     Left = 536
     Top = 776
   end
-  object TimerStartTime: TTimer
+  object TimerClock: TTimer
     Enabled = False
-    OnTimer = TimerStartTimeTimer
+    OnTimer = TimerClockTimer
     Left = 416
     Top = 776
   end

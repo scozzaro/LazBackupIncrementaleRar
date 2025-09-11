@@ -32,11 +32,17 @@ type
     LblVersion: TLabel;
     LblWinRARWarning: TLabel;
     MemoTestoLicenza: TMemo;
+    TimerBounce: TTimer;
     procedure BtnClose1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ImgLogoClick(Sender: TObject);
     procedure Label1Click(Sender: TObject);
+    procedure TimerBounceTimer(Sender: TObject);
   private
-
+      FVelocity: Integer;
+    FGravity: Integer;
+    FBottom: Integer;
   public
 
   end;
@@ -107,6 +113,14 @@ procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
   Langrun.Caption:= GetSystemLanguageCode;
 
+    // inizializza parametri per il rimbalzo
+  TimerBounce.Enabled := False;
+  TimerBounce.Interval := 20; // refresh veloce per animazione
+  FGravity := 2;
+  FVelocity := 0;
+  FBottom := ClientHeight - ImgLogo.Height - 10; // “pavimento” 10px sopra il bordo
+
+
    if GetSystemLanguageCode = 'Italiano' then
   begin
     // Imposta le caption e le stringhe in italiano
@@ -146,6 +160,29 @@ begin
 
 end;
 
+procedure TfrmAbout.FormShow(Sender: TObject);
+begin
+   // inizializza parametri animazione
+  TimerBounce.Enabled := False;
+  TimerBounce.Interval := 20; // refresh veloce
+  FGravity := 2;
+  FVelocity := 0;
+  FBottom := ClientHeight - ImgLogo.Height - 10;
+
+  // posiziona il logo in alto e al centro
+  ImgLogo.Top := 10;
+  ImgLogo.Left := 10;
+
+end;
+
+procedure TfrmAbout.ImgLogoClick(Sender: TObject);
+begin
+    // reset posizione in alto
+  ImgLogo.Top := 0;
+  FVelocity := 0;
+  TimerBounce.Enabled := True;
+end;
+
 procedure TfrmAbout.Label1Click(Sender: TObject);
 var
   BrowserProcess: TProcess;
@@ -172,6 +209,22 @@ begin
     BrowserProcess.Execute;
   finally
     BrowserProcess.Free;
+  end;
+end;
+
+procedure TfrmAbout.TimerBounceTimer(Sender: TObject);
+begin
+    // applica gravità
+  FVelocity := FVelocity + FGravity;
+  ImgLogo.Top := ImgLogo.Top + FVelocity;
+
+  // controllo collisione con il fondo
+  if ImgLogo.Top >= FBottom then
+  begin
+    ImgLogo.Top := FBottom;
+    FVelocity := -FVelocity div 2; // rimbalzo (perde energia)
+    if Abs(FVelocity) < 2 then
+      TimerBounce.Enabled := False; // ferma quando non si muove più
   end;
 end;
 

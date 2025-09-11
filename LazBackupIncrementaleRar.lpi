@@ -17,7 +17,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
-      <MinorVersionNr Value="1"/>
+      <MinorVersionNr Value="2"/>
       <StringTable CompanyName="Vincenzo Scozzaro" FileDescription="Backup program" InternalName="LazBackupIncremental" LegalCopyright="Vincenzo Scozzaro" ProductName="LazBackupIncremental"/>
     </VersionInfo>
     <BuildModes>
@@ -76,6 +76,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="C:/fpcupdeluxe/lazarus/components/rc4crypt/"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

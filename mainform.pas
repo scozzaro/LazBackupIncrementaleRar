@@ -5,10 +5,11 @@ unit mainform;
 interface
 
 uses
-    {$IFDEF WINDOWS}
+  {$IFDEF WINDOWS}
   Windows,
         ShellApi,
   {$ENDIF}
+  RC4Cipher,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   dateutils,
   FileUtil, Process, LazFileUtils, DateTimePicker, FileCtrl, StrUtils, ComCtrls,
@@ -79,7 +80,7 @@ type
     SaveConfigMenuItem: TMenuItem; // Voce di menu per salvare la configurazione
     SaveDialog1: TSaveDialog; // Dialogo per il salvataggio dei file
     ScrolledOutput: TMemo; // Memo per visualizzare l'output del processo RAR
-    TimerStartTime: TTimer; // Timer per l'avvio del backup a un'ora specifica
+    TimerClock: TTimer; // Timer per l'avvio del backup a un'ora specifica
     TrayIcon1: TTrayIcon; // Icona nella barra delle applicazioni
 
     // Dichiarazione delle procedure che gestiscono gli eventi (click, change, ecc.)
@@ -104,7 +105,7 @@ type
     procedure RemoveExcludeButtonClick(Sender: TObject);
     procedure btnRunBackupClick(Sender: TObject);
     procedure SaveConfigMenuItemClick(Sender: TObject);
-    procedure TimerStartTimeTimer(Sender: TObject);
+    procedure TimerClockTimer(Sender: TObject);
     procedure TrayIcon1Click(Sender: TObject);
     procedure TrayIcon1DblClick(Sender: TObject);
     procedure VisualizzaClick(Sender: TObject);
@@ -140,13 +141,13 @@ implementation
 {$IFDEF MSWINDOWS}
 function GetLocaleInformation(Flag: integer): string;
 var
- pcLCA: array[0..20] of char;
+  pcLCA: array[0..20] of char;
 begin
- if (GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, Flag, pcLCA, 19) <= 0) then
- begin
-   pcLCA[0] := #0;
- end;
- Result := pcLCA;
+  if (GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, Flag, pcLCA, 19) <= 0) then
+  begin
+    pcLCA[0] := #0;
+  end;
+  Result := pcLCA;
 end;
 
 {$ENDIF}
@@ -154,7 +155,7 @@ end;
 function GetSystemLanguageCode: string;
 begin
   {$IFDEF MSWINDOWS}
-   Result := GetLocaleInformation(LOCALE_SENGLANGUAGE);
+  Result := GetLocaleInformation(LOCALE_SENGLANGUAGE);
   {$ELSE}
    Result := SysUtils.GetEnvironmentVariable('LANG');
   {$ENDIF}
@@ -202,9 +203,7 @@ var
   LoadFile: string;
 begin
 
-
-
-    if GetSystemLanguageCode = 'Italian' then
+  if GetSystemLanguageCode = 'Italian' then
   begin
     // Imposta le etichette e le caption in italiano
     // Form principale
@@ -241,7 +240,7 @@ begin
     cmbCompressionLevel.Items.Add('Buona');
     cmbCompressionLevel.Items.Add('Massima');
 
-    cmbCompressionLevel.Caption:= 'Normale';
+    cmbCompressionLevel.Caption := 'Normale';
 
     cmbFrequency.Items.Clear;
     cmbFrequency.Items.Add('Giornaliero');
@@ -272,9 +271,11 @@ begin
     // Popup Menu Tray
     Visualizza.Caption := 'Visualizza';
 
-    Label3.caption :='Esempio:'#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak" '#13#10'I parametri non sono obligatori servono ad automatizzare la procedura';
-  end else begin
-     // Imposta le etichette e le caption in inglese
+    Label3.Caption := 'Esempio:'#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak" '#13#10'I parametri non sono obligatori servono ad automatizzare la procedura';
+  end
+  else
+  begin
+    // Imposta le etichette e le caption in inglese
     // Main Form
     Self.Caption := 'Laz Incremental Backup';
 
@@ -310,13 +311,13 @@ begin
     cmbCompressionLevel.Items.Add('Good');
     cmbCompressionLevel.Items.Add('Best');
 
-    cmbCompressionLevel.Caption:='Normal';
+    cmbCompressionLevel.Caption := 'Normal';
 
     cmbFrequency.Items.Clear;
     cmbFrequency.Items.Add('Daily');
     cmbFrequency.Items.Add('Weekly');
 
-    cmbFrequency.Caption:='Daily';
+    cmbFrequency.Caption := 'Daily';
 
 
     cmbDayOfWeek.Items.Clear;
@@ -328,7 +329,7 @@ begin
     cmbDayOfWeek.Items.Add('Saturday');
     cmbDayOfWeek.Items.Add('Sunday');
 
-    cmbDayOfWeek.Caption:= 'Monday';
+    cmbDayOfWeek.Caption := 'Monday';
 
     // Menu
     FileMenu.Caption := '&File';
@@ -341,7 +342,7 @@ begin
     // Popup Menu Tray
     Visualizza.Caption := 'View';
 
-    Label3.caption :='Example:'#13#10'LazBackup.exe /tray /load "C:\Configurations\home_backup.rbak"'#13#10'The parameters are not mandatory; they serve to automate the process.';
+    Label3.Caption := 'Example:'#13#10'LazBackup.exe /tray /load "C:\Configurations\home_backup.rbak"'#13#10'The parameters are not mandatory; they serve to automate the process.';
 
   end;
 
@@ -412,8 +413,6 @@ begin
     end;
   end;
 
-
-
 end;
 
 procedure TFrmMain.FormShow(Sender: TObject);
@@ -466,7 +465,7 @@ end;
 
 procedure TFrmMain.RemoveEscludiAllFilesClick(Sender: TObject);
 begin
-   ExcludeListbox.Clear;
+  ExcludeListbox.Clear;
 end;
 
 procedure TFrmMain.AddExcludeButtonClick(Sender: TObject);
@@ -565,8 +564,8 @@ end;
 procedure TFrmMain.chkStartTimeChange(Sender: TObject);
 begin
   // Abilita/disabilita il timer in base allo stato della checkbox
-  TimerStartTime.Enabled := chkStartTime.Checked;
-  lblTimeLeft.Visible:=chkStartTime.Checked;
+  TimerClock.Enabled := chkStartTime.Checked;
+  lblTimeLeft.Visible := chkStartTime.Checked;
 end;
 
 procedure TFrmMain.cmbFrequencyChange(Sender: TObject);
@@ -746,8 +745,8 @@ begin
         ProgressBar1.Position := FProcessedFiles;
 
         ProgressLabel.Caption :=
-          Format('Avanzamento: %d%% (%d di %d file)', [Round(
-          (FProcessedFiles / FTotalFiles) * 100), FProcessedFiles, FTotalFiles]);
+          Format('Avanzamento: %d%% (%d di %d file)',
+          [Round((FProcessedFiles / FTotalFiles) * 100), FProcessedFiles, FTotalFiles]);
 
       end;
     end;
@@ -824,6 +823,11 @@ var
   JSONObj: TJSONObject;
   FoldersArray, ExcludesArray: TJSONArray;
   i: integer;
+  LoadedPassword: string;
+  DecryptedPassword: string;
+const
+  EncryptionKey = 'MySuperSecretKey!@#$2025';
+  EncryptedPrefix = '<CR_>'; // Il prefisso per le stringhe cifrate
 begin
   // Carica i dati di configurazione da un file JSON
   JSONObj := TJSONObject(GetJSON(ReadFileToString(AFileName)));
@@ -850,29 +854,43 @@ begin
     chkSpegni.Checked := JSONObj.Get('chkSpegni', False);
     chkStartTime.Checked := JSONObj.Get('chkStartTime', False);
     StartTime.Time := StrToTimeDef(JSONObj.Get('start_time', ''), Now);
-    TimerStartTime.Enabled := chkStartTime.Checked;
+    TimerClock.Enabled := chkStartTime.Checked;
     chkDayBak.Checked := JSONObj.Get('chkDayBak', False);
     chkChiudiApp.Checked := JSONObj.Get('chkChiudiApp', False);
     chkMinTrayBar.Checked := JSONObj.Get('chkMinTrayBar', False);
 
-    cmbCompressionLevel.Caption:= JSONObj.Get('cmbCompressionLevel', '');
+    cmbCompressionLevel.Caption := JSONObj.Get('cmbCompressionLevel', '');
     cmbFrequency.Caption := JSONObj.Get('cmbFrequency', '');
     cmbDayOfWeek.Caption := JSONObj.Get('cmbDayOfWeek', '');
 
-      // Mostra i controlli appropriati in base alla selezione
-  case cmbFrequency.ItemIndex of
-    0: // Giornaliero: nessun controllo aggiuntivo necessario
-      ;
-    1: // Settimanale
-      cmbDayOfWeek.Visible := True;
+    // Mostra i controlli appropriati in base alla selezione
+    case cmbFrequency.ItemIndex of
+      0: // Giornaliero: nessun controllo aggiuntivo necessario
+        ;
+      1: // Settimanale
+        cmbDayOfWeek.Visible := True;
 
-  end;
+    end;
 
 
     chkEncrypt.Checked := JSONObj.Get('chkEncrypt', False);
 
-    edtPassword.Text:=JSONObj.Get('edtPassword', '');
+    LoadedPassword := JSONObj.Get('edtPassword', '');
 
+    // Verifica se la stringa inizia con il prefisso
+    if AnsiStartsStr(EncryptedPrefix, LoadedPassword) then
+    begin
+      LoadedPassword := Copy(LoadedPassword, Length(EncryptedPrefix) + 1,
+        Length(LoadedPassword));
+      edtPassword.Text := RC4.Decrypt(EncryptionKey, LoadedPassword);
+      //     ShowMessage(edtPassword.Text);
+    end
+    else
+    begin
+      // La stringa è in chiaro o non valida, usala direttamente
+      edtPassword.Text := LoadedPassword;
+      //  ShowMessage(edtPassword.Text);
+    end;
 
 
   finally
@@ -889,6 +907,10 @@ var
   F: TFileStream;
   SaveDlg: TSaveDialog;
   JSONText: utf8string;
+  EncryptedPassword: string;
+const
+  EncryptionKey = 'MySuperSecretKey!@#$2025';
+  EncryptedPrefix = '<CR_>'; // Il prefisso per le stringhe cifrate
 begin
   // Salva la configurazione corrente in un file JSON
   SaveDlg := TSaveDialog.Create(Self);
@@ -930,7 +952,11 @@ begin
 
       // Salvo lo stato della password e password
       J.Add('chkEncrypt', chkEncrypt.Checked);
-      J.Add('edtPassword', edtPassword.Text);
+
+      EncryptedPassword := RC4.Encrypt(EncryptionKey, edtPassword.Text);
+
+
+      J.Add('edtPassword', EncryptedPrefix + EncryptedPassword);
 
 
       // Scrive il JSON su file
@@ -949,7 +975,7 @@ begin
   end;
 end;
 
-procedure TFrmMain.TimerStartTimeTimer(Sender: TObject);
+procedure TFrmMain.TimerClockTimer(Sender: TObject);
 var
   CurrentDateTime: TDateTime;
   CurrentDayOfWeek: integer;
@@ -962,7 +988,7 @@ var
 begin
   if not chkStartTime.Checked then
   begin
-    TimerStartTime.Enabled := False;
+    TimerClock.Enabled := False;
     Exit;
   end;
 
@@ -1010,10 +1036,10 @@ begin
   // Confronto con tolleranza di 1 secondo per avviare il backup
   if Abs(CurrentDateTime - TargetDateTime) < (1 / (24 * 60 * 60)) then
   begin
-    TimerStartTime.Enabled := False;
+    TimerClock.Enabled := False;
     btnRunBackupClick(Sender);
     Sleep(110);
-    TimerStartTime.Enabled := True;
+    TimerClock.Enabled := True;
   end;
 end;
 
@@ -1053,7 +1079,7 @@ begin
   // Apre una finestra di dialogo per selezionare un file di configurazione e lo carica
   if OpenDialog1.Execute then
   begin
-    NomeFileConfigBakup :=  OpenDialog1.FileName;
+    NomeFileConfigBakup := OpenDialog1.FileName;
     LoadConfigFromFile(NomeFileConfigBakup);
 
   end;
@@ -1061,7 +1087,7 @@ end;
 
 procedure TFrmMain.RemoveAllFolderClick(Sender: TObject);
 begin
-   FoldersListbox.Items.Clear;
+  FoldersListbox.Items.Clear;
 end;
 
 end.
