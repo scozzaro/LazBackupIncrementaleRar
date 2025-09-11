@@ -413,6 +413,8 @@ begin
     end;
   end;
 
+  Caption := 'LazBackupIncremental - config file: '+ ExtractFileName( NomeFileConfigBakup);
+
 end;
 
 procedure TFrmMain.FormShow(Sender: TObject);
@@ -918,6 +920,17 @@ begin
     SaveDlg.Filter := 'Backup Config (*.rbak)|*.rbak';
     SaveDlg.FileName := NomeFileConfigBakup;
     if not SaveDlg.Execute then Exit; // Esce se l'utente annulla
+     NomeFileConfigBakup := SaveDlg.FileName;
+     if FileExists(NomeFileConfigBakup) then
+     begin
+        if MessageDlg('Conferma',
+                  'Il file "' + ExtractFileName( NomeFileConfigBakup) + '" esiste già.' + LineEnding +
+                  'in ' + ExtractFilePath ( NomeFileConfigBakup)  + LineEnding +
+                  'Vuoi sovrascriverlo?',
+                  mtConfirmation, [mbYes, mbNo], 0) = mrNo then exit;
+     end;
+
+       Caption := 'LazBackupIncremental - config file: '+ ExtractFileName( NomeFileConfigBakup);
 
     J := TJSONObject.Create;
     try
@@ -1081,7 +1094,7 @@ begin
   begin
     NomeFileConfigBakup := OpenDialog1.FileName;
     LoadConfigFromFile(NomeFileConfigBakup);
-
+      Caption := 'LazBackupIncremental - config file: '+ ExtractFileName( NomeFileConfigBakup);
   end;
 end;
 
