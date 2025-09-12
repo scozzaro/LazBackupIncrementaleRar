@@ -250,13 +250,14 @@ begin
 
 
     cmbDayOfWeek.Items.Clear;
+    cmbDayOfWeek.Items.Add('Domenica');
     cmbDayOfWeek.Items.Add('Lunedì');
     cmbDayOfWeek.Items.Add('Martedì');
     cmbDayOfWeek.Items.Add('Mercoledì');
     cmbDayOfWeek.Items.Add('Giovedì');
     cmbDayOfWeek.Items.Add('Venerdì');
     cmbDayOfWeek.Items.Add('Sabato');
-    cmbDayOfWeek.Items.Add('Domenica');
+
 
     cmbDayOfWeek.Caption := 'Lunedì';
 
@@ -271,7 +272,8 @@ begin
     // Popup Menu Tray
     Visualizza.Caption := 'Visualizza';
 
-    Label3.Caption := 'Esempio:'#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak" '#13#10'I parametri non sono obligatori servono ad automatizzare la procedura';
+    Label3.Caption := 'Nota:'#13#10 +
+      'Il programma carica all''avvio il file di configurazione che si trova nella cartella documenti: backup_configLaz.rbak'#13#10 + #13#10 + 'Esempio:'#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak" '#13#10'I parametri non sono obligatori servono ad automatizzare la procedura';
   end
   else
   begin
@@ -321,13 +323,14 @@ begin
 
 
     cmbDayOfWeek.Items.Clear;
+    cmbDayOfWeek.Items.Add('Sunday');
     cmbDayOfWeek.Items.Add('Monday');
     cmbDayOfWeek.Items.Add('Tuesday');
     cmbDayOfWeek.Items.Add('Wednesday');
     cmbDayOfWeek.Items.Add('Thursday');
     cmbDayOfWeek.Items.Add('Friday');
     cmbDayOfWeek.Items.Add('Saturday');
-    cmbDayOfWeek.Items.Add('Sunday');
+
 
     cmbDayOfWeek.Caption := 'Monday';
 
@@ -341,8 +344,8 @@ begin
 
     // Popup Menu Tray
     Visualizza.Caption := 'View';
-
-    Label3.Caption := 'Example:'#13#10'LazBackup.exe /tray /load "C:\Configurations\home_backup.rbak"'#13#10'The parameters are not mandatory; they serve to automate the process.';
+    Label3.Caption := 'Note:  '#13#10 +
+      'At startup, the program loads the configuration file located in the documents folder: backup_configLaz.rbak'#13#10 + #13#10 + 'Example:'#13#10'LazBackup.exe /tray /load "C:\Configurations\home_backup.rbak"'#13#10'The parameters are not mandatory; they serve to automate the process.';
 
   end;
 
@@ -413,7 +416,8 @@ begin
     end;
   end;
 
-  Caption := 'LazBackupIncremental - config file: '+ ExtractFileName( NomeFileConfigBakup);
+  Caption := 'LazBackupIncremental - config file: ' + ExtractFileName(
+    NomeFileConfigBakup);
 
 end;
 
@@ -882,8 +886,8 @@ begin
     // Verifica se la stringa inizia con il prefisso
     if AnsiStartsStr(EncryptedPrefix, LoadedPassword) then
     begin
-      LoadedPassword := Copy(LoadedPassword, Length(EncryptedPrefix) + 1,
-        Length(LoadedPassword));
+      LoadedPassword := Copy(LoadedPassword, Length(EncryptedPrefix) +
+        1, Length(LoadedPassword));
       edtPassword.Text := RC4.Decrypt(EncryptionKey, LoadedPassword);
       //     ShowMessage(edtPassword.Text);
     end
@@ -920,17 +924,18 @@ begin
     SaveDlg.Filter := 'Backup Config (*.rbak)|*.rbak';
     SaveDlg.FileName := NomeFileConfigBakup;
     if not SaveDlg.Execute then Exit; // Esce se l'utente annulla
-     NomeFileConfigBakup := SaveDlg.FileName;
-     if FileExists(NomeFileConfigBakup) then
-     begin
-        if MessageDlg('Conferma',
-                  'Il file "' + ExtractFileName( NomeFileConfigBakup) + '" esiste già.' + LineEnding +
-                  'in ' + ExtractFilePath ( NomeFileConfigBakup)  + LineEnding +
-                  'Vuoi sovrascriverlo?',
-                  mtConfirmation, [mbYes, mbNo], 0) = mrNo then exit;
-     end;
+    NomeFileConfigBakup := SaveDlg.FileName;
+    if FileExists(NomeFileConfigBakup) then
+    begin
+      if MessageDlg('Conferma', 'Il file "' +
+        ExtractFileName(NomeFileConfigBakup) + '" esiste già.' + LineEnding +
+        'in ' + ExtractFilePath(NomeFileConfigBakup) +
+        LineEnding + 'Vuoi sovrascriverlo?',
+        mtConfirmation, [mbYes, mbNo], 0) = mrNo then exit;
+    end;
 
-       Caption := 'LazBackupIncremental - config file: '+ ExtractFileName( NomeFileConfigBakup);
+    Caption := 'LazBackupIncremental - config file: ' + ExtractFileName(
+      NomeFileConfigBakup);
 
     J := TJSONObject.Create;
     try
@@ -1027,7 +1032,7 @@ begin
         TargetDateTime := TargetDateTime + 1;
       // Se l'orario target è già passato, sposta al giorno corretto della settimana successiva
       if TargetDateTime <= CurrentDateTime then
-        TargetDateTime := TargetDateTime + 7;
+        TargetDateTime := TargetDateTime + 8;
     end;
 
   end;
@@ -1094,7 +1099,8 @@ begin
   begin
     NomeFileConfigBakup := OpenDialog1.FileName;
     LoadConfigFromFile(NomeFileConfigBakup);
-      Caption := 'LazBackupIncremental - config file: '+ ExtractFileName( NomeFileConfigBakup);
+    Caption := 'LazBackupIncremental - config file: ' + ExtractFileName(
+      NomeFileConfigBakup);
   end;
 end;
 

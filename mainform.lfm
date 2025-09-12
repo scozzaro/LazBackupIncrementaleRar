@@ -1,7 +1,7 @@
 object FrmMain: TFrmMain
-  Left = 982
+  Left = 972
   Height = 827
-  Top = 181
+  Top = 49
   Width = 686
   Caption = 'Laz Backup Incrementale '
   ClientHeight = 827
@@ -176,7 +176,7 @@ object FrmMain: TFrmMain
       Width = 660
       ReadOnly = True
       ScrollBars = ssVertical
-      TabOrder = 25
+      TabOrder = 26
     end
     object chkSpegni: TCheckBox
       Left = 10
@@ -226,12 +226,12 @@ object FrmMain: TFrmMain
       Visible = False
     end
     object btnTrayBar: TButton
-      Left = 264
-      Height = 39
-      Top = 775
-      Width = 141
+      Left = 514
+      Height = 31
+      Top = 676
+      Width = 153
       Caption = 'Minimizza nella tray bar'
-      TabOrder = 26
+      TabOrder = 25
       OnClick = btnTrayBarClick
     end
     object chkDayBak: TCheckBox
@@ -285,6 +285,7 @@ object FrmMain: TFrmMain
         'Buona'
         'Massima'
       )
+      Style = csDropDownList
       TabOrder = 16
       Text = 'Normale'
     end
@@ -325,6 +326,7 @@ object FrmMain: TFrmMain
         'Giornaliero'
         'Settimanale'
       )
+      Style = csDropDownList
       TabOrder = 19
       Text = 'Giornaliero'
       OnChange = cmbFrequencyChange
@@ -345,18 +347,19 @@ object FrmMain: TFrmMain
         'Sabato'
         'Domenica'
       )
+      Style = csDropDownList
       TabOrder = 20
       Text = 'Lunedì'
       Visible = False
     end
     object Panel2: TPanel
       Left = 10
-      Height = 60
+      Height = 108
       Top = 712
       Width = 657
       BevelOuter = bvLowered
       BorderWidth = 2
-      ClientHeight = 60
+      ClientHeight = 108
       ClientWidth = 657
       Color = clYellow
       ParentBackground = False
@@ -364,11 +367,11 @@ object FrmMain: TFrmMain
       TabOrder = 27
       object Label3: TLabel
         Left = 3
-        Height = 54
+        Height = 102
         Top = 3
         Width = 651
         Align = alClient
-        Caption = 'Esempio: '#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak"'#13#10'I parametri non sono obligatori servono ad automatizzare la procedura'
+        Caption = 'Nota: '#13#10'Il progrmma carica all''avvio il file di configurazione che si trova nella cartella documenti: backup_configLaz.rbak'#13#10#13#10'Esempio: '#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak"'#13#10'I parametri non sono obligatori servono ad automatizzare la procedura'
         Color = clYellow
         Font.CharSet = ANSI_CHARSET
         Font.Pitch = fpVariable
@@ -463,6 +466,9 @@ object FrmMain: TFrmMain
     Top = 776
   end
   object TrayIcon1: TTrayIcon
+    BalloonFlags = bfInfo
+    BalloonHint = 'Click for open main window'
+    BalloonTitle = 'Open LazBackupIncremental'
     Icon.Data = {
       917E0D0000000100010000000000010020007B7E0D001600000089504E470D0A
       1A0A0000000D4948445200000400000004000802000000F07FBCD4000D7E4249
@@ -28102,6 +28108,7 @@ object FrmMain: TFrmMain
       26F5FE9DF42D997C06AF86AE12D3B904AD28CE1E80412A11B823433057E5E73A
       3E41E441207EE905450000000049454E44AE426082
     }
+    Hint = 'Clica per visualizzare il programma'
     OnClick = TrayIcon1Click
     Left = 576
     Top = 776
