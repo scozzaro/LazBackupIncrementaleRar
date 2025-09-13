@@ -90,8 +90,11 @@ type
     procedure BrowseRARButtonClick(Sender: TObject);
     procedure btnTrayBarClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure chkDayBakChange(Sender: TObject);
     procedure chkEncryptChange(Sender: TObject);
     procedure chkStartTimeChange(Sender: TObject);
+    procedure cmbCompressionLevelChange(Sender: TObject);
+    procedure cmbDayOfWeekChange(Sender: TObject);
     procedure cmbFrequencyChange(Sender: TObject);
     procedure DestButtonClick(Sender: TObject);
     procedure ExcludeLabelClick(Sender: TObject);
@@ -99,12 +102,17 @@ type
     procedure FormShow(Sender: TObject);
     procedure LicenseMenuItemClick(Sender: TObject);
     procedure LoadConfigMenuItemClick(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
+    procedure MenuItem2Click(Sender: TObject);
+    procedure MenuItem3Click(Sender: TObject);
+    procedure QuitMenuItemClick(Sender: TObject);
     procedure RemoveAllFolderClick(Sender: TObject);
     procedure RemoveButtonClick(Sender: TObject);
     procedure RemoveEscludiAllFilesClick(Sender: TObject);
     procedure RemoveExcludeButtonClick(Sender: TObject);
     procedure btnRunBackupClick(Sender: TObject);
     procedure SaveConfigMenuItemClick(Sender: TObject);
+    procedure Separator1Click(Sender: TObject);
     procedure TimerClockTimer(Sender: TObject);
     procedure TrayIcon1Click(Sender: TObject);
     procedure TrayIcon1DblClick(Sender: TObject);
@@ -350,6 +358,8 @@ begin
   end;
 
 
+  if cmbCompressionLevel.ItemIndex <0 then cmbCompressionLevel.ItemIndex := 2;
+
 
   LoadFile := '';
   TrayMode := False;
@@ -562,6 +572,11 @@ begin
 
 end;
 
+procedure TFrmMain.chkDayBakChange(Sender: TObject);
+begin
+
+end;
+
 procedure TFrmMain.chkEncryptChange(Sender: TObject);
 begin
   edtPassword.Enabled := chkEncrypt.Checked;
@@ -572,6 +587,16 @@ begin
   // Abilita/disabilita il timer in base allo stato della checkbox
   TimerClock.Enabled := chkStartTime.Checked;
   lblTimeLeft.Visible := chkStartTime.Checked;
+end;
+
+procedure TFrmMain.cmbCompressionLevelChange(Sender: TObject);
+begin
+
+end;
+
+procedure TFrmMain.cmbDayOfWeekChange(Sender: TObject);
+begin
+
 end;
 
 procedure TFrmMain.cmbFrequencyChange(Sender: TObject);
@@ -654,6 +679,14 @@ var
   ArchiveName: string;
   CompressionParam: string;
 begin
+  if FileExists(RarPathEdit.text) = false then
+  begin
+
+    ShowMessage('Il file rar NON trovato!');
+    exit;
+  end;
+
+
   // Prepara l'interfaccia per il nuovo backup
   ScrolledOutput.Lines.Clear;
   FProcessedFiles := 0;
@@ -993,6 +1026,11 @@ begin
   end;
 end;
 
+procedure TFrmMain.Separator1Click(Sender: TObject);
+begin
+
+end;
+
 procedure TFrmMain.TimerClockTimer(Sender: TObject);
 var
   CurrentDateTime: TDateTime;
@@ -1015,7 +1053,7 @@ begin
   CurrentDayOfMonth := DayOfTheMonth(CurrentDateTime);
 
   TargetDateTime := Int(CurrentDateTime) + Frac(StartTime.Time); // oggi all'ora scelta
-
+  if  cmbFrequency.ItemIndex<0 then cmbFrequency.ItemIndex :=0;
   // Calcola se è il momento giusto in base alla frequenza selezionata
   case cmbFrequency.ItemIndex of
     0: // Giornaliero
@@ -1026,6 +1064,7 @@ begin
     end;
     1: // Settimanale
     begin
+      if  cmbDayOfWeek.ItemIndex<0 then cmbDayOfWeek.ItemIndex :=0;
       TargetDayOfWeek := cmbDayOfWeek.ItemIndex + 1;
       // Se non è il giorno giusto, sposta il target al giorno corretto della settimana successiva
       while DayOfWeek(TargetDateTime) <> TargetDayOfWeek do
@@ -1045,12 +1084,18 @@ begin
   Hours := SecondsLeft div 3600;
   Minutes := (SecondsLeft mod 3600) div 60;
   Seconds := SecondsLeft mod 60;
-
+    if GetSystemLanguageCode = 'Italian' then
+  begin
   lblTimeLeft.Caption :=
-    'Ora attuale: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', CurrentDateTime) +
-    ' - Target: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', TargetDateTime) +
+    'Ora: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', CurrentDateTime) +
+    ' - backup: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', TargetDateTime) +
     ' - Mancano: ' + Format('%.2d:%.2d:%.2d', [Hours, Minutes, Seconds]);
-
+   end else begin
+     lblTimeLeft.Caption :=
+    'Now: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', CurrentDateTime) +
+    ' - Target: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', TargetDateTime) +
+    ' - Left: ' + Format('%.2d:%.2d:%.2d', [Hours, Minutes, Seconds]);
+     end;
   // Confronto con tolleranza di 1 secondo per avviare il backup
   if Abs(CurrentDateTime - TargetDateTime) < (1 / (24 * 60 * 60)) then
   begin
@@ -1102,6 +1147,35 @@ begin
     Caption := 'LazBackupIncremental - config file: ' + ExtractFileName(
       NomeFileConfigBakup);
   end;
+end;
+
+procedure TFrmMain.MenuItem1Click(Sender: TObject);
+begin
+    // Ripristina la finestra
+  Self.ShowInTaskBar := stAlways;
+  // Aggiungi questa linea per mostrare l'icona nella taskbar
+
+  // Ripristina la finestra dalla barra delle applicazioni
+  Self.Show;
+  Application.Restore;
+  Application.BringToFront;
+  // Nasconde l'icona dal tray
+  TrayIcon1.Visible := False;
+end;
+
+procedure TFrmMain.MenuItem2Click(Sender: TObject);
+begin
+  FrmAbout.ShowModal;
+end;
+
+procedure TFrmMain.MenuItem3Click(Sender: TObject);
+begin
+   halt(0);
+end;
+
+procedure TFrmMain.QuitMenuItemClick(Sender: TObject);
+begin
+
 end;
 
 procedure TFrmMain.RemoveAllFolderClick(Sender: TObject);

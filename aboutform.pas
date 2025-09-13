@@ -7,7 +7,7 @@ interface
 uses
   {$IFDEF WINDOWS}
   Windows,
-        ShellApi,
+  ShellApi,
   {$ENDIF}
   {$IFDEF LINUX}
   BaseUnix,
@@ -121,6 +121,12 @@ end;
 
 procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
+
+
+end;
+
+procedure TfrmAbout.FormShow(Sender: TObject);
+begin
   Langrun.Caption := GetSystemLanguageCode;
 
 
@@ -156,7 +162,7 @@ begin
     Self.Caption := 'About';
     ImgLogo.Hint := 'Program logo';
     LblAppName.Caption := 'Lazbackup Incremental';
-    LblVersion.Caption := 'Version ' + GetAppVersion;
+  //  LblVersion.Caption := 'Version ' + GetAppVersion;
     // If the version is dynamic, use 'Version ' + VersionNumber
     LblCopyright.Caption := 'Copyright © 2025 Vincenzo Scozzaro';
     LblAuthor.Caption := 'Author: Vincenzo Scozzaro';
@@ -175,10 +181,6 @@ begin
     LangRun.Caption := 'System Language';
   end;
 
-end;
-
-procedure TfrmAbout.FormShow(Sender: TObject);
-begin
   // posiziona il logo in alto e al centro
   ImgLogo.Top := 10;
   ImgLogo.Left := 10;

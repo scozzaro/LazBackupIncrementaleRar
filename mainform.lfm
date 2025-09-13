@@ -1,35 +1,34 @@
-object FrmMain: TFrmMain
-  Left = 972
-  Height = 827
-  Top = 49
+object frmmain: Tfrmmain
+  Left = 415
+  Height = 830
+  Top = 25
   Width = 686
-  Caption = 'Laz Backup Incrementale '
-  ClientHeight = 827
+  Caption = 'frmmain'
+  ClientHeight = 830
   ClientWidth = 686
   Menu = MainMenu1
-  Position = poDesktopCenter
   LCLVersion = '4.99.0.0'
   OnCreate = FormCreate
   OnShow = FormShow
   object Panel1: TPanel
     Left = 0
-    Height = 827
+    Height = 830
     Top = 0
     Width = 686
     Align = alClient
-    ClientHeight = 827
+    ClientHeight = 830
     ClientWidth = 686
     TabOrder = 0
     object RARPathLabel: TLabel
       Left = 10
-      Height = 15
+      Height = 17
       Top = 4
-      Width = 156
+      Width = 165
       Caption = 'Percorso del programma RAR'
     end
     object RARPathEdit: TEdit
       Left = 10
-      Height = 23
+      Height = 27
       Top = 19
       Width = 526
       TabOrder = 0
@@ -45,14 +44,14 @@ object FrmMain: TFrmMain
     end
     object DestinationLabel: TLabel
       Left = 12
-      Height = 15
+      Height = 17
       Top = 48
-      Width = 269
+      Width = 285
       Caption = 'Percorso di stezinazione di salvataggio dell''archivio'
     end
     object DestinationEdit: TEdit
       Left = 10
-      Height = 23
+      Height = 27
       Top = 64
       Width = 526
       TabOrder = 2
@@ -68,24 +67,24 @@ object FrmMain: TFrmMain
     end
     object ArchiveNameLabel: TLabel
       Left = 10
-      Height = 15
+      Height = 17
       Top = 92
-      Width = 126
+      Width = 130
       Caption = 'Nome del file di backup'
       WordWrap = True
     end
     object ArchiveNameEdit: TEdit
       Left = 10
-      Height = 23
+      Height = 27
       Top = 107
       Width = 658
       TabOrder = 5
     end
     object FoldersLabel: TLabel
       Left = 10
-      Height = 15
+      Height = 17
       Top = 136
-      Width = 95
+      Width = 105
       Caption = 'Cartelle da salvare'
       WordWrap = True
     end
@@ -96,6 +95,7 @@ object FrmMain: TFrmMain
       Width = 620
       ItemHeight = 0
       TabOrder = 6
+      TopIndex = -1
     end
     object AddButton: TButton
       Left = 640
@@ -117,12 +117,11 @@ object FrmMain: TFrmMain
     end
     object ExcludeLabel: TLabel
       Left = 10
-      Height = 15
+      Height = 17
       Top = 247
-      Width = 270
+      Width = 285
       Caption = 'Escludi file/cartelle (pattern *.tmp, *.zip, C:\temp\*)'
       WordWrap = True
-      OnClick = ExcludeLabelClick
     end
     object ExcludeListbox: TListBox
       Left = 10
@@ -131,6 +130,7 @@ object FrmMain: TFrmMain
       Width = 620
       ItemHeight = 0
       TabOrder = 10
+      TopIndex = -1
     end
     object AddExcludeButton: TButton
       Left = 640
@@ -180,26 +180,26 @@ object FrmMain: TFrmMain
     end
     object chkSpegni: TCheckBox
       Left = 10
-      Height = 19
+      Height = 21
       Top = 689
-      Width = 165
+      Width = 178
       Caption = 'Spegni computer al termine'
       TabOrder = 22
     end
     object chkStartTime: TCheckBox
       Left = 12
-      Height = 19
+      Height = 21
       Top = 352
-      Width = 71
+      Width = 79
       Caption = 'Auto Start'
       TabOrder = 14
       OnChange = chkStartTimeChange
     end
     object StartTime: TDateTimePicker
-      Left = 92
+      Left = 100
       Height = 23
-      Top = 348
-      Width = 65
+      Top = 347
+      Width = 69
       CenturyFrom = 1941
       MaxDate = 2958465
       MinDate = -53780
@@ -218,10 +218,10 @@ object FrmMain: TFrmMain
       MonthNames = 'Long'
     end
     object lblTimeLeft: TLabel
-      Left = 164
-      Height = 15
+      Left = 180
+      Height = 17
       Top = 352
-      Width = 89
+      Width = 95
       Caption = 'Time Left to start'
       Visible = False
     end
@@ -246,37 +246,38 @@ object FrmMain: TFrmMain
       ParentShowHint = False
       ShowHint = True
       TabOrder = 4
+      OnChange = chkDayBakChange
     end
     object chkMinTrayBar: TCheckBox
       Left = 200
-      Height = 19
+      Height = 21
       Top = 689
-      Width = 130
+      Width = 143
       Caption = 'Minimizza in Tray Bar'
       TabOrder = 23
     end
     object chkChiudiApp: TCheckBox
       Left = 344
-      Height = 19
+      Height = 21
       Top = 689
-      Width = 124
+      Width = 132
       Caption = 'Chiudi Applicazione'
       TabOrder = 24
     end
     object StatusLabel1: TLabel
       Left = 10
-      Height = 15
+      Height = 17
       Top = 672
-      Width = 219
+      Width = 229
       Caption = 'Dopo aver complemato il backup esegui: '
       WordWrap = True
     end
     object cmbCompressionLevel: TComboBox
       Left = 104
-      Height = 23
+      Height = 25
       Top = 376
       Width = 136
-      ItemHeight = 15
+      ItemHeight = 0
       ItemIndex = 2
       Items.Strings = (
         'Sola archiviazione'
@@ -288,19 +289,20 @@ object FrmMain: TFrmMain
       Style = csDropDownList
       TabOrder = 16
       Text = 'Normale'
+      OnChange = cmbCompressionLevelChange
     end
     object chkEncrypt: TCheckBox
       Left = 252
-      Height = 19
+      Height = 21
       Top = 380
-      Width = 139
+      Width = 150
       Caption = 'Proteggi con password'
       TabOrder = 17
       OnChange = chkEncryptChange
     end
     object edtPassword: TEdit
       Left = 410
-      Height = 23
+      Height = 27
       Top = 376
       Width = 265
       EchoMode = emPassword
@@ -310,17 +312,17 @@ object FrmMain: TFrmMain
     end
     object Label2: TLabel
       Left = 12
-      Height = 15
+      Height = 17
       Top = 380
-      Width = 79
+      Width = 84
       Caption = 'Compressione '
     end
     object cmbFrequency: TComboBox
       Left = 52
-      Height = 23
+      Height = 25
       Top = 404
       Width = 142
-      ItemHeight = 15
+      ItemHeight = 0
       ItemIndex = 0
       Items.Strings = (
         'Giornaliero'
@@ -333,10 +335,10 @@ object FrmMain: TFrmMain
     end
     object cmbDayOfWeek: TComboBox
       Left = 204
-      Height = 23
+      Height = 25
       Top = 404
       Width = 117
-      ItemHeight = 15
+      ItemHeight = 0
       ItemIndex = 0
       Items.Strings = (
         'Lunedì'
@@ -351,6 +353,7 @@ object FrmMain: TFrmMain
       TabOrder = 20
       Text = 'Lunedì'
       Visible = False
+      OnChange = cmbDayOfWeekChange
     end
     object Panel2: TPanel
       Left = 10
@@ -383,9 +386,9 @@ object FrmMain: TFrmMain
     end
     object Label4: TLabel
       Left = 12
-      Height = 15
+      Height = 17
       Top = 408
-      Width = 23
+      Width = 24
       Caption = 'Tipo'
     end
     object ProgressBar1: TProgressBar
@@ -417,58 +420,36 @@ object FrmMain: TFrmMain
     end
     object Label1: TLabel
       Left = 12
-      Height = 15
+      Height = 17
       Top = 451
       Width = 20
       Caption = 'Log'
     end
   end
-  object MainMenu1: TMainMenu
+  object PopupMenu1: TPopupMenu
     Left = 616
-    Top = 776
-    object FileMenu: TMenuItem
-      Caption = '&File'
-      object LoadConfigMenuItem: TMenuItem
-        Caption = 'Carica Configurazione'
-        OnClick = LoadConfigMenuItemClick
-      end
-      object SaveConfigMenuItem: TMenuItem
-        Caption = 'Salva Configurazione'
-        OnClick = SaveConfigMenuItemClick
-      end
-      object N1: TMenuItem
-        Caption = '-'
-      end
-      object QuitMenuItem: TMenuItem
-        Caption = 'Esci'
-      end
+    Top = 804
+    object MenuItem1: TMenuItem
+      Caption = 'Show LazBackupIncremental'
+      OnClick = MenuItem1Click
     end
-    object InfoMenu: TMenuItem
-      Caption = '&Info'
-      object AboutMenuItem: TMenuItem
-        Caption = 'About'
-        OnClick = AboutMenuItemClick
-      end
+    object MenuItem2: TMenuItem
+      Caption = 'About'
+      OnClick = MenuItem2Click
     end
-  end
-  object OpenDialog1: TOpenDialog
-    Left = 496
-    Top = 776
-  end
-  object SaveDialog1: TSaveDialog
-    Left = 536
-    Top = 776
-  end
-  object TimerClock: TTimer
-    Enabled = False
-    OnTimer = TimerClockTimer
-    Left = 416
-    Top = 776
+    object Separator1: TMenuItem
+      Caption = '-'
+      OnClick = Separator1Click
+    end
+    object MenuItem3: TMenuItem
+      Caption = 'Exit'
+      OnClick = MenuItem3Click
+    end
   end
   object TrayIcon1: TTrayIcon
-    BalloonFlags = bfInfo
     BalloonHint = 'Click for open main window'
     BalloonTitle = 'Open LazBackupIncremental'
+    PopUpMenu = PopupMenu1
     Icon.Data = {
       917E0D0000000100010000000000010020007B7E0D001600000089504E470D0A
       1A0A0000000D4948445200000400000004000802000000F07FBCD4000D7E4249
@@ -28109,16 +28090,56 @@ object FrmMain: TFrmMain
       3E41E441207EE905450000000049454E44AE426082
     }
     Hint = 'Clica per visualizzare il programma'
-    OnClick = TrayIcon1Click
-    Left = 576
-    Top = 776
+    Left = 544
+    Top = 804
+  end
+  object TimerClock: TTimer
+    Enabled = False
+    Left = 416
+    Top = 804
   end
   object PopupMenuTray: TPopupMenu
-    Left = 456
-    Top = 776
+    Left = 448
+    Top = 804
     object Visualizza: TMenuItem
       Caption = 'Visualizza'
-      OnClick = VisualizzaClick
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 480
+    Top = 804
+  end
+  object SaveDialog1: TSaveDialog
+    Left = 512
+    Top = 804
+  end
+  object MainMenu1: TMainMenu
+    Left = 576
+    Top = 804
+    object FileMenu: TMenuItem
+      Caption = '&File'
+      object LoadConfigMenuItem: TMenuItem
+        Caption = 'Carica Configurazione'
+        OnClick = LoadConfigMenuItemClick
+      end
+      object SaveConfigMenuItem: TMenuItem
+        Caption = 'Salva Configurazione'
+        OnClick = SaveConfigMenuItemClick
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object QuitMenuItem: TMenuItem
+        Caption = 'Esci'
+        OnClick = QuitMenuItemClick
+      end
+    end
+    object InfoMenu: TMenuItem
+      Caption = '&Info'
+      object AboutMenuItem: TMenuItem
+        Caption = 'About'
+        OnClick = AboutMenuItemClick
+      end
     end
   end
 end
