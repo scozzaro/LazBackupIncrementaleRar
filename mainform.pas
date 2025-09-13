@@ -227,7 +227,7 @@ begin
     ExcludeLabel.Caption := 'Escludi file/cartelle (pattern *.tmp, *.zip, C:\temp\*)';
     ProgressLabel.Caption := 'Avanzamento: 0%';
     btnRunBackup.Caption := 'Esegui Backup';
-    chkSpegni.Caption := 'Spegni computer al termine';
+    chkSpegni.Caption := 'Spegni PC';
     chkStartTime.Caption := 'Auto Start';
     lblTimeLeft.Caption := 'Tempo rimanente';
     btnTrayBar.Caption := 'Minimizza nella tray bar';
@@ -299,7 +299,7 @@ begin
     ExcludeLabel.Caption := 'Exclude files/folders (pattern *.tmp, *.zip, C:\temp\*)';
     ProgressLabel.Caption := 'Progress: 0%';
     btnRunBackup.Caption := 'Run Backup';
-    chkSpegni.Caption := 'Shutdown computer on finish';
+    chkSpegni.Caption := 'Shutdown';
     chkStartTime.Caption := 'Auto Start';
     lblTimeLeft.Caption := 'Time left to start';
     btnTrayBar.Caption := 'Minimize to tray bar';
@@ -358,7 +358,7 @@ begin
   end;
 
 
-  if cmbCompressionLevel.ItemIndex <0 then cmbCompressionLevel.ItemIndex := 2;
+
 
 
   LoadFile := '';
@@ -429,6 +429,10 @@ begin
   Caption := 'LazBackupIncremental - config file: ' + ExtractFileName(
     NomeFileConfigBakup);
 
+
+   if cmbCompressionLevel.ItemIndex <0 then cmbCompressionLevel.ItemIndex := 2;
+    if  cmbFrequency.ItemIndex<0 then cmbFrequency.ItemIndex :=0;
+    if  cmbDayOfWeek.ItemIndex<0 then cmbDayOfWeek.ItemIndex :=0;
 end;
 
 procedure TFrmMain.FormShow(Sender: TObject);
@@ -656,7 +660,7 @@ procedure TFrmMain.btnRunBackupClick(Sender: TObject);
     {$IFDEF UNIX}
  // Se il sistema operativo è Unix (Linux/macOS)
       Result := GetEnvironmentVariable('HOME');
-      if Result = '' then
+       if Result = '' then
         Result := '/tmp'; // Fallback
     {$ELSE}// Altrimenti (Windows)
     Result := GetEnvironmentVariable('USERPROFILE');
@@ -733,6 +737,32 @@ begin
       CompressionParam := ''; // Nessun parametro se l'opzione non è selezionata
   end;
 
+    if chkStartTime.Checked then
+  begin
+    if GetSystemLanguageCode = 'Italian' then
+        begin
+              ScrolledOutput.Lines.Add('Programmata' );
+          end else begin
+                ScrolledOutput.Lines.Add('Scheduled' );
+        end;
+    ScrolledOutput.Lines.Add(lblTimeLeft.Caption);
+    if GetSystemLanguageCode = 'Italian' then
+        begin
+              ScrolledOutput.Lines.Add('Inizio: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
+          end else begin
+                ScrolledOutput.Lines.Add('Start: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
+        end;
+  end else begin
+        if GetSystemLanguageCode = 'Italian' then
+        begin
+              ScrolledOutput.Lines.Add('Inizio: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
+          end else begin
+                ScrolledOutput.Lines.Add('Start: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
+        end;
+
+  end;
+
+
 
   // Configurazione dei parametri per l'esecuzione del processo RAR
   FProcess.Executable := RARPathEdit.Text;
@@ -800,10 +830,18 @@ begin
     BytesRead := FProcess.Output.Read(Buffer, SizeOf(Buffer));
     if BytesRead > 0 then
     begin
-      SetString(Line, pansichar(@Buffer[0]), BytesRead);
+       SetString(Line, pansichar(@Buffer[0]), BytesRead);
       ScrolledOutput.Lines.Text := ScrolledOutput.Lines.Text + Line;
     end;
   end;
+
+     if GetSystemLanguageCode = 'Italian' then
+        begin
+              ScrolledOutput.Lines.Add('Fine: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
+          end else begin
+                ScrolledOutput.Lines.Add('End: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
+        end;
+
 
   // Aggiorna la barra di avanzamento e lo stato al 100% al termine del backup
   // Imposta la barra di avanzamento e l'etichetta al 100% al termine del backup
@@ -935,6 +973,12 @@ begin
   finally
     JSONObj.Free; // Libera la memoria
   end;
+
+
+   if cmbCompressionLevel.ItemIndex <0 then cmbCompressionLevel.ItemIndex := 2;
+    if  cmbFrequency.ItemIndex<0 then cmbFrequency.ItemIndex :=0;
+    if  cmbDayOfWeek.ItemIndex<0 then cmbDayOfWeek.ItemIndex :=0;
+
 end;
 
 

@@ -1,13 +1,13 @@
 object frmmain: Tfrmmain
-  Left = 415
+  Left = 434
   Height = 830
-  Top = 25
+  Top = 222
   Width = 686
   Caption = 'frmmain'
   ClientHeight = 830
   ClientWidth = 686
   Menu = MainMenu1
-  LCLVersion = '4.99.0.0'
+  LCLVersion = '4.2.0.0'
   OnCreate = FormCreate
   OnShow = FormShow
   object Panel1: TPanel
@@ -20,15 +20,15 @@ object frmmain: Tfrmmain
     ClientWidth = 686
     TabOrder = 0
     object RARPathLabel: TLabel
-      Left = 10
-      Height = 17
+      Left = 11
+      Height = 16
       Top = 4
-      Width = 165
+      Width = 178
       Caption = 'Percorso del programma RAR'
     end
     object RARPathEdit: TEdit
       Left = 10
-      Height = 27
+      Height = 22
       Top = 19
       Width = 526
       TabOrder = 0
@@ -36,7 +36,7 @@ object frmmain: Tfrmmain
     object BrowseRARButton: TButton
       Left = 544
       Height = 26
-      Top = 17
+      Top = 19
       Width = 124
       Caption = 'Trova Programma'
       TabOrder = 1
@@ -44,116 +44,115 @@ object frmmain: Tfrmmain
     end
     object DestinationLabel: TLabel
       Left = 12
-      Height = 17
-      Top = 48
-      Width = 285
+      Height = 16
+      Top = 55
+      Width = 312
       Caption = 'Percorso di stezinazione di salvataggio dell''archivio'
     end
     object DestinationEdit: TEdit
-      Left = 10
-      Height = 27
-      Top = 64
+      Left = 11
+      Height = 22
+      Top = 75
       Width = 526
       TabOrder = 2
     end
     object DestButton: TButton
-      Left = 544
+      Left = 545
       Height = 26
-      Top = 60
+      Top = 75
       Width = 123
       Caption = 'Trova Percorso'
       TabOrder = 3
       OnClick = DestButtonClick
     end
     object ArchiveNameLabel: TLabel
-      Left = 10
-      Height = 17
-      Top = 92
-      Width = 130
+      Left = 12
+      Height = 16
+      Top = 110
+      Width = 142
       Caption = 'Nome del file di backup'
       WordWrap = True
     end
     object ArchiveNameEdit: TEdit
-      Left = 10
-      Height = 27
-      Top = 107
+      Left = 12
+      Height = 22
+      Top = 128
       Width = 658
       TabOrder = 5
     end
     object FoldersLabel: TLabel
-      Left = 10
-      Height = 17
-      Top = 136
-      Width = 105
+      Left = 12
+      Height = 16
+      Top = 162
+      Width = 112
       Caption = 'Cartelle da salvare'
       WordWrap = True
     end
     object FoldersListbox: TListBox
-      Left = 10
-      Height = 90
-      Top = 152
+      Left = 12
+      Height = 88
+      Top = 178
       Width = 620
       ItemHeight = 0
       TabOrder = 6
-      TopIndex = -1
     end
     object AddButton: TButton
-      Left = 640
-      Height = 26
-      Top = 152
+      Left = 639
+      Height = 25
+      Top = 178
       Width = 30
       Caption = '+'
       TabOrder = 7
       OnClick = AddButtonClick
     end
     object RemoveButton: TButton
-      Left = 640
-      Height = 26
-      Top = 184
+      Left = 639
+      Height = 25
+      Top = 209
       Width = 30
       Caption = '-'
       TabOrder = 8
       OnClick = RemoveButtonClick
     end
     object ExcludeLabel: TLabel
-      Left = 10
-      Height = 17
-      Top = 247
-      Width = 285
+      Left = 12
+      Height = 16
+      Top = 270
+      Width = 305
       Caption = 'Escludi file/cartelle (pattern *.tmp, *.zip, C:\temp\*)'
       WordWrap = True
+      OnClick = ExcludeLabelClick
     end
     object ExcludeListbox: TListBox
-      Left = 10
-      Height = 82
-      Top = 262
+      Left = 12
+      Height = 80
+      Top = 285
       Width = 620
       ItemHeight = 0
       TabOrder = 10
-      TopIndex = -1
     end
     object AddExcludeButton: TButton
-      Left = 640
-      Height = 26
-      Top = 260
+      Left = 639
+      Height = 25
+      Top = 283
       Width = 30
       Caption = '+'
       TabOrder = 11
       OnClick = AddExcludeButtonClick
     end
     object RemoveExcludeButton: TButton
-      Left = 640
-      Height = 26
-      Top = 292
+      Left = 639
+      Height = 25
+      Top = 314
       Width = 30
       Caption = '-'
       TabOrder = 12
       OnClick = RemoveExcludeButtonClick
     end
     object ProgressLabel: TLabel
-      Left = 12
-      Height = 16
-      Top = 432
+      Left = 14
+      Height = 21
+      Top = 447
       Width = 240
       Alignment = taCenter
       AutoSize = False
@@ -161,45 +160,45 @@ object frmmain: Tfrmmain
       WordWrap = True
     end
     object btnRunBackup: TButton
-      Left = 540
-      Height = 31
-      Top = 424
+      Left = 553
+      Height = 40
+      Top = 436
       Width = 115
       Caption = 'Esegui Backup'
       TabOrder = 21
       OnClick = btnRunBackupClick
     end
     object ScrolledOutput: TMemo
-      Left = 10
-      Height = 198
-      Top = 470
+      Left = 12
+      Height = 174
+      Top = 490
       Width = 660
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 26
     end
     object chkSpegni: TCheckBox
-      Left = 10
-      Height = 21
-      Top = 689
-      Width = 178
+      Left = 12
+      Height = 18
+      Top = 686
+      Width = 183
       Caption = 'Spegni computer al termine'
       TabOrder = 22
     end
     object chkStartTime: TCheckBox
       Left = 12
-      Height = 21
-      Top = 352
-      Width = 79
+      Height = 18
+      Top = 369
+      Width = 84
       Caption = 'Auto Start'
       TabOrder = 14
       OnChange = chkStartTimeChange
     end
     object StartTime: TDateTimePicker
-      Left = 100
-      Height = 23
-      Top = 347
-      Width = 69
+      Left = 106
+      Height = 21
+      Top = 367
+      Width = 77
       CenturyFrom = 1941
       MaxDate = 2958465
       MinDate = -53780
@@ -218,27 +217,27 @@ object frmmain: Tfrmmain
       MonthNames = 'Long'
     end
     object lblTimeLeft: TLabel
-      Left = 180
-      Height = 17
-      Top = 352
-      Width = 95
+      Left = 182
+      Height = 16
+      Top = 369
+      Width = 104
       Caption = 'Time Left to start'
       Visible = False
     end
     object btnTrayBar: TButton
-      Left = 514
-      Height = 31
-      Top = 676
+      Left = 516
+      Height = 32
+      Top = 678
       Width = 153
       Caption = 'Minimizza nella tray bar'
       TabOrder = 25
       OnClick = btnTrayBarClick
     end
     object chkDayBak: TCheckBox
-      Left = 429
+      Left = 432
       Height = 19
       Hint = 'Aggiuge la nome file il giorno della settimana'#13#10'Il backup aggiornerà se esiste il file della settimana precedente '#13#10'in modo da avere 7 backup incrementali '
-      Top = 88
+      Top = 108
       Width = 238
       Alignment = taLeftJustify
       AutoSize = False
@@ -249,35 +248,35 @@ object frmmain: Tfrmmain
       OnChange = chkDayBakChange
     end
     object chkMinTrayBar: TCheckBox
-      Left = 200
-      Height = 21
-      Top = 689
-      Width = 143
+      Left = 196
+      Height = 18
+      Top = 686
+      Width = 146
       Caption = 'Minimizza in Tray Bar'
       TabOrder = 23
     end
     object chkChiudiApp: TCheckBox
-      Left = 344
-      Height = 21
-      Top = 689
-      Width = 132
+      Left = 368
+      Height = 18
+      Top = 686
+      Width = 138
       Caption = 'Chiudi Applicazione'
       TabOrder = 24
     end
     object StatusLabel1: TLabel
-      Left = 10
-      Height = 17
-      Top = 672
-      Width = 229
+      Left = 12
+      Height = 16
+      Top = 668
+      Width = 249
       Caption = 'Dopo aver complemato il backup esegui: '
       WordWrap = True
     end
     object cmbCompressionLevel: TComboBox
-      Left = 104
-      Height = 25
-      Top = 376
+      Left = 106
+      Height = 20
+      Top = 392
       Width = 136
-      ItemHeight = 0
+      ItemHeight = 15
       ItemIndex = 2
       Items.Strings = (
         'Sola archiviazione'
@@ -292,37 +291,37 @@ object frmmain: Tfrmmain
       OnChange = cmbCompressionLevelChange
     end
     object chkEncrypt: TCheckBox
-      Left = 252
-      Height = 21
-      Top = 380
-      Width = 150
+      Left = 254
+      Height = 18
+      Top = 396
+      Width = 156
       Caption = 'Proteggi con password'
       TabOrder = 17
       OnChange = chkEncryptChange
     end
     object edtPassword: TEdit
-      Left = 410
-      Height = 27
-      Top = 376
-      Width = 265
+      Left = 416
+      Height = 22
+      Top = 394
+      Width = 253
       EchoMode = emPassword
       Enabled = False
       PasswordChar = '*'
       TabOrder = 18
     end
     object Label2: TLabel
-      Left = 12
-      Height = 17
-      Top = 380
-      Width = 84
+      Left = 14
+      Height = 16
+      Top = 396
+      Width = 90
       Caption = 'Compressione '
     end
     object cmbFrequency: TComboBox
-      Left = 52
-      Height = 25
-      Top = 404
+      Left = 54
+      Height = 20
+      Top = 420
       Width = 142
-      ItemHeight = 0
+      ItemHeight = 15
       ItemIndex = 0
       Items.Strings = (
         'Giornaliero'
@@ -334,11 +333,11 @@ object frmmain: Tfrmmain
       OnChange = cmbFrequencyChange
     end
     object cmbDayOfWeek: TComboBox
-      Left = 204
-      Height = 25
-      Top = 404
+      Left = 206
+      Height = 20
+      Top = 420
       Width = 117
-      ItemHeight = 0
+      ItemHeight = 15
       ItemIndex = 0
       Items.Strings = (
         'Lunedì'
@@ -385,44 +384,44 @@ object frmmain: Tfrmmain
       end
     end
     object Label4: TLabel
-      Left = 12
-      Height = 17
-      Top = 408
-      Width = 24
+      Left = 14
+      Height = 16
+      Top = 424
+      Width = 27
       Caption = 'Tipo'
     end
     object ProgressBar1: TProgressBar
-      Left = 268
-      Height = 17
-      Top = 432
+      Left = 270
+      Height = 22
+      Top = 447
       Width = 258
       TabOrder = 28
     end
     object RemoveAllFolder: TButton
-      Left = 640
-      Height = 26
+      Left = 639
+      Height = 25
       Hint = 'Rimuovi tutti'
-      Top = 216
+      Top = 240
       Width = 30
       Caption = 'C'
       TabOrder = 9
       OnClick = RemoveAllFolderClick
     end
     object RemoveEscludiAllFiles: TButton
-      Left = 640
-      Height = 26
+      Left = 639
+      Height = 25
       Hint = 'Rimuovi tutti'
-      Top = 324
+      Top = 346
       Width = 30
       Caption = 'C'
       TabOrder = 13
       OnClick = RemoveEscludiAllFilesClick
     end
     object Label1: TLabel
-      Left = 12
-      Height = 17
-      Top = 451
-      Width = 20
+      Left = 14
+      Height = 16
+      Top = 472
+      Width = 22
       Caption = 'Log'
     end
   end
@@ -28095,6 +28094,7 @@ object frmmain: Tfrmmain
   end
   object TimerClock: TTimer
     Enabled = False
+    OnTimer = TimerClockTimer
     Left = 416
     Top = 804
   end

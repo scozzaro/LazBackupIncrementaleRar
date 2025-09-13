@@ -3,263 +3,185 @@
   <ProjectSession>
     <Version Value="12"/>
     <BuildModes Active="Default"/>
-    <Units>
-      <Unit>
+    <Units Count="5">
+      <Unit0>
         <Filename Value="LazBackupIncrementaleRar.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="6"/>
-        <TopLine Value="22"/>
-        <CursorPos Y="54"/>
-        <UsageCount Value="77"/>
+        <UnitName Value="lazbackupincrementalerar"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="6"/>
+        <CursorPos Y="28"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
-      </Unit>
-      <Unit>
+      </Unit0>
+      <Unit1>
         <Filename Value="mainform.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="FrmMain"/>
+        <ComponentName Value="frmmain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="82"/>
-        <CursorPos X="30" Y="108"/>
-        <UsageCount Value="77"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="655"/>
+        <CursorPos X="8" Y="663"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
-      </Unit>
-      <Unit>
+      </Unit1>
+      <Unit2>
         <Filename Value="aboutform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmAbout"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="AboutForm"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="163"/>
-        <CursorPos X="19" Y="173"/>
-        <UsageCount Value="77"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="158"/>
+        <CursorPos X="3" Y="165"/>
+        <UsageCount Value="27"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../lazarus/fpc/3.2.2/sources/rtl/objpas/sysutils/sysencodingh.inc"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="/home/vincenzo/.lazarus2/lcl/include/customform.inc"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="3" Y="21"/>
-        <UsageCount Value="13"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../lazarus/lcl/include/progressbar.inc"/>
-        <EditorIndex Value="7"/>
-        <TopLine Value="148"/>
-        <CursorPos Y="172"/>
-        <UsageCount Value="38"/>
-        <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="aboutform.lfm"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="24626"/>
-        <CursorPos X="11" Y="24658"/>
-        <UsageCount Value="8"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../fpcsrc/packages/winunits-base/src/shellapi.pp"/>
-        <UnitName Value="ShellApi"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="1066"/>
-        <CursorPos X="10" Y="1083"/>
-        <UsageCount Value="30"/>
-        <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../lazarus/lcl/forms.pp"/>
-        <UnitName Value="Forms"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="462"/>
-        <CursorPos X="21" Y="468"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="mainform.lfm"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="28065"/>
-        <CursorPos X="9" Y="28097"/>
-        <UsageCount Value="8"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../fpcsrc/packages/fcl-res/src/versionresource.pp"/>
-        <EditorIndex Value="4"/>
-        <CursorPos X="22" Y="16"/>
-        <UsageCount Value="16"/>
-        <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../lazarus/components/rc4crypt/cipherrc4.pas"/>
-        <UnitName Value="CipherRC4"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="43" Y="9"/>
+        <TopLine Value="912"/>
+        <CursorPos Y="930"/>
         <UsageCount Value="10"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../lazarus/components/rc4crypt/rc4cipher.pas"/>
-        <UnitName Value="RC4Cipher"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="/usr/share/fpcsrc/3.2.2/packages/fcl-extra/src/fileinfo.pp"/>
+        <UnitName Value="FileInfo"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="31"/>
-        <CursorPos Y="487"/>
+        <TopLine Value="78"/>
+        <CursorPos X="15" Y="71"/>
         <UsageCount Value="10"/>
-      </Unit>
-      <Unit>
-        <Filename Value="rc4cipher.pas"/>
-        <UnitName Value="RC4Cipher"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="446"/>
-        <CursorPos Y="487"/>
-        <UsageCount Value="12"/>
-        <Loaded Value="True"/>
-      </Unit>
+      </Unit4>
     </Units>
-    <JumpHistory HistoryIndex="29">
-      <Position>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
         <Filename Value="mainform.pas"/>
-        <Caret Line="913" Column="11" TopLine="885"/>
-      </Position>
-      <Position>
+        <Caret Line="249" Column="24" TopLine="231"/>
+      </Position1>
+      <Position2>
         <Filename Value="mainform.pas"/>
-        <Caret Line="570" Column="4" TopLine="556"/>
-      </Position>
-      <Position>
+        <Caret Line="251" Column="24" TopLine="231"/>
+      </Position2>
+      <Position3>
         <Filename Value="mainform.pas"/>
-        <Caret Line="905" Column="59" TopLine="889"/>
-      </Position>
-      <Position>
+        <Caret Line="317" Column="24" TopLine="307"/>
+      </Position3>
+      <Position4>
         <Filename Value="mainform.pas"/>
-        <Caret Line="563" Column="47" TopLine="556"/>
-      </Position>
-      <Position>
+        <Caret Line="318" Column="24" TopLine="307"/>
+      </Position4>
+      <Position5>
         <Filename Value="mainform.pas"/>
-        <Caret Line="914" Column="46" TopLine="897"/>
-      </Position>
-      <Position>
+        <Caret Line="319" Column="24" TopLine="307"/>
+      </Position5>
+      <Position6>
         <Filename Value="mainform.pas"/>
-        <Caret Line="907" Column="65" TopLine="891"/>
-      </Position>
-      <Position>
+        <Caret Line="320" Column="24" TopLine="307"/>
+      </Position6>
+      <Position7>
         <Filename Value="mainform.pas"/>
-        <Caret Line="962" Column="41" TopLine="951"/>
-      </Position>
-      <Position>
+        <Caret Line="321" Column="24" TopLine="307"/>
+      </Position7>
+      <Position8>
         <Filename Value="mainform.pas"/>
-        <Caret Line="860" Column="78" TopLine="847"/>
-      </Position>
-      <Position>
+        <Caret Line="322" Column="24" TopLine="307"/>
+      </Position8>
+      <Position9>
         <Filename Value="mainform.pas"/>
-        <Caret Line="903" Column="70" TopLine="877"/>
-      </Position>
-      <Position>
+        <Caret Line="324" Column="24" TopLine="307"/>
+      </Position9>
+      <Position10>
         <Filename Value="mainform.pas"/>
-        <Caret Line="555" Column="20" TopLine="553"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="94" Column="32" TopLine="79"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="166" Column="45" TopLine="147"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="118" Column="3" TopLine="108"/>
-      </Position>
-      <Position>
+        <Caret Line="433" Column="80" TopLine="417"/>
+      </Position10>
+      <Position11>
         <Filename Value="mainform.pas"/>
-        <Caret Line="555" Column="20" TopLine="553"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="165" Column="31" TopLine="160"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="182" Column="60" TopLine="179"/>
-      </Position>
-      <Position>
+        <Caret Line="594" Column="39" TopLine="571"/>
+      </Position11>
+      <Position12>
         <Filename Value="mainform.pas"/>
-        <Caret Line="989" Column="58" TopLine="978"/>
-      </Position>
-      <Position>
+        <Caret Line="728" Column="37" TopLine="706"/>
+      </Position12>
+      <Position13>
         <Filename Value="mainform.pas"/>
-        <Caret Line="991" Column="10" TopLine="978"/>
-      </Position>
-      <Position>
+        <Caret Line="922" Column="32" TopLine="900"/>
+      </Position13>
+      <Position14>
         <Filename Value="mainform.pas"/>
-        <Caret Line="1039" Column="10" TopLine="1013"/>
-      </Position>
-      <Position>
+        <Caret Line="1072" Column="2" TopLine="1059"/>
+      </Position14>
+      <Position15>
         <Filename Value="mainform.pas"/>
-        <Caret Line="1042" Column="10" TopLine="1016"/>
-      </Position>
-      <Position>
+        <Caret Line="434" Column="31" TopLine="419"/>
+      </Position15>
+      <Position16>
         <Filename Value="mainform.pas"/>
-        <Caret Line="45" Column="88" TopLine="30"/>
-      </Position>
-      <Position>
+        <Caret Line="140" Column="72" TopLine="136"/>
+      </Position16>
+      <Position17>
         <Filename Value="mainform.pas"/>
-        <Caret Line="83" Column="34" TopLine="57"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="105" Column="28" TopLine="99"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="114" Column="8" TopLine="98"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="35" Column="16" TopLine="8"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="44" Column="22" TopLine="22"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="45" Column="22" TopLine="22"/>
-      </Position>
-      <Position>
-        <Filename Value="aboutform.pas"/>
-        <Caret Line="173" Column="19" TopLine="163"/>
-      </Position>
+        <Caret Line="433" Column="74" TopLine="411"/>
+      </Position17>
+      <Position18>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="434" Column="61" TopLine="412"/>
+      </Position18>
+      <Position19>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="481" Column="36" TopLine="458"/>
+      </Position19>
+      <Position20>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="508" Column="36" TopLine="485"/>
+      </Position20>
+      <Position21>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="613" Column="30" TopLine="590"/>
+      </Position21>
+      <Position22>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="730" Column="37" TopLine="708"/>
+      </Position22>
+      <Position23>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="924" Column="32" TopLine="902"/>
+      </Position23>
+      <Position24>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="1074" Column="59" TopLine="1051"/>
+      </Position24>
+      <Position25>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="1076" Column="30" TopLine="1054"/>
+      </Position25>
+      <Position26>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="1085" Column="6" TopLine="1063"/>
+      </Position26>
+      <Position27>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="426" Column="23" TopLine="413"/>
+      </Position27>
+      <Position28>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="961" Column="5" TopLine="940"/>
+      </Position28>
+      <Position29>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="524" Column="3" TopLine="521"/>
+      </Position29>
+      <Position30>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="833" Column="3" TopLine="826"/>
+      </Position30>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes ActiveMode="default">
-        <Mode Name="default">
-          <local>
-            <CommandLineParams Value="x/Load C:/config.rbak x/Tray"/>
-          </local>
-        </Mode>
-      </Modes>
+      <Modes ActiveMode=""/>
     </RunParams>
-    <HistoryLists>
-      <List Name="LaunchingApplication" Type="File" Count="2">
-        <Item1 Value="C:\WINDOWS\system32\cmd.exe \C ${TargetCmdLine}"/>
-        <Item2 Value="C:\WINDOWS\system32\cmd.exe /C ${TargetCmdLine}"/>
-      </List>
-      <List Name="CommandLineParameters" Count="5">
-        <Item1 Value="x/Load C:\config.rbak x/Tray"/>
-        <Item2 Value="/Load C:\config.rbak /Tray"/>
-        <Item3 Value="/Load C:\config.rbak"/>
-        <Item4 Value="/load prova.rbak"/>
-        <Item5 Value="\Load C:\config.rbak \Tray"/>
-      </List>
-    </HistoryLists>
   </ProjectSession>
 </CONFIG>

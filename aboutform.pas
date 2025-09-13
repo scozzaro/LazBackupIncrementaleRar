@@ -161,8 +161,8 @@ begin
     // Imposta le caption e le stringhe in inglese
     Self.Caption := 'About';
     ImgLogo.Hint := 'Program logo';
-    LblAppName.Caption := 'Lazbackup Incremental';
-  //  LblVersion.Caption := 'Version ' + GetAppVersion;
+     LblAppName.Caption := 'Lazbackup Incremental';
+   LblVersion.Caption := 'Version ' + GetAppVersion;
     // If the version is dynamic, use 'Version ' + VersionNumber
     LblCopyright.Caption := 'Copyright © 2025 Vincenzo Scozzaro';
     LblAuthor.Caption := 'Author: Vincenzo Scozzaro';

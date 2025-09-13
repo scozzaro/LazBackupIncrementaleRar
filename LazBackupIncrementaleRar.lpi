@@ -3,80 +3,77 @@
   <ProjectOptions>
     <Version Value="12"/>
     <General>
+      <Flags>
+        <CompatibilityMode Value="True"/>
+      </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="Laz Backup Incrementale Rar"/>
+      <Title Value="lazbackupincrementalerar"/>
       <Scaled Value="True"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <XPManifest>
-        <DpiAware Value="True/PM"/>
-        <TextDesc Value="Backup with rar incremental build lazarus"/>
+        <DpiAware Value="True"/>
       </XPManifest>
       <Icon Value="0"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
-      <MinorVersionNr Value="2"/>
-      <StringTable CompanyName="Vincenzo Scozzaro" FileDescription="Backup program" InternalName="LazBackupIncremental" LegalCopyright="Vincenzo Scozzaro" ProductName="LazBackupIncremental"/>
+      <MinorVersionNr Value="3"/>
+      <StringTable Comments="Vincenzo Scozzaro" CompanyName="Vincenzo Scozzaro" FileDescription="Backup program" InternalName="LazBackupIncremental" LegalCopyright="Vincenzo Scozzaro" OriginalFilename="LazBackupIncremental" ProductName="LazBackupIncremental"/>
     </VersionInfo>
-    <BuildModes>
-      <Item Name="Default" Default="True"/>
+    <BuildModes Count="1">
+      <Item1 Name="Default" Default="True"/>
     </BuildModes>
     <PublishOptions>
       <Version Value="2"/>
+      <DestinationDirectory Value="$(ProjPath)/published/"/>
       <UseFileFilters Value="True"/>
     </PublishOptions>
     <RunParams>
       <FormatVersion Value="2"/>
     </RunParams>
-    <RequiredPackages>
-      <Item>
+    <RequiredPackages Count="3">
+      <Item1>
         <PackageName Value="DateTimeCtrlsDsgn"/>
-      </Item>
-      <Item>
+      </Item1>
+      <Item2>
         <PackageName Value="DateTimeCtrls"/>
-      </Item>
-      <Item>
-        <PackageName Value="richmemo_design"/>
-      </Item>
-      <Item>
-        <PackageName Value="richmemopackage"/>
-      </Item>
-      <Item>
+      </Item2>
+      <Item3>
         <PackageName Value="LCL"/>
-      </Item>
+      </Item3>
     </RequiredPackages>
-    <Units>
-      <Unit>
+    <Units Count="3">
+      <Unit0>
         <Filename Value="LazBackupIncrementaleRar.lpr"/>
         <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
+        <UnitName Value="lazbackupincrementalerar"/>
+      </Unit0>
+      <Unit1>
         <Filename Value="mainform.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="FrmMain"/>
+        <ComponentName Value="frmmain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit>
-      <Unit>
+      </Unit1>
+      <Unit2>
         <Filename Value="aboutform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmAbout"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="AboutForm"/>
-      </Unit>
+      </Unit2>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="LazBackupIncrementaleRar"/>
+      <Filename Value="lazbackupincrementalerar"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="C:/fpcupdeluxe/lazarus/components/rc4crypt/"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>
@@ -91,16 +88,10 @@
     </Linking>
   </CompilerOptions>
   <Debugging>
-    <Exceptions>
-      <Item>
-        <Name Value="EAbort"/>
-      </Item>
-      <Item>
-        <Name Value="ECodetoolError"/>
-      </Item>
-      <Item>
-        <Name Value="EFOpenError"/>
-      </Item>
+    <Exceptions Count="1">
+      <Item1>
+        <Name Value="EResNotFound"/>
+      </Item1>
     </Exceptions>
   </Debugging>
 </CONFIG>
