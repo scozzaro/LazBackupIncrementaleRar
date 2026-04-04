@@ -9,11 +9,11 @@ uses
   Windows,
         ShellApi,
   {$ENDIF}
-  RC4Cipher,
+  RC4Cipher, LazUTF8,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   dateutils,
   FileUtil, Process, LazFileUtils, DateTimePicker, FileCtrl, StrUtils, ComCtrls,
-  Menus, EditBtn, Buttons, AboutForm, fpjson, jsonparser, jsonconf;
+  Menus, EditBtn, Buttons, RichMemo, AboutForm, fpjson, jsonparser, jsonconf;
 
 type
 
@@ -44,12 +44,16 @@ type
     Label1: TLabel;
     lblTimeLeft: TLabel; // Etichetta per visualizzare il conto alla rovescia del timer
     Label2: TLabel;
-    Label3: TLabel;
     Label4: TLabel;
-    Panel2: TPanel;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    PopupMenu1: TPopupMenu;
     ProgressBar1: TProgressBar;
     RemoveAllFolder: TButton;
     RemoveEscludiAllFiles: TButton;
+    RichMemo1: TRichMemo;
+    Separator1: TMenuItem;
     StatusLabel1: TLabel; // Etichetta per lo stato
     Visualizza: TMenuItem; // Voce di menu per visualizzare la finestra
     PopupMenuTray: TPopupMenu;
@@ -105,7 +109,9 @@ type
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
+
     procedure QuitMenuItemClick(Sender: TObject);
+    procedure RARPathLabelDblClick(Sender: TObject);
     procedure RemoveAllFolderClick(Sender: TObject);
     procedure RemoveButtonClick(Sender: TObject);
     procedure RemoveEscludiAllFilesClick(Sender: TObject);
@@ -133,6 +139,8 @@ type
     // Precalcola il numero totale di file
     procedure LoadConfigFromFile(const AFileName: string);
     // Carica la configurazione da un file
+
+    procedure SetRichEdit;
   public
   end;
 
@@ -170,6 +178,72 @@ begin
 end;
 
 
+
+
+procedure TFrmMain.SetRichEdit;
+
+  function UTF8ToRTF(const s: string): string;
+  var
+    ws: unicodestring;
+    i: integer;
+    c: widechar;
+    code: integer;
+  begin
+    Result := '';
+
+    ws := UTF8Decode(s);
+
+    for i := 1 to Length(ws) do
+    begin
+      c := ws[i];
+      code := Ord(c);
+
+      // escape caratteri RTF
+      if (c = '\') or (c = '{') or (c = '}') then
+        Result := Result + '\' + UTF8Encode(c)
+
+      // ASCII normale
+      else if (code >= 0) and (code <= 127) then
+        Result := Result + UTF8Encode(c)
+
+      // Unicode (accenti ecc.)
+      else
+        Result := Result + '\u' + IntToStr(code) + '?';
+    end;
+  end;
+
+var
+  ss: TStringStream;
+begin
+  ss := TStringStream.Create('{\rtf1\ansi\deff0' +
+    '{\fonttbl' + '{\f0\fswiss Helvetica;}' +
+    '{\f1\fmodern Courier New;}' + '}' +
+    '{\colortbl ;\red0\green0\blue255;}' + '\fs24 ' +
+    '\b ' + UTF8ToRTF(
+    'Note (scorri fino alla fine per leggere tutte le informazioni):') +
+    '\b0\par\par ' + UTF8ToRTF(
+    'Il programma carica all''avvio il file di configurazione che si trova nella cartella documenti:') +
+    '\par ' + '\b backup_configLaz.rbak\b0\par\par ' +
+    UTF8ToRTF('Esempio:') + '\par ' +
+    '\f1\b LazBackup.exe /tray /load "C:\\Configurazioni\\backup_casa.rbak"\b0\f0\par\par '
+    + UTF8ToRTF(
+    'I parametri non sono obbligatori, servono ad automatizzare la procedura.') +
+    '\par\par ' + UTF8ToRTF('Installa RAR dal sito ufficiale:') +
+    '\par ' + '\b https://www.rarlab.com\b0\par\par ' +
+    UTF8ToRTF('Per macOS:') + '\par\par ' +
+    UTF8ToRTF('Verifica se è già installato da terminale con il comando:') +
+    '\par ' + '\cf1\f1\b sudo find / -name rar 2>/dev/null\b0\f0\cf0\par\par ' +
+    UTF8ToRTF('Per installarlo usa Homebrew. Se Homebrew non è installato, installalo:') + '\par ' +
+    '\cf1\f1\b /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"\b0\f0\cf0\par\par '
+    +
+    UTF8ToRTF('Installa RAR con Homebrew:') + '\par ' +
+    '\cf1\f1\b brew install rar\b0\f0\cf0\par ' + '}');
+
+  ss.Position := 0;
+  RichMemo1.LoadRichText(ss);
+  ss.Free;
+
+end;
 
 procedure TFrmMain.FormCreate(Sender: TObject);
 
@@ -280,8 +354,7 @@ begin
     // Popup Menu Tray
     Visualizza.Caption := 'Visualizza';
 
-    Label3.Caption := 'Nota:'#13#10 +
-      'Il programma carica all''avvio il file di configurazione che si trova nella cartella documenti: backup_configLaz.rbak'#13#10 + #13#10 + 'Esempio:'#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak" '#13#10'I parametri non sono obligatori servono ad automatizzare la procedura';
+    //  Label3.Caption := 'Nota:'#13#10 +   'Il programma carica all''avvio il file di configurazione che si trova nella cartella documenti: backup_configLaz.rbak'#13#10 + #13#10 + 'Esempio:'#13#10'LazBackup.exe /tray /load "C:\Configurazioni\backup_casa.rbak" '#13#10'I parametri non sono obligatori servono ad automatizzare la procedura';
   end
   else
   begin
@@ -352,11 +425,8 @@ begin
 
     // Popup Menu Tray
     Visualizza.Caption := 'View';
-    Label3.Caption := 'Note:  '#13#10 +
-      'At startup, the program loads the configuration file located in the documents folder: backup_configLaz.rbak'#13#10 + #13#10 + 'Example:'#13#10'LazBackup.exe /tray /load "C:\Configurations\home_backup.rbak"'#13#10'The parameters are not mandatory; they serve to automate the process.';
 
   end;
-
 
 
 
@@ -430,9 +500,12 @@ begin
     NomeFileConfigBakup);
 
 
-   if cmbCompressionLevel.ItemIndex <0 then cmbCompressionLevel.ItemIndex := 2;
-    if  cmbFrequency.ItemIndex<0 then cmbFrequency.ItemIndex :=0;
-    if  cmbDayOfWeek.ItemIndex<0 then cmbDayOfWeek.ItemIndex :=0;
+  if cmbCompressionLevel.ItemIndex < 0 then cmbCompressionLevel.ItemIndex := 2;
+  if cmbFrequency.ItemIndex < 0 then cmbFrequency.ItemIndex := 0;
+  if cmbDayOfWeek.ItemIndex < 0 then cmbDayOfWeek.ItemIndex := 0;
+
+
+  SetRichEdit;
 end;
 
 procedure TFrmMain.FormShow(Sender: TObject);
@@ -683,7 +756,7 @@ var
   ArchiveName: string;
   CompressionParam: string;
 begin
-  if FileExists(RarPathEdit.text) = false then
+  if FileExists(RarPathEdit.Text) = False then
   begin
 
     ShowMessage('Il file rar NON trovato!');
@@ -737,28 +810,40 @@ begin
       CompressionParam := ''; // Nessun parametro se l'opzione non è selezionata
   end;
 
-    if chkStartTime.Checked then
+  if chkStartTime.Checked then
   begin
     if GetSystemLanguageCode = 'Italian' then
-        begin
-              ScrolledOutput.Lines.Add('Programmata' );
-          end else begin
-                ScrolledOutput.Lines.Add('Scheduled' );
-        end;
+    begin
+      ScrolledOutput.Lines.Add('Programmata');
+    end
+    else
+    begin
+      ScrolledOutput.Lines.Add('Scheduled');
+    end;
     ScrolledOutput.Lines.Add(lblTimeLeft.Caption);
     if GetSystemLanguageCode = 'Italian' then
-        begin
-              ScrolledOutput.Lines.Add('Inizio: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
-          end else begin
-                ScrolledOutput.Lines.Add('Start: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
-        end;
-  end else begin
-        if GetSystemLanguageCode = 'Italian' then
-        begin
-              ScrolledOutput.Lines.Add('Inizio: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
-          end else begin
-                ScrolledOutput.Lines.Add('Start: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
-        end;
+    begin
+      ScrolledOutput.Lines.Add('Inizio: ' +
+        FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+    end
+    else
+    begin
+      ScrolledOutput.Lines.Add('Start: ' +
+        FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+    end;
+  end
+  else
+  begin
+    if GetSystemLanguageCode = 'Italian' then
+    begin
+      ScrolledOutput.Lines.Add('Inizio: ' +
+        FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+    end
+    else
+    begin
+      ScrolledOutput.Lines.Add('Start: ' +
+        FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+    end;
 
   end;
 
@@ -830,17 +915,21 @@ begin
     BytesRead := FProcess.Output.Read(Buffer, SizeOf(Buffer));
     if BytesRead > 0 then
     begin
-       SetString(Line, pansichar(@Buffer[0]), BytesRead);
+      SetString(Line, pansichar(@Buffer[0]), BytesRead);
       ScrolledOutput.Lines.Text := ScrolledOutput.Lines.Text + Line;
     end;
   end;
 
-     if GetSystemLanguageCode = 'Italian' then
-        begin
-              ScrolledOutput.Lines.Add('Fine: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
-          end else begin
-                ScrolledOutput.Lines.Add('End: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now) );
-        end;
+  if GetSystemLanguageCode = 'Italian' then
+  begin
+    ScrolledOutput.Lines.Add('Fine: ' +
+      FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+  end
+  else
+  begin
+    ScrolledOutput.Lines.Add('End: ' +
+      FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+  end;
 
 
   // Aggiorna la barra di avanzamento e lo stato al 100% al termine del backup
@@ -975,9 +1064,9 @@ begin
   end;
 
 
-   if cmbCompressionLevel.ItemIndex <0 then cmbCompressionLevel.ItemIndex := 2;
-    if  cmbFrequency.ItemIndex<0 then cmbFrequency.ItemIndex :=0;
-    if  cmbDayOfWeek.ItemIndex<0 then cmbDayOfWeek.ItemIndex :=0;
+  if cmbCompressionLevel.ItemIndex < 0 then cmbCompressionLevel.ItemIndex := 2;
+  if cmbFrequency.ItemIndex < 0 then cmbFrequency.ItemIndex := 0;
+  if cmbDayOfWeek.ItemIndex < 0 then cmbDayOfWeek.ItemIndex := 0;
 
 end;
 
@@ -1005,10 +1094,10 @@ begin
     if FileExists(NomeFileConfigBakup) then
     begin
       if MessageDlg('Conferma', 'Il file "' +
-        ExtractFileName(NomeFileConfigBakup) + '" esiste già.' + LineEnding +
-        'in ' + ExtractFilePath(NomeFileConfigBakup) +
-        LineEnding + 'Vuoi sovrascriverlo?',
-        mtConfirmation, [mbYes, mbNo], 0) = mrNo then exit;
+        ExtractFileName(NomeFileConfigBakup) + '" esiste già.' +
+        LineEnding + 'in ' + ExtractFilePath(NomeFileConfigBakup) +
+        LineEnding + 'Vuoi sovrascriverlo?', mtConfirmation, [mbYes, mbNo], 0) =
+        mrNo then exit;
     end;
 
     Caption := 'LazBackupIncremental - config file: ' + ExtractFileName(
@@ -1097,7 +1186,7 @@ begin
   CurrentDayOfMonth := DayOfTheMonth(CurrentDateTime);
 
   TargetDateTime := Int(CurrentDateTime) + Frac(StartTime.Time); // oggi all'ora scelta
-  if  cmbFrequency.ItemIndex<0 then cmbFrequency.ItemIndex :=0;
+  if cmbFrequency.ItemIndex < 0 then cmbFrequency.ItemIndex := 0;
   // Calcola se è il momento giusto in base alla frequenza selezionata
   case cmbFrequency.ItemIndex of
     0: // Giornaliero
@@ -1108,7 +1197,7 @@ begin
     end;
     1: // Settimanale
     begin
-      if  cmbDayOfWeek.ItemIndex<0 then cmbDayOfWeek.ItemIndex :=0;
+      if cmbDayOfWeek.ItemIndex < 0 then cmbDayOfWeek.ItemIndex := 0;
       TargetDayOfWeek := cmbDayOfWeek.ItemIndex + 1;
       // Se non è il giorno giusto, sposta il target al giorno corretto della settimana successiva
       while DayOfWeek(TargetDateTime) <> TargetDayOfWeek do
@@ -1128,18 +1217,20 @@ begin
   Hours := SecondsLeft div 3600;
   Minutes := (SecondsLeft mod 3600) div 60;
   Seconds := SecondsLeft mod 60;
-    if GetSystemLanguageCode = 'Italian' then
+  if GetSystemLanguageCode = 'Italian' then
   begin
-  lblTimeLeft.Caption :=
-    'Ora: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', CurrentDateTime) +
-    ' - backup: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', TargetDateTime) +
-    ' - Mancano: ' + Format('%.2d:%.2d:%.2d', [Hours, Minutes, Seconds]);
-   end else begin
-     lblTimeLeft.Caption :=
-    'Now: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', CurrentDateTime) +
-    ' - Target: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', TargetDateTime) +
-    ' - Left: ' + Format('%.2d:%.2d:%.2d', [Hours, Minutes, Seconds]);
-     end;
+    lblTimeLeft.Caption :=
+      'Ora: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', CurrentDateTime) +
+      ' - backup: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', TargetDateTime) +
+      ' - Mancano: ' + Format('%.2d:%.2d:%.2d', [Hours, Minutes, Seconds]);
+  end
+  else
+  begin
+    lblTimeLeft.Caption :=
+      'Now: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', CurrentDateTime) +
+      ' - Target: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', TargetDateTime) +
+      ' - Left: ' + Format('%.2d:%.2d:%.2d', [Hours, Minutes, Seconds]);
+  end;
   // Confronto con tolleranza di 1 secondo per avviare il backup
   if Abs(CurrentDateTime - TargetDateTime) < (1 / (24 * 60 * 60)) then
   begin
@@ -1195,7 +1286,7 @@ end;
 
 procedure TFrmMain.MenuItem1Click(Sender: TObject);
 begin
-    // Ripristina la finestra
+  // Ripristina la finestra
   Self.ShowInTaskBar := stAlways;
   // Aggiungi questa linea per mostrare l'icona nella taskbar
 
@@ -1214,11 +1305,34 @@ end;
 
 procedure TFrmMain.MenuItem3Click(Sender: TObject);
 begin
-   halt(0);
+  halt(0);
 end;
+
+
 
 procedure TFrmMain.QuitMenuItemClick(Sender: TObject);
 begin
+
+end;
+
+procedure TFrmMain.RARPathLabelDblClick(Sender: TObject);
+begin
+
+  {$IFDEF WINDOWS}
+    RARPathEdit.Text := 'C:\Program Files\WinRAR\Rar.exe';
+
+
+  {$ENDIF}
+
+  {$IFDEF LINUX}
+    RARPathEdit.Text := '/usr/local/bin/rar';
+  {$ENDIF}
+
+  {$IFDEF DARWIN}
+        // Per macOS
+
+ RARPathEdit.Text := '/usr/local/bin/rar';
+  {$ENDIF}
 
 end;
 
