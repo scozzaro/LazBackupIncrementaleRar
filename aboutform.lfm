@@ -1,13 +1,13 @@
 object frmAbout: TfrmAbout
-  Left = 777
+  Left = 760
   Height = 517
-  Top = 141
+  Top = 151
   Width = 332
   Caption = 'About'
   ClientHeight = 517
   ClientWidth = 332
   Position = poDesktopCenter
-  LCLVersion = '4.2.0.0'
+  LCLVersion = '4.99.0.0'
   OnCreate = FormCreate
   OnShow = FormShow
   object MemoTestoLicenza: TMemo
@@ -27,9 +27,9 @@ object frmAbout: TfrmAbout
   end
   object LblAppName: TLabel
     Left = 80
-    Height = 18
+    Height = 23
     Top = 20
-    Width = 187
+    Width = 194
     Caption = 'LazbackupIncrementale'
     Font.Height = -16
     Font.Style = [fsBold]
@@ -37,16 +37,16 @@ object frmAbout: TfrmAbout
   end
   object LblVersion: TLabel
     Left = 80
-    Height = 16
+    Height = 17
     Top = 50
-    Width = 84
+    Width = 79
     Caption = 'Versione 1.0.0'
   end
   object LblCopyright: TLabel
     Left = 80
-    Height = 16
+    Height = 17
     Top = 75
-    Width = 242
+    Width = 214
     Caption = 'Copyright © 2025 Vincenzo Scozzaro'
     Font.CharSet = ANSI_CHARSET
     Font.Pitch = fpVariable
@@ -56,9 +56,9 @@ object frmAbout: TfrmAbout
   end
   object LblAuthor: TLabel
     Left = 80
-    Height = 16
+    Height = 17
     Top = 100
-    Width = 174
+    Width = 154
     Caption = 'Autore: Vincenzo Scozzaro'
     Font.CharSet = ANSI_CHARSET
     Font.Pitch = fpVariable
@@ -101,16 +101,16 @@ object frmAbout: TfrmAbout
   end
   object LangRun: TLabel
     Left = 12
-    Height = 16
+    Height = 17
     Top = 171
-    Width = 57
+    Width = 51
     Caption = 'Lang Run'
   end
   object Label1: TLabel
     Left = 12
-    Height = 16
+    Height = 17
     Top = 416
-    Width = 144
+    Width = 134
     Caption = 'https://www.rarlab.com/'
     Font.Style = [fsUnderline]
     ParentFont = False
@@ -30069,7 +30069,7 @@ object frmAbout: TfrmAbout
   end
   object TimerBounce: TTimer
     OnTimer = TimerBounceTimer
-    Left = 256
-    Top = 448
+    Left = 272
+    Top = 424
   end
 end
