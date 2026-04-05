@@ -1,3 +1,5 @@
+
+
 unit AboutForm;
 
 {$mode ObjFPC}{$H+}
@@ -11,7 +13,9 @@ uses
   {$ENDIF}
   {$IFDEF LINUX}
   BaseUnix,
+     LCLIntf, LCLType,  DynLibs,
   {$ENDIF}
+
   fileinfo,
   Process,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls;
@@ -25,6 +29,7 @@ type
     ImgLogo: TImage;
     Label1: TLabel;
     LangRun: TLabel;
+    LibUse: TLabel;
     LblAppName: TLabel;
     LblAuthor: TLabel;
     LblLicenza: TLabel;
@@ -121,12 +126,125 @@ end;
 
 procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
-
+  application.ProcessMessages;;
 
 end;
 
 procedure TfrmAbout.FormShow(Sender: TObject);
+var
+  Info: string;
+
+  function GetWidgetSet: string;
+  begin
+    Result := '';
+    {$IFDEF LCLQT6}
+      Result := 'Qt6';
+    {$ENDIF}
+    {$IFDEF LCLQT5}
+      Result := 'Qt5';
+    {$ENDIF}
+    {$IFDEF LCLGTK2}
+      Result := 'Qt2';
+    {$ENDIF}
+    {$IFDEF LCLGTK3}
+      Result := 'GTK3';
+    {$ENDIF}
+    {$IFDEF LCLGTK4}
+      Result := 'GTK4';
+    {$ENDIF}
+    {$IFDEF LCLCARBON}
+      Result := 'Carbon (macOS legacy)';
+    {$ENDIF}
+    {$IFDEF LCLCOCOA}
+      Result := 'Cocoa (macOS)';
+    {$ENDIF}
+    {$IFDEF LCLWIN32}
+      Result := 'Win32';
+    {$ENDIF}
+    {$IFDEF LCLWIN64}
+      Result := 'Win64';
+    {$ENDIF}
+    if Result = '' then
+      Result := 'Sconosciuto';
+  end;
+
+  function GetOS: string;
+  begin
+    {$IFDEF WINDOWS}
+      Result := 'Windows';
+    {$ELSE}
+      {$IFDEF DARWIN}
+        Result := 'macOS';
+      {$ELSE}
+        {$IFDEF UNIX}
+          Result := 'Linux';
+        {$ELSE}
+          Result := 'Sconosciuto';
+        {$ENDIF}
+      {$ENDIF}
+    {$ENDIF}
+  end;
+
+  function GetArchitecture: string;
+  begin
+    {$IFDEF CPU32}
+      Result := 'x86 (32-bit)';
+    {$ELSE}
+      {$IFDEF CPU64}
+        Result := 'x86_64 (64-bit)';
+      {$ELSE}
+        {$IFDEF CPUARM}
+          Result := 'ARM';
+        {$ELSE}
+          Result := 'Sconosciuta';
+        {$ENDIF}
+      {$ENDIF}
+    {$ENDIF}
+  end;
+
+  function GetCompileDate: string;
+  begin
+    Result := {$I %DATE%} + ' ' + {$I %TIME%};
+  end;
+
+  function GetTargetCPU: string;
+  begin
+    {$IFDEF CPU386}
+      Result := 'i386';
+    {$ELSE}
+      {$IFDEF CPUX86_64}
+        Result := 'x86_64';
+      {$ELSE}
+        {$IFDEF CPUARM}
+          Result := 'ARM';
+        {$ELSE}
+          Result := 'Sconosciuta';
+        {$ENDIF}
+      {$ENDIF}
+    {$ENDIF}
+  end;
+
 begin
+  Info := Format(
+    'Compilato con: Free Pascal %s' + sLineBreak +
+    'Target CPU: %s' + sLineBreak +
+    'Architettura: %s' + sLineBreak +
+    'WidgetSet: %s' + sLineBreak +
+    'Sistema Operativo: %s' + sLineBreak +
+    'Data compilazione: %s',
+    [{$I %FPCVERSION%}, GetTargetCPU, GetArchitecture, GetWidgetSet, GetOS, GetCompileDate]
+  );
+
+  // Puoi anche aggiungere informazioni su Lazarus
+  {$IFDEF LCLVERSION}
+    Info := Info + sLineBreak + 'LCL: ' + LCLVERSION;
+  {$ENDIF}
+
+  // Mostra in una label
+  LibUse.Caption := Info;
+
+
+    application.ProcessMessages;;
   Langrun.Caption := GetSystemLanguageCode;
 
 
@@ -204,6 +322,8 @@ begin
 
   fVelocityX := (Random(30) - 10) / 5; // Nuova spinta casuale orizzontale
 
+
+      application.ProcessMessages;;
 end;
 
 procedure TfrmAbout.ImgLogoClick(Sender: TObject);

@@ -1,126 +1,20 @@
 object frmAbout: TfrmAbout
-  Left = 760
-  Height = 517
+  Left = 750
+  Height = 546
   Top = 151
-  Width = 332
+  Width = 342
   Caption = 'About'
-  ClientHeight = 517
-  ClientWidth = 332
+  ClientHeight = 546
+  ClientWidth = 342
   Position = poDesktopCenter
-  LCLVersion = '4.99.0.0'
+  LCLVersion = '4.6.0.0'
   OnCreate = FormCreate
   OnShow = FormShow
-  object MemoTestoLicenza: TMemo
-    Left = 10
-    Height = 144
-    Top = 192
-    Width = 310
-    Lines.Strings = (
-      'Questa applicazione è distribuita sotto licenza Mozilla Public License.'
-      'È gratuita e può essere utilizzata anche per scopi commerciali.'
-      'Non è richiesta alcuna royalty o pagamento.'
-      'Ulteriori dettagli sulla licenza possono essere consultati su https://www.mozilla.org/MPL/'
-    )
-    ReadOnly = True
-    ScrollBars = ssVertical
-    TabOrder = 1
-  end
-  object LblAppName: TLabel
-    Left = 80
-    Height = 23
-    Top = 20
-    Width = 194
-    Caption = 'LazbackupIncrementale'
-    Font.Height = -16
-    Font.Style = [fsBold]
-    ParentFont = False
-  end
-  object LblVersion: TLabel
-    Left = 80
-    Height = 17
-    Top = 50
-    Width = 79
-    Caption = 'Versione 1.0.0'
-  end
-  object LblCopyright: TLabel
-    Left = 80
-    Height = 17
-    Top = 75
-    Width = 214
-    Caption = 'Copyright © 2025 Vincenzo Scozzaro'
-    Font.CharSet = ANSI_CHARSET
-    Font.Pitch = fpVariable
-    Font.Quality = fqDraft
-    Font.Style = [fsBold]
-    ParentFont = False
-  end
-  object LblAuthor: TLabel
-    Left = 80
-    Height = 17
-    Top = 100
-    Width = 154
-    Caption = 'Autore: Vincenzo Scozzaro'
-    Font.CharSet = ANSI_CHARSET
-    Font.Pitch = fpVariable
-    Font.Quality = fqDraft
-    Font.Style = [fsBold]
-    ParentFont = False
-  end
-  object LblLicenza: TLabel
-    Left = 80
-    Height = 32
-    Top = 128
-    Width = 234
-    AutoSize = False
-    Caption = 'Licenza: Mozilla, gratuito anche per scopi commerciali'
-    WordWrap = True
-  end
-  object LblWinRARWarning: TLabel
-    Left = 12
-    Height = 72
-    Top = 348
-    Width = 309
-    AutoSize = False
-    Caption = 'Avvertenza: Questo programma richiede l''installazione di RAR o WinRAR. Questi strumenti non sono forniti e devono essere scaricati e installati separatamente dall''utente.'
-    Font.CharSet = ANSI_CHARSET
-    Font.Color = 16750080
-    Font.Height = -13
-    Font.Name = '.SF NS'
-    Font.Style = [fsBold]
-    ParentFont = False
-    WordWrap = True
-  end
-  object BtnClose1: TButton
-    Left = 128
-    Height = 30
-    Top = 480
-    Width = 100
-    Caption = 'Chiudi'
-    TabOrder = 0
-    OnClick = BtnClose1Click
-  end
-  object LangRun: TLabel
-    Left = 12
-    Height = 17
-    Top = 171
-    Width = 51
-    Caption = 'Lang Run'
-  end
-  object Label1: TLabel
-    Left = 12
-    Height = 17
-    Top = 416
-    Width = 134
-    Caption = 'https://www.rarlab.com/'
-    Font.Style = [fsUnderline]
-    ParentFont = False
-    OnClick = Label1Click
-  end
   object ImgLogo: TImage
     Left = 10
     Height = 64
     Hint = 'Logo del programma'
-    Top = 8
+    Top = 4
     Width = 64
     ParentShowHint = False
     Picture.Data = {
@@ -30067,9 +29961,122 @@ object frmAbout: TfrmAbout
     Stretch = True
     OnClick = ImgLogoClick
   end
+  object MemoTestoLicenza: TMemo
+    Left = 10
+    Height = 152
+    Top = 260
+    Width = 322
+    Lines.Strings = (
+      'Questa applicazione è distribuita sotto licenza Mozilla Public License.'
+      'È gratuita e può essere utilizzata anche per scopi commerciali.'
+      'Non è richiesta alcuna royalty o pagamento.'
+      'Ulteriori dettagli sulla licenza possono essere consultati su https://www.mozilla.org/MPL/'
+    )
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 1
+  end
+  object LblAppName: TLabel
+    Left = 80
+    Height = 22
+    Top = 4
+    Width = 178
+    Caption = 'LazbackupIncrementale'
+    Font.Height = -16
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object LblVersion: TLabel
+    Left = 80
+    Height = 18
+    Top = 28
+    Width = 80
+    Caption = 'Versione 1.0.0'
+  end
+  object LblCopyright: TLabel
+    Left = 80
+    Height = 18
+    Top = 44
+    Width = 226
+    Caption = 'Copyright © 2025 Vincenzo Scozzaro'
+    Font.CharSet = ANSI_CHARSET
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object LblAuthor: TLabel
+    Left = 80
+    Height = 18
+    Top = 64
+    Width = 163
+    Caption = 'Autore: Vincenzo Scozzaro'
+    Font.CharSet = ANSI_CHARSET
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object LblLicenza: TLabel
+    Left = 80
+    Height = 32
+    Top = 84
+    Width = 252
+    AutoSize = False
+    Caption = 'Licenza: Mozilla, gratuito anche per scopi commerciali'
+    WordWrap = True
+  end
+  object BtnClose1: TButton
+    Left = 124
+    Height = 30
+    Top = 508
+    Width = 100
+    Caption = 'Chiudi'
+    TabOrder = 0
+    OnClick = BtnClose1Click
+  end
+  object LangRun: TLabel
+    Left = 11
+    Height = 18
+    Top = 240
+    Width = 54
+    Caption = 'Lang Run'
+  end
+  object Label1: TLabel
+    Left = 11
+    Height = 18
+    Top = 484
+    Width = 140
+    Caption = 'https://www.rarlab.com/'
+    Font.Style = [fsUnderline]
+    ParentFont = False
+    OnClick = Label1Click
+  end
+  object LblWinRARWarning: TLabel
+    Left = 11
+    Height = 72
+    Top = 412
+    Width = 309
+    AutoSize = False
+    Caption = 'Avvertenza: Questo programma richiede l''installazione di RAR o WinRAR. Questi strumenti non sono forniti e devono essere scaricati e installati separatamente dall''utente.'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = 16750080
+    Font.Height = -13
+    Font.Name = '.SF NS'
+    Font.Style = [fsBold]
+    ParentFont = False
+    WordWrap = True
+  end
+  object LibUse: TLabel
+    Left = 10
+    Height = 18
+    Top = 116
+    Width = 39
+    Caption = 'LibUse'
+  end
   object TimerBounce: TTimer
     OnTimer = TimerBounceTimer
-    Left = 272
-    Top = 424
+    Left = 271
+    Top = 484
   end
 end

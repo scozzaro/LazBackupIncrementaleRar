@@ -109,8 +109,11 @@ type
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
+    procedure ProgressLabelClick(Sender: TObject);
+    procedure ProgressLabelDblClick(Sender: TObject);
 
     procedure QuitMenuItemClick(Sender: TObject);
+    procedure RARPathLabelClick(Sender: TObject);
     procedure RARPathLabelDblClick(Sender: TObject);
     procedure RemoveAllFolderClick(Sender: TObject);
     procedure RemoveButtonClick(Sender: TObject);
@@ -178,8 +181,6 @@ begin
 end;
 
 
-
-
 procedure TFrmMain.SetRichEdit;
 
   function UTF8ToRTF(const s: string): string;
@@ -214,24 +215,52 @@ procedure TFrmMain.SetRichEdit;
 
 var
   ss: TStringStream;
+  txt: string;
 begin
-  ss := TStringStream.Create('{\rtf1\ansi\deff0' +
-    '{\fonttbl' + '{\f0\fswiss Helvetica;}' +
-    '{\f1\fmodern Courier New;}' + '}' +
-    '{\colortbl ;\red0\green0\blue255;}' + '\fs24 ' +
-    '\b ' + UTF8ToRTF(
-    'Note (scorri fino alla fine per leggere tutte le informazioni):') +
+
+  RichMemo1.Clear;
+
+  {$IFDEF LINUX}
+
+  // ✅ Linux + macOS: testo semplice (stabile)
+  txt :=
+    'Note (scorri fino alla fine per leggere tutte le informazioni):' + LineEnding + LineEnding +
+    'Il programma carica all''avvio il file di configurazione nella cartella documenti con il nome predefinito:' + LineEnding +
+    'backup_configLaz.rbak' + LineEnding + LineEnding +
+    'Esempio è possibile cambiare nome file di configurazione e percorso:' + LineEnding +
+    './lazbackupincrementalerar --tray --load "/home/vincenzo/Configurazioni/backup_casa.rbak"' + LineEnding + LineEnding +
+    'I parametri non sono obbligatori.' + LineEnding + LineEnding +
+        'Linux (Ubuntu/Debian): installa dai repository ufficiali:' + LineEnding +
+    'Installazione RAR trova il percorso:' + LineEnding +
+
+
+
+    'sudo apt update' + LineEnding +
+    'sudo apt install rar unrar' + LineEnding +
+    'Test per verificare l''installazione:' + LineEnding +
+    'which rar' + LineEnding +
+    'which unrar'+ LineEnding +
+    'sudo find / -name rar 2>/dev/null' + LineEnding ;
+
+  RichMemo1.Clear;
+  RichMemo1.Text := txt;
+
+  {$ELSE}
+  ss := TStringStream.Create('{\rtf1\ansi\deff0' + '{\fonttbl' +
+    '{\f0\fswiss Helvetica;}' + '{\f1\fmodern Courier New;}' +
+    '}' + '{\colortbl ;\red0\green0\blue255;}' + '\fs24 ' + '\b ' +
+    UTF8ToRTF('Note (scorri fino alla fine per leggere tutte le informazioni):') +
     '\b0\par\par ' + UTF8ToRTF(
-    'Il programma carica all''avvio il file di configurazione che si trova nella cartella documenti:') +
-    '\par ' + '\b backup_configLaz.rbak\b0\par\par ' +
+    'Il programma carica all''avvio il file di configurazione che si trova nella cartella documenti:')
+    + '\par ' + '\b backup_configLaz.rbak\b0\par\par ' +
     UTF8ToRTF('Esempio:') + '\par ' +
     '\f1\b LazBackup.exe /tray /load "C:\\Configurazioni\\backup_casa.rbak"\b0\f0\par\par '
-    + UTF8ToRTF(
-    'I parametri non sono obbligatori, servono ad automatizzare la procedura.') +
+    +
+    UTF8ToRTF('I parametri non sono obbligatori, servono ad automatizzare la procedura.') +
     '\par\par ' + UTF8ToRTF('Installa RAR dal sito ufficiale:') +
     '\par ' + '\b https://www.rarlab.com\b0\par\par ' +
-    UTF8ToRTF('Per macOS:') + '\par\par ' +
-    UTF8ToRTF('Verifica se è già installato da terminale con il comando:') +
+    UTF8ToRTF('Per macOS:') + '\par\par ' + UTF8ToRTF(
+    'Verifica se è già installato da terminale con il comando:') +
     '\par ' + '\cf1\f1\b sudo find / -name rar 2>/dev/null\b0\f0\cf0\par\par ' +
     UTF8ToRTF('Per installarlo usa Homebrew. Se Homebrew non è installato, installalo:') + '\par ' +
     '\cf1\f1\b /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"\b0\f0\cf0\par\par '
@@ -242,8 +271,9 @@ begin
   ss.Position := 0;
   RichMemo1.LoadRichText(ss);
   ss.Free;
-
+  {$ENDIF}
 end;
+
 
 procedure TFrmMain.FormCreate(Sender: TObject);
 
@@ -438,29 +468,45 @@ begin
   I := 1;
   while I <= ParamCount do
   begin
-    Param := UpperCASE(ParamStr(I));
-    if AnsiStartsText('/TRAY', Param) then
+    Param := UpperCase(ParamStr(I));
+
+    {$IFDEF WINDOWS}
+  // Parametri stile Windows: /TRAY /LOAD
+  if AnsiStartsText('/TRAY', Param) then
+  begin
+    TrayMode := True;
+    Inc(I);
+  end
+  else if AnsiStartsText('/LOAD', Param) then
+  begin
+    Inc(I);
+    if I <= ParamCount then
+    begin
+      LoadFile := ParamStr(I);
+      LoadFile := StringReplace(LoadFile, '"', '', [rfReplaceAll]);
+    end;
+    Inc(I);
+  end ;
+    {$ELSE}
+    // Parametri stile Linux/macOS: --tray --load
+    if AnsiStartsText('--TRAY', Param) then
     begin
       TrayMode := True;
-      Inc(I); // Passa al prossimo parametro
+      Inc(I);
     end
-    else if AnsiStartsText('/LOAD', Param) then
+    else if AnsiStartsText('--LOAD', Param) then
     begin
-      Inc(I); // Passa al prossimo parametro, che dovrebbe essere il nome del file
+      Inc(I);
       if I <= ParamCount then
       begin
         LoadFile := ParamStr(I);
-        // Rimuovi eventuali doppi apici se il percorso era tra virgolette
         LoadFile := StringReplace(LoadFile, '"', '', [rfReplaceAll]);
-
       end;
-      Inc(I); // Passa al parametro successivo dopo il nome del file
-    end
-    else
-    begin
-      // Se il parametro non è riconosciuto, passa al successivo
       Inc(I);
-    end;
+    end
+    {$ENDIF}
+    else
+      Inc(I);
   end;
 
   // Crea l'oggetto per l'esecuzione del processo RAR
@@ -517,7 +563,7 @@ begin
     btnTrayBarClick(Sender);
     TrayMode := False;
   end;
-
+  SetRichEdit;
 end;
 
 procedure TFrmMain.LicenseMenuItemClick(Sender: TObject);
@@ -823,26 +869,26 @@ begin
     ScrolledOutput.Lines.Add(lblTimeLeft.Caption);
     if GetSystemLanguageCode = 'Italian' then
     begin
-      ScrolledOutput.Lines.Add('Inizio: ' +
-        FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+      ScrolledOutput.Lines.Add('Inizio: ' + FormatDateTime(
+        'dd/mm/yyyy hh:nn:ss', now));
     end
     else
     begin
-      ScrolledOutput.Lines.Add('Start: ' +
-        FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+      ScrolledOutput.Lines.Add('Start: ' + FormatDateTime(
+        'dd/mm/yyyy hh:nn:ss', now));
     end;
   end
   else
   begin
     if GetSystemLanguageCode = 'Italian' then
     begin
-      ScrolledOutput.Lines.Add('Inizio: ' +
-        FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+      ScrolledOutput.Lines.Add('Inizio: ' + FormatDateTime(
+        'dd/mm/yyyy hh:nn:ss', now));
     end
     else
     begin
-      ScrolledOutput.Lines.Add('Start: ' +
-        FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+      ScrolledOutput.Lines.Add('Start: ' + FormatDateTime(
+        'dd/mm/yyyy hh:nn:ss', now));
     end;
 
   end;
@@ -922,13 +968,11 @@ begin
 
   if GetSystemLanguageCode = 'Italian' then
   begin
-    ScrolledOutput.Lines.Add('Fine: ' +
-      FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+    ScrolledOutput.Lines.Add('Fine: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
   end
   else
   begin
-    ScrolledOutput.Lines.Add('End: ' +
-      FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+    ScrolledOutput.Lines.Add('End: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
   end;
 
 
@@ -1308,9 +1352,24 @@ begin
   halt(0);
 end;
 
+procedure TFrmMain.ProgressLabelClick(Sender: TObject);
+begin
+
+end;
+
+procedure TFrmMain.ProgressLabelDblClick(Sender: TObject);
+begin
+
+end;
+
 
 
 procedure TFrmMain.QuitMenuItemClick(Sender: TObject);
+begin
+
+end;
+
+procedure TFrmMain.RARPathLabelClick(Sender: TObject);
 begin
 
 end;
@@ -1325,7 +1384,7 @@ begin
   {$ENDIF}
 
   {$IFDEF LINUX}
-    RARPathEdit.Text := '/usr/local/bin/rar';
+    RARPathEdit.Text := '/usr/bin/rar';
   {$ENDIF}
 
   {$IFDEF DARWIN}
