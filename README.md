@@ -33,3 +33,14 @@ This software is distributed under the Mozilla Public License (MPL), which allow
 ![Screenshot della finestra principale](images/screen_main_macos.png)
 
 ![Screenshot della finestra principale](images/screen_about.jpg)
+
+
+## ❗ Important / Importante
+
+### 🇬🇧 English
+If the application does not run on macOS (e.g., it is damaged or cannot be opened), you may need to remove the quarantine attribute.
+
+**After moving the app to the Applications folder**, run this command in the terminal:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/LazBackupIncrementaleRar.app
