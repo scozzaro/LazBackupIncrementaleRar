@@ -26,6 +26,18 @@ Improved User Experience: At startup, a splash screen provides a welcome interfa
 License
 This software is distributed under the Mozilla Public License (MPL), which allows you to use, modify, and redistribute the source code in compliance with the terms of the license.
 
+## ❗ Important / Importante
+
+### 🇬🇧 English
+If the application does not run on macOS (e.g., it is damaged or cannot be opened), you may need to remove the quarantine attribute.
+
+**After moving the app to the Applications folder**, run this command in the terminal:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/LazBackupIncrementaleRar.app
+
+
+
 ![Screenshot della finestra principale](images/screen_main.jpg)
 
 ![Screenshot della finestra principale](images/screen_main_ubuntu.png)
