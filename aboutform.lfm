@@ -3,6 +3,7 @@ object frmAbout: TfrmAbout
   Height = 546
   Top = 151
   Width = 342
+  BorderIcons = []
   Caption = 'About'
   ClientHeight = 546
   ClientWidth = 342
@@ -29978,9 +29979,9 @@ object frmAbout: TfrmAbout
   end
   object LblAppName: TLabel
     Left = 80
-    Height = 22
+    Height = 18
     Top = 4
-    Width = 178
+    Width = 187
     Caption = 'LazbackupIncrementale'
     Font.Height = -16
     Font.Style = [fsBold]
@@ -29988,16 +29989,16 @@ object frmAbout: TfrmAbout
   end
   object LblVersion: TLabel
     Left = 80
-    Height = 18
+    Height = 16
     Top = 28
-    Width = 80
+    Width = 84
     Caption = 'Versione 1.0.0'
   end
   object LblCopyright: TLabel
     Left = 80
-    Height = 18
+    Height = 16
     Top = 44
-    Width = 226
+    Width = 242
     Caption = 'Copyright © 2025 Vincenzo Scozzaro'
     Font.CharSet = ANSI_CHARSET
     Font.Pitch = fpVariable
@@ -30007,9 +30008,9 @@ object frmAbout: TfrmAbout
   end
   object LblAuthor: TLabel
     Left = 80
-    Height = 18
+    Height = 16
     Top = 64
-    Width = 163
+    Width = 174
     Caption = 'Autore: Vincenzo Scozzaro'
     Font.CharSet = ANSI_CHARSET
     Font.Pitch = fpVariable
@@ -30037,16 +30038,16 @@ object frmAbout: TfrmAbout
   end
   object LangRun: TLabel
     Left = 11
-    Height = 18
+    Height = 16
     Top = 240
-    Width = 54
+    Width = 57
     Caption = 'Lang Run'
   end
   object Label1: TLabel
     Left = 11
-    Height = 18
+    Height = 16
     Top = 484
-    Width = 140
+    Width = 144
     Caption = 'https://www.rarlab.com/'
     Font.Style = [fsUnderline]
     ParentFont = False
@@ -30069,14 +30070,14 @@ object frmAbout: TfrmAbout
   end
   object LibUse: TLabel
     Left = 10
-    Height = 18
+    Height = 16
     Top = 116
-    Width = 39
+    Width = 42
     Caption = 'LibUse'
   end
   object TimerBounce: TTimer
     OnTimer = TimerBounceTimer
-    Left = 271
-    Top = 484
+    Left = 272
+    Top = 492
   end
 end

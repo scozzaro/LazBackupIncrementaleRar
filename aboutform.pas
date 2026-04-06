@@ -1,5 +1,3 @@
-
-
 unit AboutForm;
 
 {$mode ObjFPC}{$H+}
@@ -13,15 +11,13 @@ uses
   {$ENDIF}
   {$IFDEF LINUX}
   BaseUnix,
-     LCLIntf, LCLType,  DynLibs,
+  LCLIntf, LCLType, DynLibs,
   {$ENDIF}
-
   fileinfo,
   Process,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls;
 
 type
-
   { TfrmAbout }
 
   TfrmAbout = class(TForm)
@@ -38,25 +34,23 @@ type
     LblWinRARWarning: TLabel;
     MemoTestoLicenza: TMemo;
     TimerBounce: TTimer;
+    TimerAutoClose: TTimer;  // Timer per la chiusura automatica
     procedure BtnClose1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure ImgLogoClick(Sender: TObject);
     procedure Label1Click(Sender: TObject);
     procedure TimerBounceTimer(Sender: TObject);
+    procedure TimerAutoCloseTimer(Sender: TObject);
   private
     fVelocityY: single;
     fGravity: single;
     fMinY: integer;
-    // Variabili per il movimento orizzontale
     fVelocityX: single;
     fMinX: integer;
     fMaxX: integer;
-
-
-
   public
-
   end;
 
 var
@@ -67,18 +61,16 @@ implementation
 {$R *.lfm}
 
 { TfrmAbout }
+
 {$IFDEF MSWINDOWS}
 function GetLocaleInformation(Flag: integer): string;
 var
   pcLCA: array[0..20] of char;
 begin
   if (GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, Flag, pcLCA, 19) <= 0) then
-  begin
     pcLCA[0] := #0;
-  end;
   Result := pcLCA;
 end;
-
 {$ENDIF}
 
 function GetSystemLanguageCode: string;
@@ -86,48 +78,47 @@ begin
   {$IFDEF MSWINDOWS}
   Result := GetLocaleInformation(LOCALE_SENGLANGUAGE);
   {$ELSE}
-   Result := SysUtils.GetEnvironmentVariable('LANG');
+  Result := SysUtils.GetEnvironmentVariable('LANG');
   {$ENDIF}
 end;
-
-
-procedure TfrmAbout.BtnClose1Click(Sender: TObject);
-begin
-  Close;
-end;
-
 
 function GetAppVersion: string;
 var
   FileVerInfo: TFileVersionInfo;
-  s: string;
 begin
   FileVerInfo := TFileVersionInfo.Create(nil);
   try
     FileVerInfo.ReadFileInfo;
-    s := 'Company: ' + FileVerInfo.VersionStrings.Values['CompanyName'] +
-      LineEnding + 'File description: ' +
-      FileVerInfo.VersionStrings.Values['FileDescription'] + lineEnding +
-      'File version: ' + FileVerInfo.VersionStrings.Values['FileVersion'] +
-      LineEnding + 'Internal name: ' + FileVerInfo.VersionStrings.Values[
-      'InternalName'] + LineEnding + 'Legal copyright: ' +
-      FileVerInfo.VersionStrings.Values['LegalCopyright'] + LineEnding +
-      'Original filename: ' + FileVerInfo.VersionStrings.Values['OriginalFilename'] +
-      LineEnding + 'Product name: ' +
-      FileVerInfo.VersionStrings.Values['ProductName'] + LineEnding +
-      'Product version: ' + FileVerInfo.VersionStrings.Values['ProductVersion'];
-    //   ShowMessage(s);
-    GetAppVersion := FileVerInfo.VersionStrings.Values['FileVersion'];
+    Result := FileVerInfo.VersionStrings.Values['FileVersion'];
   finally
     FileVerInfo.Free;
   end;
 end;
 
+procedure TfrmAbout.TimerAutoCloseTimer(Sender: TObject);
+begin
+  TimerAutoClose.Enabled := False;
+  Close;  // Chiude lo splash screen
+end;
+
+procedure TfrmAbout.BtnClose1Click(Sender: TObject);
+begin
+
+  Close;
+end;
 
 procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
-  application.ProcessMessages;;
+  Application.ProcessMessages;
+  BorderIcons := BorderIcons - [biMinimize, biMaximize];
 
+  // Finestra non ridimensionabile
+  BorderStyle := bsSingle;
+end;
+
+procedure TfrmAbout.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  CloseAction := caFree;
 end;
 
 procedure TfrmAbout.FormShow(Sender: TObject);
@@ -137,35 +128,16 @@ var
   function GetWidgetSet: string;
   begin
     Result := '';
-    {$IFDEF LCLQT6}
-      Result := 'Qt6';
-    {$ENDIF}
-    {$IFDEF LCLQT5}
-      Result := 'Qt5';
-    {$ENDIF}
-    {$IFDEF LCLGTK2}
-      Result := 'Qt2';
-    {$ENDIF}
-    {$IFDEF LCLGTK3}
-      Result := 'GTK3';
-    {$ENDIF}
-    {$IFDEF LCLGTK4}
-      Result := 'GTK4';
-    {$ENDIF}
-    {$IFDEF LCLCARBON}
-      Result := 'Carbon (macOS legacy)';
-    {$ENDIF}
-    {$IFDEF LCLCOCOA}
-      Result := 'Cocoa (macOS)';
-    {$ENDIF}
-    {$IFDEF LCLWIN32}
-      Result := 'Win32';
-    {$ENDIF}
-    {$IFDEF LCLWIN64}
-      Result := 'Win64';
-    {$ENDIF}
-    if Result = '' then
-      Result := 'Sconosciuto';
+    {$IFDEF LCLQT6} Result := 'Qt6'; {$ENDIF}
+    {$IFDEF LCLQT5} Result := 'Qt5'; {$ENDIF}
+    {$IFDEF LCLGTK2} Result := 'GTK2'; {$ENDIF}
+    {$IFDEF LCLGTK3} Result := 'GTK3'; {$ENDIF}
+    {$IFDEF LCLGTK4} Result := 'GTK4'; {$ENDIF}
+    {$IFDEF LCLCARBON} Result := 'Carbon (macOS legacy)'; {$ENDIF}
+    {$IFDEF LCLCOCOA} Result := 'Cocoa (macOS)'; {$ENDIF}
+    {$IFDEF LCLWIN32} Result := 'Win32'; {$ENDIF}
+    {$IFDEF LCLWIN64} Result := 'Win64'; {$ENDIF}
+    if Result = '' then Result := 'Sconosciuto';
   end;
 
   function GetOS: string;
@@ -225,6 +197,7 @@ var
   end;
 
 begin
+  // Imposta le informazioni tecniche
   Info := Format(
     'Compilato con: Free Pascal %s' + sLineBreak +
     'Target CPU: %s' + sLineBreak +
@@ -235,29 +208,21 @@ begin
     [{$I %FPCVERSION%}, GetTargetCPU, GetArchitecture, GetWidgetSet, GetOS, GetCompileDate]
   );
 
-  // Puoi anche aggiungere informazioni su Lazarus
   {$IFDEF LCLVERSION}
     Info := Info + sLineBreak + 'LCL: ' + LCLVERSION;
   {$ENDIF}
 
-  // Mostra in una label
   LibUse.Caption := Info;
+  Application.ProcessMessages;
+  LangRun.Caption := GetSystemLanguageCode;
 
-
-    application.ProcessMessages;;
-  Langrun.Caption := GetSystemLanguageCode;
-
-
-
-
+  // Impostazioni lingua
   if GetSystemLanguageCode = 'Italiano' then
   begin
-    // Imposta le caption e le stringhe in italiano
     Self.Caption := 'Informazioni';
     ImgLogo.Hint := 'Logo del programma';
     LblAppName.Caption := 'Lazbackup Incrementale';
     LblVersion.Caption := 'Versione ' + GetAppVersion;
-    // Se la versione è dinamica, usa 'Versione ' + VersionNumber
     LblCopyright.Caption := 'Copyright © 2025 Vincenzo Scozzaro';
     LblAuthor.Caption := 'Autore: Vincenzo Scozzaro';
     LblLicenza.Caption := 'Licenza: Mozilla, gratuito anche per scopi commerciali';
@@ -276,12 +241,10 @@ begin
   end
   else
   begin
-    // Imposta le caption e le stringhe in inglese
     Self.Caption := 'About';
     ImgLogo.Hint := 'Program logo';
-     LblAppName.Caption := 'Lazbackup Incremental';
-   LblVersion.Caption := 'Version ' + GetAppVersion;
-    // If the version is dynamic, use 'Version ' + VersionNumber
+    LblAppName.Caption := 'Lazbackup Incremental';
+    LblVersion.Caption := 'Version ' + GetAppVersion;
     LblCopyright.Caption := 'Copyright © 2025 Vincenzo Scozzaro';
     LblAuthor.Caption := 'Author: Vincenzo Scozzaro';
     LblLicenza.Caption := 'License: Mozilla, free for commercial use';
@@ -299,49 +262,47 @@ begin
     LangRun.Caption := 'System Language';
   end;
 
-  // posiziona il logo in alto e al centro
+  // Posiziona il logo
   ImgLogo.Top := 10;
   ImgLogo.Left := 10;
 
-  // inizializza parametri animazione
+  // Inizializza parametri animazione
   TimerBounce.Enabled := False;
-
   TimerBounce.Interval := 10;
 
   fVelocityY := 0;
   fGravity := 0.5;
   fMinY := ImgLogo.Top;
-
-  // Imposta i limiti orizzontali di rimbalzo (40 pixel dai bordi)
   fMinX := 40;
   fMaxX := Self.ClientWidth - ImgLogo.Width - 40;
 
-  // Inizializza la velocità orizzontale con un valore casuale
   Randomize;
-  // Assegna una velocità iniziale casuale tra -2.0 e 2.0
+  fVelocityX := (Random(30) - 10) / 5;
 
-  fVelocityX := (Random(30) - 10) / 5; // Nuova spinta casuale orizzontale
+  Application.ProcessMessages;
 
-
-      application.ProcessMessages;;
+  // === LOGICA DI CHIUSURA AUTOMATICA ===
+  // Se il pulsante BtnClose1 non è visibile, avvia il timer per la chiusura automatica dopo 4 secondi
+  if not BtnClose1.Visible then
+  begin
+    TimerAutoClose := TTimer.Create(Self);
+    TimerAutoClose.Interval := 4000;  // 4 secondi
+    TimerAutoClose.OnTimer := @TimerAutoCloseTimer;
+    TimerAutoClose.Enabled := True;
+  end;
+   Self.Caption := 'Informazioni';
 end;
 
 procedure TfrmAbout.ImgLogoClick(Sender: TObject);
 begin
-  // reset posizione in alto
 
   ImgLogo.Top := 10;
-
-  // Inizializza i parametri dell'animazione
   fVelocityY := 0;
-  // Inizializza la velocità orizzontale con un valore casuale
   Randomize;
-  // Assegna una velocità iniziale casuale tra -2.0 e 2.0
-
-  fVelocityX := (Random(30) - 10) / 5; // Nuova spinta casuale orizzontale
-
-  // Attiva il timer per avviare l'animazione
+  fVelocityX := (Random(30) - 10) / 5;
   TimerBounce.Enabled := True;
+
+
 end;
 
 procedure TfrmAbout.Label1Click(Sender: TObject);
@@ -356,18 +317,14 @@ begin
     BrowserProcess.Parameters.Add('start');
     BrowserProcess.Parameters.Add('https://www.rarlab.com/');
     {$ENDIF}
-
     {$IFDEF LINUX}
     BrowserProcess.Executable := 'xdg-open';
     BrowserProcess.Parameters.Add('https://www.rarlab.com/');
     {$ENDIF}
-
     {$IFDEF DARWIN}
- // DARWIN è la direttiva per macOS e iOS
     BrowserProcess.Executable := 'open';
     BrowserProcess.Parameters.Add('https://www.rarlab.com/');
     {$ENDIF}
-
     BrowserProcess.Execute;
   finally
     BrowserProcess.Free;
@@ -378,7 +335,6 @@ procedure TfrmAbout.TimerBounceTimer(Sender: TObject);
 var
   NewY, NewX: integer;
 begin
-  // --- Logica di movimento verticale (uguale a prima) ---
   fVelocityY := fVelocityY + fGravity;
   NewY := ImgLogo.Top + Trunc(fVelocityY);
 
@@ -387,12 +343,11 @@ begin
     ImgLogo.Top := Self.ClientHeight - ImgLogo.Height;
     fVelocityY := fVelocityY * -0.6;
 
-    // Ferma l'animazione se la velocità verticale è quasi nulla
     if Abs(fVelocityY) < 1 then
     begin
       TimerBounce.Enabled := False;
       fVelocityY := 0;
-      fVelocityX := 0; // Ferma anche il movimento orizzontale
+      fVelocityX := 0;
       ImgLogo.Top := Self.ClientHeight - ImgLogo.Height;
       Exit;
     end;
@@ -402,19 +357,16 @@ begin
     ImgLogo.Top := NewY;
   end;
 
-  // --- Nuova logica di movimento e rimbalzo orizzontale ---
   NewX := ImgLogo.Left + Trunc(fVelocityX);
 
-  // Controlla se l'immagine colpisce il bordo sinistro
   if NewX < fMinX then
   begin
-    fVelocityX := Abs(fVelocityX); // Inverti la direzione
+    fVelocityX := Abs(fVelocityX);
     NewX := fMinX;
   end
-  // Controlla se l'immagine colpisce il bordo destro
   else if (NewX + ImgLogo.Width) > fMaxX then
   begin
-    fVelocityX := -Abs(fVelocityX); // Inverti la direzione
+    fVelocityX := -Abs(fVelocityX);
     NewX := fMaxX - ImgLogo.Width;
   end;
 

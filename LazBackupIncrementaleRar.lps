@@ -9,8 +9,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="lazbackupincrementalerar"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="13"/>
-        <CursorPos Y="54"/>
+        <TopLine Value="5"/>
+        <CursorPos X="13" Y="25"/>
         <UsageCount Value="2242"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -20,9 +20,8 @@
         <ComponentName Value="frmmain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="509"/>
-        <CursorPos X="11" Y="465"/>
+        <TopLine Value="581"/>
+        <CursorPos X="11" Y="586"/>
         <UsageCount Value="2242"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -34,9 +33,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="AboutForm"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="139"/>
-        <CursorPos X="70" Y="143"/>
+        <TopLine Value="88"/>
+        <CursorPos Y="106"/>
         <UsageCount Value="2239"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -47,136 +47,136 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1127"/>
         <CursorPos Y="1146"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit3>
       <Unit4>
         <Filename Value="../../lazarus/config/onlinepackagemanager/packages/HtmlViewer/source/StyleTypes.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="780"/>
         <CursorPos X="27" Y="794"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit4>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1272" Column="11" TopLine="1236"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="232" Column="50" TopLine="225"/>
       </Position1>
       <Position2>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1271" Column="11" TopLine="1235"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="16" Column="33"/>
       </Position2>
       <Position3>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1270" Column="11" TopLine="1234"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="18" Column="34"/>
       </Position3>
       <Position4>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="367" Column="30" TopLine="343"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="140" Column="28" TopLine="135"/>
       </Position4>
       <Position5>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1268" Column="11" TopLine="1232"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="151" Column="5" TopLine="128"/>
       </Position5>
       <Position6>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1295" Column="11" TopLine="1249"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="245" Column="3" TopLine="223"/>
       </Position6>
       <Position7>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1231" Column="59" TopLine="1032"/>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="9" Column="41"/>
       </Position7>
       <Position8>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="12" Column="26"/>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="50" Column="52" TopLine="31"/>
       </Position8>
       <Position9>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1227" Column="53" TopLine="1216"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="320" Column="29" TopLine="316"/>
       </Position9>
       <Position10>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1298" Column="18" TopLine="1262"/>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="22" Column="42" TopLine="16"/>
       </Position10>
       <Position11>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1237" Column="91" TopLine="1216"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="352" Column="5" TopLine="329"/>
       </Position11>
       <Position12>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1301" Column="19" TopLine="1241"/>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="35" Column="59" TopLine="17"/>
       </Position12>
       <Position13>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="143" Column="50" TopLine="122"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="342" Column="40" TopLine="330"/>
       </Position13>
       <Position14>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="112" Column="33" TopLine="99"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="344" Column="33" TopLine="330"/>
       </Position14>
       <Position15>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1306" Column="11" TopLine="1296"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="376" Column="5" TopLine="353"/>
       </Position15>
       <Position16>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="112" Column="2" TopLine="99"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="151" Column="4" TopLine="139"/>
       </Position16>
       <Position17>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="143" Column="8" TopLine="131"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="409" Column="35" TopLine="402"/>
       </Position17>
       <Position18>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="525" Column="17" TopLine="508"/>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="32" Column="44" TopLine="12"/>
       </Position18>
       <Position19>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="143" Column="22" TopLine="132"/>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="16" Column="36" TopLine="12"/>
       </Position19>
       <Position20>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1344" Column="8" TopLine="1335"/>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="22" Column="39" TopLine="12"/>
       </Position20>
       <Position21>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1345" Column="8" TopLine="1336"/>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="30" Column="34" TopLine="12"/>
       </Position21>
       <Position22>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1385" Column="6" TopLine="1358"/>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="27" Column="56" TopLine="16"/>
       </Position22>
       <Position23>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="262" Column="34" TopLine="251"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="410" Column="31" TopLine="402"/>
       </Position23>
       <Position24>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1309" Column="14" TopLine="1299"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="47" Column="22" TopLine="44"/>
       </Position24>
       <Position25>
-        <Filename Value="LazBackupIncrementaleRar.lpr"/>
-        <Caret Line="54" TopLine="13"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="291" Column="57" TopLine="255"/>
       </Position25>
       <Position26>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="252" Column="4" TopLine="228"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="112" Column="3" TopLine="110"/>
       </Position26>
       <Position27>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="190" Column="93" TopLine="176"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="298" Column="12" TopLine="286"/>
       </Position27>
       <Position28>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="223" Column="37" TopLine="210"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="354" Column="58" TopLine="343"/>
       </Position28>
       <Position29>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1371" Column="41" TopLine="1366"/>
+        <Filename Value="aboutform.pas"/>
+        <Caret Line="286" Column="69" TopLine="281"/>
       </Position29>
       <Position30>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="135" Column="13" TopLine="117"/>
+        <Filename Value="LazBackupIncrementaleRar.lpr"/>
+        <Caret Line="25" Column="13" TopLine="5"/>
       </Position30>
     </JumpHistory>
     <RunParams>
