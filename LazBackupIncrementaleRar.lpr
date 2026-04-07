@@ -19,8 +19,8 @@ var
 
 begin
   RequireDerivedFormResource := True;
-  Application.Title := 'lazbackupincrementalerar';
-  Application.Scaled := True;
+  Application.Title:='lazbackupincrementalerar';
+  Application.Scaled:=True;
   Application.MainFormOnTaskbar := True;
 
   Application.Initialize;

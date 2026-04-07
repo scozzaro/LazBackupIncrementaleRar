@@ -1,7 +1,7 @@
 object frmmain: Tfrmmain
   Left = 376
   Height = 830
-  Top = 0
+  Top = 30
   Width = 680
   Caption = 'frmmain'
   ClientHeight = 830
@@ -21,17 +21,16 @@ object frmmain: Tfrmmain
     ClientWidth = 680
     TabOrder = 0
     object RARPathLabel: TLabel
-      Left = 11
-      Height = 18
+      Left = 10
+      Height = 16
       Top = 4
-      Width = 169
+      Width = 178
       Caption = 'Percorso del programma RAR'
-      OnClick = RARPathLabelClick
       OnDblClick = RARPathLabelDblClick
     end
     object RARPathEdit: TEdit
       Left = 10
-      Height = 25
+      Height = 22
       Top = 19
       Width = 526
       TabOrder = 0
@@ -47,14 +46,14 @@ object frmmain: Tfrmmain
     end
     object DestinationLabel: TLabel
       Left = 12
-      Height = 18
+      Height = 16
       Top = 55
-      Width = 292
+      Width = 312
       Caption = 'Percorso di stezinazione di salvataggio dell''archivio'
     end
     object DestinationEdit: TEdit
       Left = 11
-      Height = 25
+      Height = 22
       Top = 75
       Width = 526
       TabOrder = 2
@@ -70,24 +69,24 @@ object frmmain: Tfrmmain
     end
     object ArchiveNameLabel: TLabel
       Left = 12
-      Height = 18
+      Height = 16
       Top = 110
-      Width = 137
+      Width = 142
       Caption = 'Nome del file di backup'
       WordWrap = True
     end
     object ArchiveNameEdit: TEdit
       Left = 12
-      Height = 25
+      Height = 22
       Top = 128
       Width = 658
       TabOrder = 5
     end
     object FoldersLabel: TLabel
       Left = 12
-      Height = 18
+      Height = 16
       Top = 162
-      Width = 105
+      Width = 112
       Caption = 'Cartelle da salvare'
       WordWrap = True
     end
@@ -98,7 +97,6 @@ object frmmain: Tfrmmain
       Width = 620
       ItemHeight = 0
       TabOrder = 6
-      TopIndex = -1
     end
     object AddButton: TButton
       Left = 639
@@ -126,10 +124,10 @@ object frmmain: Tfrmmain
     end
     object ExcludeLabel: TLabel
       Left = 12
-      Height = 18
+      Height = 16
       Hint = 'DbClick default settings'
       Top = 270
-      Width = 291
+      Width = 305
       Caption = 'Escludi file/cartelle (pattern *.tmp, *.zip, C:\temp\*)'
       ParentShowHint = False
       ShowHint = True
@@ -143,7 +141,6 @@ object frmmain: Tfrmmain
       Width = 620
       ItemHeight = 0
       TabOrder = 10
-      TopIndex = -1
     end
     object AddExcludeButton: TButton
       Left = 639
@@ -183,7 +180,7 @@ object frmmain: Tfrmmain
       OnDblClick = ProgressLabelDblClick
     end
     object btnRunBackup: TButton
-      Left = 553
+      Left = 552
       Height = 40
       Top = 448
       Width = 115
@@ -202,15 +199,15 @@ object frmmain: Tfrmmain
     end
     object chkSpegni: TCheckBox
       Left = 12
-      Height = 24
+      Height = 18
       Top = 686
-      Width = 185
+      Width = 183
       Caption = 'Spegni computer al termine'
       TabOrder = 22
     end
     object chkStartTime: TCheckBox
       Left = 12
-      Height = 24
+      Height = 18
       Top = 369
       Width = 84
       Caption = 'Auto Start'
@@ -219,9 +216,9 @@ object frmmain: Tfrmmain
     end
     object StartTime: TDateTimePicker
       Left = 106
-      Height = 23
+      Height = 21
       Top = 367
-      Width = 69
+      Width = 77
       CenturyFrom = 1941
       MaxDate = 2958465
       MinDate = -53780
@@ -241,9 +238,9 @@ object frmmain: Tfrmmain
     end
     object lblTimeLeft: TLabel
       Left = 190
-      Height = 18
+      Height = 16
       Top = 369
-      Width = 99
+      Width = 104
       Caption = 'Time Left to start'
       Visible = False
     end
@@ -272,7 +269,7 @@ object frmmain: Tfrmmain
     end
     object chkMinTrayBar: TCheckBox
       Left = 196
-      Height = 24
+      Height = 18
       Top = 686
       Width = 146
       Caption = 'Minimizza in Tray Bar'
@@ -280,26 +277,26 @@ object frmmain: Tfrmmain
     end
     object chkChiudiApp: TCheckBox
       Left = 368
-      Height = 24
+      Height = 18
       Top = 686
-      Width = 139
+      Width = 138
       Caption = 'Chiudi Applicazione'
       TabOrder = 24
     end
     object StatusLabel1: TLabel
       Left = 12
-      Height = 18
+      Height = 16
       Top = 668
-      Width = 238
+      Width = 249
       Caption = 'Dopo aver complemato il backup esegui: '
       WordWrap = True
     end
     object cmbCompressionLevel: TComboBox
       Left = 106
-      Height = 26
+      Height = 19
       Top = 392
       Width = 131
-      ItemHeight = 18
+      ItemHeight = 15
       ItemIndex = 2
       Items.Strings = (
         'Sola archiviazione'
@@ -315,7 +312,7 @@ object frmmain: Tfrmmain
     end
     object chkEncrypt: TCheckBox
       Left = 254
-      Height = 24
+      Height = 18
       Top = 396
       Width = 156
       Caption = 'Proteggi con password'
@@ -324,7 +321,7 @@ object frmmain: Tfrmmain
     end
     object edtPassword: TEdit
       Left = 416
-      Height = 25
+      Height = 22
       Top = 394
       Width = 253
       EchoMode = emPassword
@@ -334,17 +331,17 @@ object frmmain: Tfrmmain
     end
     object Label2: TLabel
       Left = 14
-      Height = 18
+      Height = 16
       Top = 396
-      Width = 86
+      Width = 90
       Caption = 'Compressione '
     end
     object cmbFrequency: TComboBox
       Left = 52
-      Height = 26
+      Height = 19
       Top = 424
       Width = 97
-      ItemHeight = 18
+      ItemHeight = 15
       ItemIndex = 0
       Items.Strings = (
         'Giornaliero'
@@ -357,10 +354,10 @@ object frmmain: Tfrmmain
     end
     object cmbDayOfWeek: TComboBox
       Left = 204
-      Height = 26
+      Height = 19
       Top = 424
       Width = 88
-      ItemHeight = 18
+      ItemHeight = 15
       ItemIndex = 0
       Items.Strings = (
         'Lunedì'
@@ -379,9 +376,9 @@ object frmmain: Tfrmmain
     end
     object Label4: TLabel
       Left = 12
-      Height = 18
+      Height = 16
       Top = 428
-      Width = 26
+      Width = 27
       Caption = 'Tipo'
     end
     object ProgressBar1: TProgressBar
@@ -417,7 +414,7 @@ object frmmain: Tfrmmain
     end
     object Label1: TLabel
       Left = 14
-      Height = 18
+      Height = 16
       Top = 472
       Width = 22
       Caption = 'Log'
@@ -28108,8 +28105,8 @@ object frmmain: Tfrmmain
   object TimerClock: TTimer
     Enabled = False
     OnTimer = TimerClockTimer
-    Left = 412
-    Top = 804
+    Left = 404
+    Top = 808
   end
   object PopupMenuTray: TPopupMenu
     Left = 448

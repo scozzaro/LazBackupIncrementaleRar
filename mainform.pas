@@ -295,16 +295,15 @@ procedure TFrmMain.FormCreate(Sender: TObject);
     {$ENDIF}
 
     {$IFDEF LINUX}
-      FProcess.Executable := '/sbin/shutdown';
-      FProcess.Parameters.Add('-h'); // Opzione per l'halt (spegnimento)
-      FProcess.Parameters.Add('now'); // Spegni immediatamente
+      RARPathEdit.Text := '/usr/bin/rar';
     {$ENDIF}
 
+
+       // Per macOS
     {$IFDEF DARWIN}
- // Per macOS
-      FProcess.Executable := '/usr/bin/osascript';
-      FProcess.Parameters.Add('-e');
-      FProcess.Parameters.Add('tell application "System Events" to shut down');
+
+
+        RARPathEdit.Text := '/usr/local/bin/rar';
     {$ENDIF}
   end;
 
@@ -486,7 +485,7 @@ begin
       LoadFile := StringReplace(LoadFile, '"', '', [rfReplaceAll]);
     end;
     Inc(I);
-  end ;
+  end
     {$ELSE}
     // Parametri stile Linux/macOS: --tray --load
     if AnsiStartsText('--TRAY', Param) then
@@ -773,222 +772,327 @@ begin
 end;
 
 procedure TFrmMain.btnRunBackupClick(Sender: TObject);
-// Funzione locale per ottenere il percorso della home directory in base al sistema operativo
+
+  // Funzione locale per ottenere il percorso della home directory
   function GetHomeDir: string;
   begin
     {$IFDEF UNIX}
- // Se il sistema operativo è Unix (Linux/macOS)
       Result := GetEnvironmentVariable('HOME');
-       if Result = '' then
-        Result := '/tmp'; // Fallback
-    {$ELSE}// Altrimenti (Windows)
-    Result := GetEnvironmentVariable('USERPROFILE');
-    if Result = '' then
-      Result := 'C:\'; // Fallback
+      if Result = '' then
+        Result := GetEnvironmentVariable('TMPDIR');
+      if Result = '' then
+        Result := '/tmp';
+    {$ELSE}
+      Result := GetEnvironmentVariable('USERPROFILE');
+      if Result = '' then
+        Result := 'C:\';
     {$ENDIF}
   end;
 
-const
-  // Array per i nomi dei giorni della settimana
-  Giorni: array[0..6] of string = (
-    'Lunedi', 'Martedi', 'Mercoledi', 'Giovedi', 'Venerdi', 'Sabato', 'Domenica'
-    );
-var
-  // Variabili per la gestione dell'output del processo
-  Buffer: array[0..1023] of byte;
-  BytesRead: longint;
-  Line: string;
-  i, idx: integer;
-  ArchiveName: string;
-  CompressionParam: string;
-begin
-  if FileExists(RarPathEdit.Text) = False then
-  begin
 
-    ShowMessage('Il file rar NON trovato!');
-    exit;
+
+
+  // Funzione per ottenere messaggi localizzati
+  function _(const Italian, English: string): string;
+  begin
+    if GetSystemLanguageCode = 'Italian' then
+      Result := Italian
+    else
+      Result := English;
   end;
 
+  // Funzione per formattare la durata in millisecondi
+  function FormatDuration(Milliseconds: QWord): string;
+  var
+    Seconds, Minutes, Hours: Integer;
+  begin
+    Seconds := Milliseconds div 1000;
+    Hours := Seconds div 3600;
+    Minutes := (Seconds mod 3600) div 60;
+    Seconds := Seconds mod 60;
+    Result := Format('%.2d:%.2d:%.2d', [Hours, Minutes, Seconds]);
+  end;
 
-  // Prepara l'interfaccia per il nuovo backup
+  // Procedura per aggiornare UI in modo sicuro
+  procedure SafeUIRefresh;
+  begin
+    Application.ProcessMessages;
+    Sleep(1);
+  end;
+
+const
+  Giorni: array[0..6] of string = (
+    'Lunedi', 'Martedi', 'Mercoledi', 'Giovedi', 'Venerdi', 'Sabato', 'Domenica'
+  );
+  MAX_BUFFER_SIZE = 8192;
+  UI_UPDATE_INTERVAL_MS = 100;
+var
+  Buffer: array[0..MAX_BUFFER_SIZE - 1] of byte;
+  BytesRead: LongInt;
+  Line: string;
+  i, idx: Integer;
+  ArchiveName: string;
+  CompressionParam: string;
+  LastUIUpdate: QWord;
+  BackupStartTick: QWord;  // ✅ Rinominato per chiarezza
+  ElapsedSeconds: Integer;
+  OutputLineCount: Integer;
+  ShutdownCmd: TStringArray;
+  ShutdownProcess: TProcess;
+  BackupSuccess: Boolean;
+begin
+  // ========== VALIDAZIONE INIZIALE ==========
+  if not FileExists(RARPathEdit.Text) then
+  begin
+    ShowMessage(_('File RAR non trovato! Verifica il percorso.',
+                  'RAR file not found! Check the path.'));
+    Exit;
+  end;
+
+  if FoldersListbox.Items.Count = 0 then
+  begin
+    ShowMessage(_('Nessuna cartella selezionata per il backup.',
+                  'No folders selected for backup.'));
+    Exit;
+  end;
+
+  if (DestinationEdit.Text = '') or not DirectoryExists(DestinationEdit.Text) then
+  begin
+    ShowMessage(_('Cartella di destinazione non valida o inesistente.',
+                  'Invalid or non-existent destination folder.'));
+    Exit;
+  end;
+
+  // ========== PREPARAZIONE INTERFACCIA ==========
   ScrolledOutput.Lines.Clear;
   FProcessedFiles := 0;
-
   FTotalFiles := 0;
+  BackupSuccess := True;
+  OutputLineCount := 0;
+  LastUIUpdate := GetTickCount64;
+  BackupStartTick := GetTickCount64;  // ✅ Inizio misurazione tempo
 
-  // Calcola il numero totale di file da processare per aggiornare l'avanzamento
-  for i := 0 to FoldersListbox.Items.Count - 1 do
-    PreCalculateFiles(FoldersListbox.Items[i]);
+  // Disabilita controlli durante il backup
+  btnRunBackup.Enabled := False;
+  btnRunBackup.Caption := _('Backup in corso...', 'Backup in progress...');
+  ProgressBar1.Style := pbstMarquee;
+  ProgressLabel.Caption := _('Calcolo file in corso...', 'Calculating files...');
 
-  // Imposta il valore massimo della progress bar sul numero totale di file
+  // ========== CALCOLO FILE TOTALI ==========
+  try
+    FTotalFiles := 0;
+    for i := 0 to FoldersListbox.Items.Count - 1 do
+    begin
+      if DirectoryExists(FoldersListbox.Items[i]) then
+        PreCalculateFiles(FoldersListbox.Items[i])
+      else
+        ScrolledOutput.Lines.Add(_('Attenzione: Cartella non trovata - ',
+                                   'Warning: Folder not found - ') +
+                                   FoldersListbox.Items[i]);
+    end;
+
+    if FTotalFiles = 0 then
+    begin
+      ShowMessage(_('Nessun file trovato da processare.',
+                    'No files found to process.'));
+      btnRunBackup.Enabled := True;
+      btnRunBackup.Caption := _('Esegui Backup', 'Run Backup');
+      ProgressBar1.Style := pbstNormal;
+      Exit;
+    end;
+  except
+    on E: Exception do
+    begin
+      ScrolledOutput.Lines.Add(_('ERRORE nel calcolo dei file: ',
+                                 'ERROR calculating files: ') + E.Message);
+      BackupSuccess := False;
+    end;
+  end;
+
+  // Imposta ProgressBar
+  ProgressBar1.Style := pbstNormal;
   ProgressBar1.Min := 0;
   ProgressBar1.Max := FTotalFiles;
   ProgressBar1.Position := 0;
 
-
-  // Gestione del nome dell'archivio
+  // ========== GESTIONE NOME ARCHIVIO ==========
   ArchiveName := ArchiveNameEdit.Text;
-  if LowerCase(ExtractFileExt(ArchiveName)) <> '.rar' then
-  begin
-    ArchiveName := ArchiveName + '.rar';
-    ArchiveNameEdit.Text := ArchiveName;
-  end;
+  if ArchiveName = '' then
+    ArchiveName := 'backup';
 
-  // Se la checkbox 'Backup giornaliero' è selezionata, aggiunge il giorno al nome dell'archivio
+  if LowerCase(ExtractFileExt(ArchiveName)) <> '.rar' then
+    ArchiveName := ArchiveName + '.rar';
+
   if chkDayBak.Checked then
   begin
     idx := DayOfWeek(Now) - 2;
-    // Mappa il giorno della settimana (1=Domenica) a un indice 0-6
-    if idx < 0 then
-      idx := 6;
-    ArchiveName := ChangeFileExt(ArchiveName, '') + '_' + IntToStr(idx) +
-      '_' + Giorni[idx] + '.rar';
+    if idx < 0 then idx := 6;
+    ArchiveName := ChangeFileExt(ArchiveName, '') + Format('_%d_%s.rar', [idx, Giorni[idx]]);
+    ArchiveNameEdit.Text := ArchiveName;
   end;
 
-  // Aggiungi questo blocco per gestire la compressione
+  // ========== PARAMETRI COMPRESSIONE ==========
   case cmbCompressionLevel.ItemIndex of
-    0: CompressionParam := '-m0'; // Sola archiviazione
-    1: CompressionParam := '-m1'; // Veloce
-    2: CompressionParam := '-m3'; // Normale (default)
-    3: CompressionParam := '-m4'; // Buona
-    4: CompressionParam := '-m5'; // Massima
-    else
-      CompressionParam := ''; // Nessun parametro se l'opzione non è selezionata
+    0: CompressionParam := '-m0';
+    1: CompressionParam := '-m1';
+    2: CompressionParam := '-m3';
+    3: CompressionParam := '-m4';
+    4: CompressionParam := '-m5';
+    else CompressionParam := '-m3';
   end;
+
+  // ========== LOG INIZIO BACKUP ==========
+  ScrolledOutput.Lines.Add(StringOfChar('=', 60));
+  ScrolledOutput.Lines.Add(_('BACKUP AVVIATO', 'BACKUP STARTED'));
+  ScrolledOutput.Lines.Add(StringOfChar('=', 60));
 
   if chkStartTime.Checked then
   begin
-    if GetSystemLanguageCode = 'Italian' then
-    begin
-      ScrolledOutput.Lines.Add('Programmata');
-    end
-    else
-    begin
-      ScrolledOutput.Lines.Add('Scheduled');
-    end;
+    ScrolledOutput.Lines.Add(_('Modalità: Programmata', 'Mode: Scheduled'));
     ScrolledOutput.Lines.Add(lblTimeLeft.Caption);
-    if GetSystemLanguageCode = 'Italian' then
-    begin
-      ScrolledOutput.Lines.Add('Inizio: ' + FormatDateTime(
-        'dd/mm/yyyy hh:nn:ss', now));
-    end
-    else
-    begin
-      ScrolledOutput.Lines.Add('Start: ' + FormatDateTime(
-        'dd/mm/yyyy hh:nn:ss', now));
-    end;
-  end
-  else
-  begin
-    if GetSystemLanguageCode = 'Italian' then
-    begin
-      ScrolledOutput.Lines.Add('Inizio: ' + FormatDateTime(
-        'dd/mm/yyyy hh:nn:ss', now));
-    end
-    else
-    begin
-      ScrolledOutput.Lines.Add('Start: ' + FormatDateTime(
-        'dd/mm/yyyy hh:nn:ss', now));
-    end;
-
   end;
 
+  ScrolledOutput.Lines.Add(_('Inizio: ', 'Start: ') + FormatDateTime('dd/mm/yyyy hh:nn:ss', Now));
+  ScrolledOutput.Lines.Add(_('File da processare: ', 'Files to process: ') + IntToStr(FTotalFiles));
+  ScrolledOutput.Lines.Add(StringOfChar('-', 60));
 
-
-  // Configurazione dei parametri per l'esecuzione del processo RAR
+  // ========== CONFIGURAZIONE PROCESSO RAR ==========
   FProcess.Executable := RARPathEdit.Text;
   FProcess.Parameters.Clear;
-  FProcess.Parameters.Add('a');       // Aggiungi file all'archivio (opzione 'a')
-  FProcess.Parameters.Add('-u');
-  // Aggiorna solo file modificati o nuovi (opzione '-u')
-  FProcess.Parameters.Add('-r');       // Include sottocartelle (opzione '-r')
 
-  // Aggiungi il parametro di compressione se selezionato
+  // Parametri base
+  FProcess.Parameters.Add('a');
+  FProcess.Parameters.Add('-u');
+  FProcess.Parameters.Add('-r');
+  FProcess.Parameters.Add('-idp');
+  FProcess.Parameters.Add('-y');
+
+  // Compressione
   if CompressionParam <> '' then
     FProcess.Parameters.Add(CompressionParam);
 
-  // Aggiungi questo blocco per gestire la password
+  // Password
   if chkEncrypt.Checked and (edtPassword.Text <> '') then
-  begin
     FProcess.Parameters.Add('-p' + edtPassword.Text);
-  end;
 
+  // Destinazione
+  FProcess.Parameters.Add(IncludeTrailingPathDelimiter(DestinationEdit.Text) + ArchiveName);
 
-  FProcess.Parameters.Add(DestinationEdit.Text + PathDelim + ArchiveName);
-  // Percorso di destinazione
-  FProcess.Parameters.AddStrings(FoldersListbox.Items);
-  // Aggiunge le cartelle da includere
+  // Cartelle sorgente (solo quelle esistenti)
+  for i := 0 to FoldersListbox.Items.Count - 1 do
+    if DirectoryExists(FoldersListbox.Items[i]) then
+      FProcess.Parameters.Add(FoldersListbox.Items[i]);
 
+  // Opzioni processo
   FProcess.Options := [poUsePipes, poStderrToOutput, poNoConsole];
   FProcess.CurrentDirectory := GetHomeDir;
 
-  FProcess.Execute; // Avvia il processo RAR
+  // ========== ESECUZIONE BACKUP ==========
+  try
+    FProcess.Execute;
 
-  // Ciclo per leggere l'output del processo RAR in tempo reale
+    // Lettura output con miglioramenti performance
+    while FProcess.Running or (FProcess.Output.NumBytesAvailable > 0) do
+    begin
+      if FProcess.Output.NumBytesAvailable > 0 then
+      begin
+        BytesRead := FProcess.Output.Read(Buffer, SizeOf(Buffer));
+        if BytesRead > 0 then
+        begin
+          SetString(Line, PAnsiChar(@Buffer[0]), BytesRead);
+          ScrolledOutput.Lines.Text := ScrolledOutput.Lines.Text + Line;
+          Inc(OutputLineCount);
 
+          // Aggiornamento progress (ogni X righe o ogni intervallo di tempo)
+          if (OutputLineCount mod 10 = 0) or
+             (GetTickCount64 - LastUIUpdate >= UI_UPDATE_INTERVAL_MS) then
+          begin
+            Inc(FProcessedFiles, BytesRead div 100);
+            if FProcessedFiles > FTotalFiles then
+              FProcessedFiles := FTotalFiles;
 
+            ProgressBar1.Position := FProcessedFiles;
+            ProgressLabel.Caption := Format(
+              _('Avanzamento: %d%% (%d di %d file)',
+                'Progress: %d%% (%d of %d files)'),
+              [Round((FProcessedFiles / FTotalFiles) * 100),
+               FProcessedFiles, FTotalFiles]);
 
+            ScrolledOutput.SelStart := Length(ScrolledOutput.Text);
+            LastUIUpdate := GetTickCount64;
+            SafeUIRefresh;
+          end;
+        end;
+      end
+      else
+      begin
+        SafeUIRefresh;
+      end;
+    end;
 
-  while FProcess.Running or (FProcess.Output.NumBytesAvailable > 0) do
-  begin
-    if FProcess.Output.NumBytesAvailable > 0 then
+    // Output residuo
+    while FProcess.Output.NumBytesAvailable > 0 do
     begin
       BytesRead := FProcess.Output.Read(Buffer, SizeOf(Buffer));
       if BytesRead > 0 then
       begin
-        SetString(Line, pansichar(@Buffer[0]), BytesRead);
+        SetString(Line, PAnsiChar(@Buffer[0]), BytesRead);
         ScrolledOutput.Lines.Text := ScrolledOutput.Lines.Text + Line;
-        ScrolledOutput.SelStart := Length(ScrolledOutput.Text);
-
-        // La logica per aggiornare la progress bar in base all'output di RAR
-        Inc(FProcessedFiles);
-        ProgressBar1.Position := FProcessedFiles;
-
-        ProgressLabel.Caption :=
-          Format('Avanzamento: %d%% (%d di %d file)',
-          [Round((FProcessedFiles / FTotalFiles) * 100), FProcessedFiles, FTotalFiles]);
-
       end;
     end;
-    Application.ProcessMessages;
-    // Permette all'interfaccia utente di rimanere responsiva
-    Sleep(50); // Mette in pausa l'esecuzione per evitare di sovraccaricare la CPU
-  end;
 
-  // Cattura l'eventuale output residuo dopo la fine del processo
-  while FProcess.Output.NumBytesAvailable > 0 do
-  begin
-    BytesRead := FProcess.Output.Read(Buffer, SizeOf(Buffer));
-    if BytesRead > 0 then
+    BackupSuccess := (FProcess.ExitStatus = 0);
+
+  except
+    on E: Exception do
     begin
-      SetString(Line, pansichar(@Buffer[0]), BytesRead);
-      ScrolledOutput.Lines.Text := ScrolledOutput.Lines.Text + Line;
+      ScrolledOutput.Lines.Add(_('ERRORE durante il backup: ',
+                                 'ERROR during backup: ') + E.Message);
+      BackupSuccess := False;
     end;
   end;
 
-  if GetSystemLanguageCode = 'Italian' then
+  // ========== COMPLETAMENTO BACKUP ==========
+  ScrolledOutput.Lines.Add(StringOfChar('-', 60));
+
+  if BackupSuccess then
   begin
-    ScrolledOutput.Lines.Add('Fine: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+    ScrolledOutput.Lines.Add(_('BACKUP COMPLETATO CON SUCCESSO',
+                               'BACKUP COMPLETED SUCCESSFULLY'));
   end
   else
   begin
-    ScrolledOutput.Lines.Add('End: ' + FormatDateTime('dd/mm/yyyy hh:nn:ss', now));
+    ScrolledOutput.Lines.Add(_('BACKUP COMPLETATO CON ERRORI',
+                               'BACKUP COMPLETED WITH ERRORS'));
   end;
 
+  ScrolledOutput.Lines.Add(_('Fine: ', 'End: ') + FormatDateTime('dd/mm/yyyy hh:nn:ss', Now));
 
-  // Aggiorna la barra di avanzamento e lo stato al 100% al termine del backup
-  // Imposta la barra di avanzamento e l'etichetta al 100% al termine del backup
+  // ✅ CALCOLO DURATA CORRETTO
+  ElapsedSeconds := (GetTickCount64 - BackupStartTick) div 1000;
+  ScrolledOutput.Lines.Add(_('Durata: ', 'Duration: ') +
+    Format('%02d ore %02d minuti %02d secondi',
+    [ElapsedSeconds div 3600, (ElapsedSeconds div 60) mod 60, ElapsedSeconds mod 60]));
+
+  ScrolledOutput.Lines.Add(StringOfChar('=', 60));
+
+  // Aggiornamento finale UI
   ProgressBar1.Position := FTotalFiles;
-  ProgressLabel.Caption := Format('Avanzamento: 100%% (%d di %d file)',
-    [FTotalFiles, FTotalFiles]);
+  ProgressLabel.Caption := Format(_('Avanzamento: 100%% (%d di %d file) - COMPLETATO',
+                                    'Progress: 100%% (%d of %d files) - COMPLETED'),
+                                  [FTotalFiles, FTotalFiles]);
 
-  // 🔹 Se la checkbox per lo spegnimento è attiva, esegue il comando di spegnimento
-  if chkSpegni.Checked then
+  // ========== AZIONI POST BACKUP ==========
+  try
+    // 1. Spegnimento
+      // 🔹 Se la checkbox per lo spegnimento è attiva, esegue il comando di spegnimento
+    if chkSpegni.Checked and BackupSuccess then
   begin
     FProcess.CloseInput;
     FProcess.Parameters.Clear;
 
     // Codice specifico per lo spegnimento in base al sistema operativo
+      // Funzione per ottenere il comando di shutdown specifico per OS
     {$IFDEF WINDOWS}
       FProcess.Executable := 'shutdown';
       FProcess.Parameters.Add('-s'); // Opzione per spegnere
@@ -1013,19 +1117,36 @@ begin
     FProcess.Execute;
   end;
 
-  // Se la checkbox 'Minimizza dopo il backup' è attiva, minimizza l'app
-  if chkMinTrayBar.Checked then
-  begin
-    btnTrayBarClick(Sender);
+
+
+    // 2. Minimizza in tray
+    if chkMinTrayBar.Checked then
+      btnTrayBarClick(Sender);
+
+    // 3. Chiudi app
+    if chkChiudiApp.Checked then
+    begin
+      ScrolledOutput.Lines.Add(_('Chiusura applicazione tra 3 secondi...',
+                                 'Closing application in 3 seconds...'));
+      SafeUIRefresh;
+      Sleep(3000);
+      Application.Terminate;
+    end;
+
+  except
+    on E: Exception do
+      ScrolledOutput.Lines.Add(_('ERRORE nelle azioni post-backup: ',
+                                 'ERROR in post-backup actions: ') + E.Message);
   end;
 
-  // Se la checkbox 'Chiudi app dopo il backup' è attiva, chiude l'app
-  if chkChiudiApp.Checked then
-  begin
-    halt(0); // Termina l'applicazione
-  end;
+  // ========== RIPRISTINO UI ==========
+  btnRunBackup.Enabled := True;
+  btnRunBackup.Caption := _('Esegui Backup', 'Run Backup');
 
+  if not (chkSpegni.Checked or chkMinTrayBar.Checked or chkChiudiApp.Checked) then
+    ShowMessage(_('Backup completato con successo!', 'Backup completed successfully!'));
 end;
+
 
 
 procedure TFrmMain.LoadConfigFromFile(const AFileName: string);

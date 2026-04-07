@@ -13,6 +13,8 @@
       <UseXPManifest Value="True"/>
       <XPManifest>
         <DpiAware Value="True/PM_V2"/>
+        <TextName Value="vincenzoscozzaro.lazbackupincrementale.rar"/>
+        <TextDesc Value="Backup folder with rar compressor"/>
       </XPManifest>
       <Icon Value="0"/>
     </General>
@@ -21,7 +23,8 @@
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="4"/>
       <BuildNr Value="1"/>
-      <StringTable Comments="Vincenzo Scozzaro" CompanyName="Vincenzo Scozzaro" FileDescription="Backup program" InternalName="LazBackupIncremental" LegalCopyright="Vincenzo Scozzaro" OriginalFilename="LazBackupIncremental" ProductName="LazBackupIncremental"/>
+      <Language Value="0410"/>
+      <StringTable Comments="Vincenzo Scozzaro" CompanyName="Vincenzo Scozzaro" FileDescription="Backup program with rar compressor" InternalName="LazBackupIncremental" LegalCopyright="Vincenzo Scozzaro" OriginalFilename="LazBackupIncremental" ProductName="LazBackupIncremental" ProductVersion="1.4.0.1"/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>
